@@ -13,13 +13,13 @@ const Home = () => {
                 </div>
             </div>
             <div className='home-sci'>
-                <Link to='#'>
+                <Link to='https://www.linkedin.com/in/naderchatti' target='_blank'>
                     <FaLinkedinIn />
                 </Link>
-                <Link to='#'>
+                <Link to='https://twitter.com/naderchatti' target='_blank'>
                     <FaTwitter />
                 </Link>
-                <Link to='#'>
+                <Link to='mailto:contact@naderchatti.com'>
                     <MdMail />
                 </Link>
             </div>
