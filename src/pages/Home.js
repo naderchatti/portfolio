@@ -5,9 +5,9 @@ import { MdMail } from 'react-icons/md';
 
 const Home = () => {
     return (
-        <section className='home' id='home'>
+        <div className='home' id='home'>
             <div className='home-content'>
-                <h1>Hi, I'm <span>Nader Chatti</span></h1>
+                <h1>Hi, I'm <br /><span>Nader Chatti</span></h1>
                 <div className='text-animate'>
                     <h3>Fullstack Developer</h3>
                 </div>
@@ -23,7 +23,7 @@ const Home = () => {
                     <MdMail />
                 </Link>
             </div>
-        </section>
+        </div>
     );
 };
 
