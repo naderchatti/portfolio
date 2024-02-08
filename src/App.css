@@ -97,9 +97,9 @@
 .home-sci {
   /* position: absolute; */
   bottom: 4rem;
-  width: 170px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
+  gap: 1rem;
 }
 
 .home-sci a {
@@ -107,8 +107,8 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 6rem;
+  height: 6rem;
   background: transparent;
   border: .2rem solid var(--main-color);
   border-radius: 50%;

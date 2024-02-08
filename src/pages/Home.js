@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import { MdMail } from 'react-icons/md';
+import { PiGithubLogoFill } from 'react-icons/pi';
 
 const Home = () => {
     return (
@@ -15,6 +16,9 @@ const Home = () => {
             <div className='home-sci'>
                 <Link to='https://www.linkedin.com/in/naderchatti' target='_blank'>
                     <FaLinkedinIn />
+                </Link>
+                <Link to='https://github.com/chattinader' target='_blank'>
+                    <PiGithubLogoFill />
                 </Link>
                 <Link to='https://twitter.com/naderchatti' target='_blank'>
                     <FaTwitter />
