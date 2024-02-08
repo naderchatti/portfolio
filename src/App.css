@@ -1,17 +1,15 @@
-.appbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 2rem 9%;
-  background: transparent;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
 }
 
-.logo {
+.appbar {
+  padding: 2rem var(--padding-horizontal);
+  background: transparent;
+}
+
+ .logo {
   font-size: 2.5rem;
   color: var(--text-color);
   font-weight: 600;
@@ -24,54 +22,103 @@
   display: none;
 }
 
-section {
-  min-height: 100vh;
-  padding: 10rem 9% 2rem;
-}
-
 .home {
-  display: flex;
-  align-items: center;
-  padding: 0 9%;
+  padding: 0 var(--padding-horizontal);
+  display: grid;
+  gap: 2rem;
 }
 
 .home-content {
-  max-width: 60rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 2rem;
+}
+
+.home-content > * {
+  display: grid;
+  gap: 2rem;
+  place-content: center;
 }
 
 .home-content h1 {
-  font-size: 4rem;
   font-weight: 700;
   line-height: 1.3;
 }
 
-.home-content .text-animate {
-  position: relative;
-  width: 32.8rem;
-}
-
-.home-content .text-animate h3 {
+.home-content h3 {
   font-size: 2.6rem;
   font-weight: 700;
   color: transparent;
   -webkit-text-stroke: .7px var(--main-color);
 }
 
-.home-sci {
+.home-content span {
+  font-size: 4rem;
+  width: max-content;
+  position: relative;
+}
+
+.home-content span::before,
+.home-content span::after {
+  content: "";
   position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.home-content span::before {
+  background-color: var(--bg-color);
+  animation: typewriter 1s steps(12) 1s forwards;
+}
+
+.home-content span:hover::before {
+  animation: typewriter-backwards 0.5s steps(12) forwards;
+}
+
+.home-content span::after {
+  width: 0.125rem;
+  background: white;
+  animation: 
+  typewriter 1s steps(12) 1s forwards,
+  blink 750ms steps(12) infinite;
+}
+
+.home-content span:hover::after {
+  animation: typewriter-backwards 0.5s steps(12) forwards,
+  blink 750ms steps(12) infinite;
+}
+
+@keyframes typewriter {
+  to {left: 100%;}
+}
+
+@keyframes typewriter-backwards {
+  from {left: 100%;}
+
+  to {left: 0;}
+}
+
+@keyframes blink {
+  to {background: transparent;}
+}
+
+.home-sci {
   bottom: 4rem;
-  width: 170px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  gap: 1rem;
 }
 
 .home-sci a {
+  margin-inline: auto;
   position: relative;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 6rem;
+  height: 6rem;
   background: transparent;
   border: .2rem solid var(--main-color);
   border-radius: 50%;
@@ -102,16 +149,99 @@ section {
   width: 100%;
 }
 
+.download-button {
+  display: grid;
+  gap: 2rem;
+}
+
+.download-button button {
+  position: relative;
+  display: inline-flex;
+  width: max-content;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: .2rem solid var(--main-color);
+  border-radius: 1rem;
+  padding: 1rem;
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--main-color);
+  z-index: 1;
+  overflow: hidden;
+  transition: .5s;
+}
+
+.download-button button:nth-child(2) {
+  background: var(--main-color);
+  color: var(--bg-color);
+}
+
+.download-button button:hover {
+  color: var(--bg-color);
+}
+
+.download-button button:nth-child(2):hover {
+  color: var(--main-color);
+}
+
+.download-button button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  background: var(--main-color);
+  height: 100%;
+  z-index: -1;
+  transition: .5s;
+}
+
+.download-button button:nth-child(2)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  background: var(--bg-color);
+}
+
+.download-button button:hover::before {
+  width: 100%;
+}
+
 @media screen and (min-width: 400px) {
   .logo {
     font-size: 4rem;
   }
 
   .home-content h1 {
-    font-size: 5.6rem;
+    font-size: 4rem;
+  }
+
+  .home-content span {
+    font-size: 8rem;
+  }
+  
+  .home-content {
+    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
   }
 
   .home-content .text-animate h3 {
     font-size: 3.2rem;
+  }
+
+  .home-sci {
+    grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
+  }
+
+  .download-button {
+    grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .home-content {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
