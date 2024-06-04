@@ -1,0 +1,36 @@
+:root {
+    /* Color palette */
+    --primary-color: hsl(210, 20%, 30%);
+    --secondary-color: hsl(210, 15%, 45%);
+    --background-color: hsl(0, 0%, 90%);
+    --foreground-color: hsl(0, 0%, 15%);
+    --border-color: hsl(0, 0%, 70%);
+
+    /* Font family */
+    --font-family: 'Inter', sans-serif;
+
+    /* Font sizes */
+    --font-size-normal: 1rem;
+    --font-size-large: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark mode colors */
+        --background-color: hsl(0, 0%, 15%);
+        --foreground-color: hsl(0, 0%, 95%);
+        --border-color: hsl(0, 0%, 30%);
+    }
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--foreground-color);
+    font-family: var(--font-family);
+    font-size: var(--font-size-normal);
+    border-color: var(--border-color);
+}
+
+h1, h2, h3 {
+    font-size: var(--font-size-large);
+}
