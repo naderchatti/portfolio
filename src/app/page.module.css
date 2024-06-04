@@ -3,6 +3,11 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
+  padding: 2rem;
   min-height: 100vh;
 }
+
+.title {
+  margin-block-end: 2rem;
+}
+
