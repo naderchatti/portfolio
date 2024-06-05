@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    /* Color palette */
+    --primary-color: hsl(210, 20%, 35%);
+    --secondary-color: hsl(210, 15%, 45%);
+    --background-color: hsl(0, 0%, 90%);
+    --foreground-color: hsl(0, 0%, 15%);
+    --border-color: hsl(0, 0%, 70%);
+    --label-color: hsl(0, 0%, 15%);
+    --white-color: hsl(0, 0%, 95%);
+    --black-color: hsl(0, 0%, 15%);
+    --error-color: hsl(0, 100%, 50%);
+
+    /* Font family */
+    --font-family: 'Montserrat', sans-serif;
+
+    /* Font sizes */
+    --font-size-normal: 1rem;
+    --font-size-large: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark mode colors */
+        --background-color: hsl(0, 0%, 15%);
+        --foreground-color: hsl(0, 0%, 95%);
+        --border-color: hsl(0, 0%, 30%);
+        --inverse-label-color: hsl(0, 0%, 95%);
+    }
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--foreground-color);
+    font-family: var(--font-family);
+    font-size: var(--font-size-normal);
+    border-color: var(--border-color);
+}
+
+h1, h2, h3 {
+    font-size: var(--font-size-large);
+    font-family: var(--font-family);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+a {
+    color: var(--foreground-color);
+    text-decoration: none;
+    transition: scale 0.3s ease;
+    font-family: var(--font-family);
+}
+
+a:hover {
+    scale: 1.02;
+}
+
+@media (min-width: 768px) {
+    a:hover {
+        scale: 1.05;
+    }
+}
