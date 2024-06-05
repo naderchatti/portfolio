@@ -6,6 +6,22 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+const Links = ({ toggleDrawer }: { toggleDrawer?: () => void }) => {
+  return (
+    <>
+      <Link href="/" onClick={toggleDrawer}>
+        Home
+      </Link>
+      <Link href="/blog" onClick={toggleDrawer}>
+        Blog
+      </Link>
+      <Link href="/contact" onClick={toggleDrawer}>
+        Contact
+      </Link>
+    </>
+  );
+};
+
 const Navbar = () => {
   const router = useRouter();
   const { isMobile } = useResponsive();
@@ -34,7 +50,7 @@ const Navbar = () => {
         >
           Nader.
         </h1>
-        {isMobile ? (
+        {/* {isMobile ? (
           <input
             type="checkbox"
             role="button"
@@ -45,13 +61,11 @@ const Navbar = () => {
           />
         ) : (
           <div className={styles.navLinks}>
-            <Link href="/">Home</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/contact">Contact</Link>
+            <Links />
           </div>
-        )}
+        )} */}
       </div>
-      {isMobile && <Drawer toggleDrawer={toggleDrawer} isOpen={isOpen} />}
+      {/* {isMobile && <Drawer toggleDrawer={toggleDrawer} isOpen={isOpen} />} */}
     </>
   );
 };
@@ -67,15 +81,7 @@ const Drawer = ({
 }) => {
   return (
     <div className={`${styles.drawer} ${isOpen ? styles.open : ''}`}>
-      <Link href="/" onClick={toggleDrawer}>
-        Home
-      </Link>
-      <Link href="/blog" onClick={toggleDrawer}>
-        Blog
-      </Link>
-      <Link href="/contact" onClick={toggleDrawer}>
-        Contact
-      </Link>
+      <Links toggleDrawer={toggleDrawer} />
     </div>
   );
 };

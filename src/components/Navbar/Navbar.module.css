@@ -18,6 +18,7 @@
     font-weight: bold;
     color: var(--primary-color);
     cursor: pointer;
+    width: fit-content;
 }
 
 .navLinks {
