@@ -60,6 +60,7 @@
 @media (min-width: 768px) {
     .modalContainer{
         width: 50%;
+        padding: 2rem;
     }
 
     .modalButtons{
