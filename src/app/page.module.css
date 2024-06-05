@@ -6,7 +6,56 @@
   padding: 2rem;
 }
 
-.title {
-  margin-block-end: 2rem;
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: flex-start;
+}
+
+.hello {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--white-color);
+}
+
+.name {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  overflow: hidden;
+  width: 0;
+  border-right: .075em solid var(--secondary-color);
+  white-space: nowrap;
+  animation:
+    typing 1s 3.5s steps(12) forwards,
+    blink-caret 1s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--secondary-color); }
+}
+
+.role {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--secondary-color);
+}
+
+@media (min-width: 768px) {
+  .name {
+    font-size: 4rem;
+  }
+
+  .role {
+    font-size: 2rem;
+  }
 }
 

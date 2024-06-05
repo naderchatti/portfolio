@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
     /* Color palette */
     --primary-color: hsl(210, 20%, 35%);
@@ -11,7 +13,7 @@
     --error-color: hsl(0, 100%, 50%);
 
     /* Font family */
-    --font-family: 'Inter', sans-serif;
+    --font-family: 'Montserrat', sans-serif;
 
     /* Font sizes */
     --font-size-normal: 1rem;
@@ -38,17 +40,20 @@ body {
 
 h1, h2, h3 {
     font-size: var(--font-size-large);
+    font-family: var(--font-family);
 }
 
 * {
     margin: 0;
     padding: 0;
+    font-family: var(--font-family);
 }
 
 a {
     color: var(--foreground-color);
     text-decoration: none;
     transition: scale 0.3s ease;
+    font-family: var(--font-family);
 }
 
 a:hover {
