@@ -1,10 +1,14 @@
 :root {
     /* Color palette */
-    --primary-color: hsl(210, 20%, 30%);
+    --primary-color: hsl(210, 20%, 35%);
     --secondary-color: hsl(210, 15%, 45%);
     --background-color: hsl(0, 0%, 90%);
     --foreground-color: hsl(0, 0%, 15%);
     --border-color: hsl(0, 0%, 70%);
+    --label-color: hsl(0, 0%, 15%);
+    --white-color: hsl(0, 0%, 95%);
+    --black-color: hsl(0, 0%, 15%);
+    --error-color: hsl(0, 100%, 50%);
 
     /* Font family */
     --font-family: 'Inter', sans-serif;
@@ -20,6 +24,7 @@
         --background-color: hsl(0, 0%, 15%);
         --foreground-color: hsl(0, 0%, 95%);
         --border-color: hsl(0, 0%, 30%);
+        --inverse-label-color: hsl(0, 0%, 95%);
     }
 }
 
