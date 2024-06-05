@@ -7,9 +7,10 @@ const LandingAnimation = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setIsVisible(false);
     }, 2500);
+    return () => clearTimeout(timeout);
   }, []);
 
   if (isVisible)
