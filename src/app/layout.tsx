@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ResponsiveProvider } from '@/context/ResponsiveContext';
 import Navbar from '@/components/Navbar/Navbar';
+import Image from 'next/image';
+import LandingAnimation from '@/components/LandingAnimation/LandingAnimation';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,6 +22,7 @@ export default function RootLayout({
     <ResponsiveProvider>
       <html lang="en">
         <body className={inter.className}>
+          <LandingAnimation />
           <Navbar />
           {children}
         </body>
