@@ -1,0 +1,32 @@
+.inputContainer {
+    position: relative;
+    width: 100%;
+    margin-block-start: 0.5rem;
+}
+
+.inputText {
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 0.5rem;
+    font-family: var(--font-family);
+}
+
+.floatingLabel {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    opacity: 0.5;
+    pointer-events: none;
+    color: var(--label-color);
+}
+
+.focused {
+    transform: translate(-0.8rem, -2.6rem);
+    font-size: 0.8em;
+    color: var(--inverse-label-color);
+}
+

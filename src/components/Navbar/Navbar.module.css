@@ -1,0 +1,120 @@
+.navbar {
+    height: 4rem;
+    background-color: var(--background-color);
+    outline: 1px solid var(--border-color);
+    box-shadow: 0 0 10px 0 var(--border-color);
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    cursor: pointer;
+    width: fit-content;
+}
+
+.navLinks {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.drawer {
+    display: grid;
+    grid-template-rows: repeat(3, 2rem);
+    gap: 1rem;
+    position: fixed;
+    z-index: 100;
+    top: 4rem;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    opacity: 0;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    height: 0;
+    background: hsla(0, 0%, 100%, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in-out;
+}
+
+.drawer.open {
+    opacity: 1;
+    height: 10rem;
+}
+
+.menuButton {
+    --s: 1.4rem;
+    --c: var(--foreground-color);
+
+    height: var(--s);
+    aspect-ratio: 1;
+    border: none;
+    padding: 0;
+    border-inline: calc(var(--s)/2) solid #0000;
+    box-sizing: content-box;
+    --_g1: linear-gradient(var(--c) 20%, #0000 0 80%, var(--c) 0) no-repeat content-box border-box;
+    --_g2: radial-gradient(circle closest-side at 50% 12.5%, var(--c) 95%, #0000) repeat-y content-box border-box;
+    background:
+        var(--_g2) left var(--_p, 0px) top,
+        var(--_g1) left calc(var(--s)/10 + var(--_p, 0px)) top,
+        var(--_g2) right var(--_p, 0px) top,
+        var(--_g1) right calc(var(--s)/10 + var(--_p, 0px)) top;
+    background-size:
+        20% 80%,
+        40% 100%;
+    position: relative;
+    clip-path: inset(0 25%);
+    --webkit-mask: linear-gradient(90deg, #0000, #000 25% 75%, #0000);
+    cursor: pointer;
+    transition:
+        background-position .3s var(--_s, .3s),
+        clip-path 0s var(--_s, .6s);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.menuButton:before,
+.menuButton:after {
+    content: "";
+    position: absolute;
+    border-radius: var(--s);
+    inset: 40% 0;
+    background: var(--c);
+    transition: transform .3s calc(.3s - var(--_s, .3s));
+}
+
+.menuButton:checked {
+    clip-path: inset(0);
+    --_p: calc(-1*var(--s));
+    --_s: 0s;
+}
+
+.menuButton:checked:before {
+    transform: rotate(45deg);
+}
+
+.menuButton:checked:after {
+    transform: rotate(-45deg);
+}
+
+.menuButton:focus-visible {
+    clip-path: none;
+    --webkit-mask: none;
+    border: none;
+    outline: 2px solid var(--c);
+    outline-offset: 5px;
+}
+
+
