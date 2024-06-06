@@ -17,18 +17,25 @@ export default function Home() {
   };
 
   const downloadEnglish = () => {
-    downloadResume('/CV Nader CHATTI EN.pdf', 'CV Nader CHATTI EN.pdf');
+    downloadResume(
+      '/documents/CV_Nader_CHATTI_EN.pdf',
+      'CV Nader CHATTI EN.pdf'
+    );
     toggleShowModal();
   };
 
   const downloadFrench = () => {
-    downloadResume('/CV Nader CHATTI FR.pdf', 'CV Nader CHATTI FR.pdf');
+    downloadResume(
+      '/documents/CV_Nader_CHATTI_FR.pdf',
+      'CV Nader CHATTI FR.pdf'
+    );
     toggleShowModal();
   };
 
   const downloadResume = (path: string, filename: string) => {
     const link = document.createElement('a');
     link.href = path;
+    link.target = '_blank';
     link.setAttribute('download', filename);
     document.body.appendChild(link);
 
