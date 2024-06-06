@@ -17,24 +17,30 @@ export default function Home() {
   };
 
   const downloadEnglish = () => {
-    downloadResume('/CV Nader CHATTI EN.pdf', 'CV Nader CHATTI EN.pdf');
+    downloadResume('CV_Nader_CHATTI_EN.pdf');
     toggleShowModal();
   };
 
   const downloadFrench = () => {
-    downloadResume('/CV Nader CHATTI FR.pdf', 'CV Nader CHATTI FR.pdf');
+    downloadResume('CV_Nader_CHATTI_FR.pdf');
     toggleShowModal();
   };
 
-  const downloadResume = (path: string, filename: string) => {
-    const link = document.createElement('a');
-    link.href = path;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
+  const downloadResume = (filename: string) => {
+    const path = `/@public/${filename}`;
+    fetch(path)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((e) => console.error('Error downloading the file:', e));
   };
 
   return (
