@@ -7,6 +7,15 @@ import PrimaryButton from '@/components/PrimaryButton/PrimaryButton';
 import { useState } from 'react';
 import { useResponsive } from '@/context/ResponsiveContext';
 import ModalTwoOptions from '@/components/Modal/ModalTwoOptions';
+import NextJS from '@/components/CustomSVGs/NextJS';
+import React from '@/components/CustomSVGs/React';
+import NodeJS from '@/components/CustomSVGs/NodeJS';
+import Angular from '@/components/CustomSVGs/Angular';
+import Python from '@/components/CustomSVGs/Python';
+import HTML from '@/components/CustomSVGs/HTML';
+import JS from '@/components/CustomSVGs/JS';
+import CSS from '@/components/CustomSVGs/CSS';
+import Java from '@/components/CustomSVGs/Java';
 
 export default function Home() {
   const { isMobile } = useResponsive();
@@ -62,6 +71,74 @@ export default function Home() {
           <span className={styles.hello}>Hello, I&apos;m</span>
           <h1 className={styles.name}>Nader CHATTI</h1>
           <h4 className={styles.role}>Full Stack Developer</h4>
+        </section>
+
+        <section
+          className={styles.frameworks}
+          style={
+            {
+              '--item-width': '100px',
+              '--item-height': '50px',
+              '--quantity': '9',
+            } as React.CSSProperties
+          }
+        >
+          <div className={styles.list}>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '1' } as React.CSSProperties}
+            >
+              <NextJS />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '2' } as React.CSSProperties}
+            >
+              <React />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '3' } as React.CSSProperties}
+            >
+              <NodeJS />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '4' } as React.CSSProperties}
+            >
+              <Angular />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '5' } as React.CSSProperties}
+            >
+              <Python />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '6' } as React.CSSProperties}
+            >
+              <HTML />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '7' } as React.CSSProperties}
+            >
+              <JS />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '8' } as React.CSSProperties}
+            >
+              <CSS />
+            </div>
+            <div
+              className={styles.item}
+              style={{ '--item-position': '9' } as React.CSSProperties}
+            >
+              <Java />
+            </div>
+          </div>
         </section>
 
         <section className={styles.files}>
