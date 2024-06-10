@@ -1,6 +1,6 @@
 .main {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto auto;
   padding: 2rem;
   box-sizing: border-box;
   gap: 3rem;
@@ -8,7 +8,7 @@
 }
 
 .main > * {
-  margin: 0 auto;
+  margin: auto;
 }
 
 .hero {
@@ -55,46 +55,7 @@
 
 .frameworks {
   width: 100%;
-  height: var(--item-height);
   overflow: hidden;
-  mask-image: linear-gradient(
-    to right, 
-    rgba(0, 0, 0, 0), 
-    rgba(0, 0, 0, 1) 20% 80%, 
-    rgb(0, 0, 0, 0)
-  );
-}
-
-.frameworks .list {
-  display: flex;
-  width: 100%;
-  min-width: calc(var(--item-width) * var(--quantity));
-  position: relative;
-}
-
-.frameworks .list .item {
-  --animation-duration: 15s;
-  width: var(--item-width);
-  height: var(--item-height);
-  position: absolute;
-  left: 100%;
-  animation: scrollLeft var(--animation-duration) linear infinite;
-  animation-delay: calc(var(--animation-duration) / var(--quantity) * (var(--quantity) - var(--item-position)) * -1);
-  transition: all 0.3s ease;
-}
-
-.frameworks:hover .list .item {
-  animation-play-state: paused;
-  filter: grayscale(1);
-}
-
-.frameworks .list .item:hover {
-  filter: grayscale(0);
-  cursor: pointer;
-}
-
-@keyframes scrollLeft {
-  to { left: calc(var(--item-width) * -1); }
 }
 
 .files {
@@ -156,10 +117,6 @@
   .iconContainer .icon {
     width: 2rem;
     height: 2rem;
-  }
-
-  .frameworks {
-    width: 50%;
   }
 }
 
