@@ -9,7 +9,7 @@ const LandingAnimation = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsVisible(false);
-    }, 2500);
+    }, 3000);
     return () => clearTimeout(timeout);
   }, []);
 
