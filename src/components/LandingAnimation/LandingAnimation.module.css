@@ -1,20 +1,9 @@
 .container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000;
-    width: 100vw;
-    height: 100dvh;
     overflow: hidden;
-    background-color: hsla(0, 0%, 0%, 0.5);
-    backdrop-filter: blur(5px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    animation: fadeOut 0.5s 2.5s ease-in-out forwards;
 }
 
 @keyframes fadeOut {
@@ -27,25 +16,42 @@
 }
 
 .svg {
-    width: 80vw;
+    width: 60vw;
     stroke-dasharray: 4500;
     opacity: 0;
-    animation: draw 3s 0.75s ease-in-out forwards;
+    fill: var(--primary-color);
+    fill-opacity: 0;
+    mask-image: linear-gradient(60deg, rgba(0, 0, 0, 0.5) 10%, #fff, rgba(0, 0, 0, 0.5) 90%);
+    mask-size: 300% 100%;
+    animation: draw 3s 0.75s ease-in-out forwards, blink 3s infinite alternate;
+}
+
+@keyframes blink {
+    100% {
+        mask-position: right;
+    }
+}
+
+.svg path, .svg polygon {
+    stroke: var(--foreground-color);
 }
 
 @keyframes draw {
     0% {
         stroke-dashoffset: 4500;
         opacity: 0;
+        fill-opacity: 0;
     }
 
     10% {
         opacity: 1;
+        fill-opacity: 0;
     }
     
     100% {
         stroke-dashoffset: 0;
         opacity: 1;
+        fill-opacity: 1;
     }
 }
 
@@ -57,7 +63,7 @@
 
 @media (min-width: 768px) {
     .svg {
-        width: 40vw;
+        width: 30vw;
     }
 }
 

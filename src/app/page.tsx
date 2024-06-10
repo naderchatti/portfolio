@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useResponsive } from '@/context/ResponsiveContext';
 import ModalTwoOptions from '@/components/Modal/ModalTwoOptions';
 import { FrameworkSlider } from '@/components/Slider/FrameworkSlider';
+import LandingAnimation from '@/components/LandingAnimation/LandingAnimation';
 
 export default function Home() {
   const { isMobile } = useResponsive();
@@ -59,52 +60,62 @@ export default function Home() {
         />
       )}
       <main className={styles.main}>
-        <section className={styles.hero}>
-          <span className={styles.hello}>Hello, I&apos;m</span>
-          <h1 className={styles.name}>Nader CHATTI</h1>
-          <h4 className={styles.role}>Full Stack Developer</h4>
+        <section>
+          <LandingAnimation />
+
+          <div className={styles.hero}>
+            <h3>Hello, I&apos;m</h3>
+            <h1 className={styles.name}>Nader CHATTI</h1>
+            <h3 className={styles.role}>Full Stack Engineer</h3>
+          </div>
         </section>
 
-        <section className={styles.frameworks}>
-          <FrameworkSlider />
+        <section>
+          <div className={styles.frameworks}>
+            <h2>My skills</h2>
+            <FrameworkSlider />
+          </div>
         </section>
 
-        <section className={styles.files}>
-          <PrimaryButton type="button" action={toggleShowModal}>
-            Download Resume
-          </PrimaryButton>
-        </section>
-
-        <section className={styles.social}>
-          <div className={styles.iconContainer}>
-            <Link
-              href="https://www.linkedin.com/in/naderchatti"
-              target="_blank"
-              className={styles.icon}
-            >
-              <TfiLinkedin size={isMobile ? '1rem' : '2rem'} />
-            </Link>
-            <Link
-              href="https://github.com/chattinader"
-              target="_blank"
-              className={styles.icon}
-            >
-              <TfiGithub size={isMobile ? '1rem' : '2rem'} />
-            </Link>
-            <Link
-              href="https://twitter.com/naderchatti"
-              target="_blank"
-              className={styles.icon}
-            >
-              <TfiTwitter size={isMobile ? '1rem' : '2rem'} />
-            </Link>
-            <Link
-              href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
-              target="_blank"
-              className={styles.icon}
-            >
-              <TfiEmail size={isMobile ? '1rem' : '2rem'} />
-            </Link>
+        <section>
+          <div className={styles.files}>
+            <h2>Download my resume</h2>
+            <PrimaryButton type="button" action={toggleShowModal}>
+              Download Resume
+            </PrimaryButton>
+          </div>
+          <div className={styles.social}>
+            <h2>Find me on socials</h2>
+            <div className={styles.iconContainer}>
+              <Link
+                href="https://www.linkedin.com/in/naderchatti"
+                target="_blank"
+                className={styles.icon}
+              >
+                <TfiLinkedin size={isMobile ? '1rem' : '2rem'} />
+              </Link>
+              <Link
+                href="https://github.com/chattinader"
+                target="_blank"
+                className={styles.icon}
+              >
+                <TfiGithub size={isMobile ? '1rem' : '2rem'} />
+              </Link>
+              <Link
+                href="https://twitter.com/naderchatti"
+                target="_blank"
+                className={styles.icon}
+              >
+                <TfiTwitter size={isMobile ? '1rem' : '2rem'} />
+              </Link>
+              <Link
+                href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
+                target="_blank"
+                className={styles.icon}
+              >
+                <TfiEmail size={isMobile ? '1rem' : '2rem'} />
+              </Link>
+            </div>
           </div>
         </section>
       </main>
