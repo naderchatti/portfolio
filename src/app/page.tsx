@@ -70,7 +70,6 @@ export default function Home() {
         </section>
 
         <section className={styles.files}>
-          <h5>Download my resume by clicking on the button below</h5>
           <PrimaryButton type="button" action={toggleShowModal}>
             Download Resume
           </PrimaryButton>
