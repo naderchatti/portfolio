@@ -24,16 +24,15 @@
     left: 100%;
     animation: scrollLeft var(--animation-duration) linear infinite;
     animation-delay: calc(var(--animation-duration) / var(--quantity) * (var(--quantity) - var(--item-position)) * -1);
-    transition: all 0.3s ease;
 }
 
 .slider:hover .list .item {
     animation-play-state: paused;
-    filter: grayscale(1);
 }
 
-.slider .list .item:hover {
-    filter: grayscale(0);
+.slider .list .item:hover svg {
+    transition: all 0.3s ease;
+    fill: var(--secondary-color);
     cursor: pointer;
 }
 
