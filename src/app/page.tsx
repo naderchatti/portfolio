@@ -64,9 +64,27 @@ export default function Home() {
           <LandingAnimation />
 
           <div className={styles.hero}>
-            <h3>Hello, I&apos;m</h3>
+            <h2>Hello, I&apos;m</h2>
             <h1 className={styles.name}>Nader CHATTI</h1>
-            <h3 className={styles.role}>Full Stack Engineer</h3>
+            <h3 className={styles.role}>Software Engineer</h3>
+          </div>
+        </section>
+
+        <section>
+          <div className={styles.about}>
+            <h2>About Me</h2>
+            <p>
+              I am a software engineer, specializing in building exceptional
+              digital experiences. <br />
+              As a full stack developer, I have a passion for creating clean
+              architecture and continuously learning new technologies.
+            </p>
+            <p>
+              I am located in France and as a free-lancer, I work from every
+              corner of the world. <br />
+              So if you need the expert touch in your project, I can be your
+              partner.
+            </p>
           </div>
         </section>
 
