@@ -70,7 +70,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section>
+        <section
+          style={
+            {
+              '--height': '150%',
+            } as React.CSSProperties
+          }
+        >
           <div className={styles.about}>
             <h2>About Me</h2>
             <p>
@@ -78,8 +84,8 @@ export default function Home() {
               digital experiences. <br />
               As a full stack developer, I have a passion for creating clean
               architecture and continuously learning new technologies.
-            </p>
-            <p>
+              <br />
+              <br />
               I am located in France and as a free-lancer, I work from every
               corner of the world. <br />
               So if you need the expert touch in your project, I can be your

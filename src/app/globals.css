@@ -6,6 +6,7 @@
     --secondary-color: hsl(210, 15%, 45%);
     --background-color: hsl(0, 0%, 90%);
     --foreground-color: hsl(0, 0%, 15%);
+    --foreground-color-04: hsla(0, 0%, 15%, 0.4);
     --border-color: hsl(0, 0%, 70%);
     --label-color: hsl(0, 0%, 15%);
     --white-color: hsl(0, 0%, 95%);
@@ -25,6 +26,7 @@
         /* Dark mode colors */
         --background-color: hsl(0, 0%, 15%);
         --foreground-color: hsl(0, 0%, 95%);
+        --foreground-color-04: hsla(0, 0%, 95%, 0.4);
         --border-color: hsl(0, 0%, 30%);
         --inverse-label-color: hsl(0, 0%, 95%);
     }
