@@ -70,13 +70,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          style={
-            {
-              '--height': '150%',
-            } as React.CSSProperties
-          }
-        >
+        <section className={styles.aboutSection}>
           <div className={styles.about}>
             <h2>About Me</h2>
             <p>
