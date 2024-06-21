@@ -10,6 +10,7 @@ import ModalTwoOptions from '@/components/Modal/ModalTwoOptions';
 import { FrameworkSlider } from '@/components/Slider/FrameworkSlider';
 import LandingAnimation from '@/components/LandingAnimation/LandingAnimation';
 import { ProgrammingLanguagesSlider } from '@/components/Slider/ProgrammingLanguagesSlider';
+import { DatabaseSlider } from '@/components/Slider/DatabaseSlider';
 
 export default function Home() {
   const { isMobile } = useResponsive();
@@ -99,6 +100,10 @@ export default function Home() {
             <div className={styles.skillsItem}>
               <h3>Programming languages</h3>
               <ProgrammingLanguagesSlider />
+            </div>
+            <div className={styles.skillsItem}>
+              <h3>Databases</h3>
+              <DatabaseSlider />
             </div>
           </div>
         </section>
