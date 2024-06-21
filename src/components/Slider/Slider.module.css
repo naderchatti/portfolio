@@ -22,7 +22,7 @@
     height: var(--item-height);
     position: absolute;
     left: 100%;
-    animation: scrollLeft var(--animation-duration) linear infinite;
+    animation: scrollLeft var(--animation-duration) linear infinite var(--direction);
     animation-delay: calc(var(--animation-duration) / var(--quantity) * (var(--quantity) - var(--item-position)) * -1);
 }
 

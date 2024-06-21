@@ -80,11 +80,17 @@
   animation-range-end: 80vh;
 }
 
-.frameworks {
+.skills {
   width: 100%;
   overflow: hidden;
   display: grid;
+  gap: 2rem;
+}
+
+.skillsItem {
+  display: grid;
   place-content: center;
+  gap: 1rem;
 }
 
 .files {

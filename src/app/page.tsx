@@ -9,6 +9,7 @@ import { useResponsive } from '@/context/ResponsiveContext';
 import ModalTwoOptions from '@/components/Modal/ModalTwoOptions';
 import { FrameworkSlider } from '@/components/Slider/FrameworkSlider';
 import LandingAnimation from '@/components/LandingAnimation/LandingAnimation';
+import { ProgrammingLanguagesSlider } from '@/components/Slider/ProgrammingLanguagesSlider';
 
 export default function Home() {
   const { isMobile } = useResponsive();
@@ -89,9 +90,16 @@ export default function Home() {
         </section>
 
         <section>
-          <div className={styles.frameworks}>
-            <h2>My skills</h2>
-            <FrameworkSlider />
+          <h2>My skills</h2>
+          <div className={styles.skills}>
+            <div className={styles.skillsItem}>
+              <h3>Frameworks</h3>
+              <FrameworkSlider />
+            </div>
+            <div className={styles.skillsItem}>
+              <h3>Programming languages</h3>
+              <ProgrammingLanguagesSlider />
+            </div>
           </div>
         </section>
 
