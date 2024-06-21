@@ -9,11 +9,9 @@ const frameworks = [
   'React',
   'NodeJS',
   'Angular',
-  'Python',
-  'HTML',
-  'JS',
-  'CSS',
-  'Java',
+  'Flask',
+  'FastAPI',
+  'Spring Boot',
 ];
 
 export const FrameworkSlider = () => {
@@ -26,7 +24,7 @@ export const FrameworkSlider = () => {
         {
           '--item-width': isMobile ? '3.5rem' : '6rem',
           '--item-height': isMobile ? '2rem' : '3rem',
-          '--quantity': '9',
+          '--quantity': frameworks.length.toString(),
         } as React.CSSProperties
       }
     >
@@ -43,6 +41,7 @@ export const FrameworkSlider = () => {
               }
             >
               <CustomSVGs iconName={framework} />
+              <p>{framework}</p>
             </div>
           );
         })}

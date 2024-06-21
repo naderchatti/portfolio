@@ -1,7 +1,7 @@
 .slider {
     width: 100%;
     margin: 0 auto;
-    height: var(--item-height);
+    height: calc(var(--item-height) + 2.5rem);
     overflow: hidden;
     mask-image: linear-gradient(to right,
             rgba(0, 0, 0, 0),
@@ -24,6 +24,11 @@
     left: 100%;
     animation: scrollLeft var(--animation-duration) linear infinite;
     animation-delay: calc(var(--animation-duration) / var(--quantity) * (var(--quantity) - var(--item-position)) * -1);
+}
+
+.slider .list .item p {
+    font-size: 0.75rem;
+    margin-block-start: 0.5rem;
 }
 
 .slider:hover .list .item {
