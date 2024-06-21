@@ -5,16 +5,17 @@ import { useResponsive } from '@/context/ResponsiveContext';
 import CustomSVGs from '../CustomSVGs/CustomSVGs';
 
 const frameworks = [
-  'NextJS',
-  'React',
-  'NodeJS',
-  'Angular',
-  'Flask',
-  'FastAPI',
-  'Spring Boot',
+  'Python',
+  'HTML',
+  'CSS',
+  'JavaScript',
+  'TypeScript',
+  'Java',
+  'C',
+  'C++',
 ];
 
-export const FrameworkSlider = () => {
+export const ProgrammingLanguagesSlider = () => {
   const { isMobile } = useResponsive();
 
   return (
@@ -25,7 +26,7 @@ export const FrameworkSlider = () => {
           '--item-width': isMobile ? '3.5rem' : '6rem',
           '--item-height': isMobile ? '2rem' : '3rem',
           '--quantity': frameworks.length.toString(),
-          '--direction': 'forwards',
+          '--direction': 'reverse',
         } as React.CSSProperties
       }
     >

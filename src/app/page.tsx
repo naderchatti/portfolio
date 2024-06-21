@@ -9,6 +9,8 @@ import { useResponsive } from '@/context/ResponsiveContext';
 import ModalTwoOptions from '@/components/Modal/ModalTwoOptions';
 import { FrameworkSlider } from '@/components/Slider/FrameworkSlider';
 import LandingAnimation from '@/components/LandingAnimation/LandingAnimation';
+import { ProgrammingLanguagesSlider } from '@/components/Slider/ProgrammingLanguagesSlider';
+import { DatabaseSlider } from '@/components/Slider/DatabaseSlider';
 
 export default function Home() {
   const { isMobile } = useResponsive();
@@ -70,13 +72,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          style={
-            {
-              '--height': '150%',
-            } as React.CSSProperties
-          }
-        >
+        <section className={styles.aboutSection}>
           <div className={styles.about}>
             <h2>About Me</h2>
             <p>
@@ -95,9 +91,20 @@ export default function Home() {
         </section>
 
         <section>
-          <div className={styles.frameworks}>
-            <h2>My skills</h2>
-            <FrameworkSlider />
+          <h2>My skills</h2>
+          <div className={styles.skills}>
+            <div className={styles.skillsItem}>
+              <h3>Frameworks</h3>
+              <FrameworkSlider />
+            </div>
+            <div className={styles.skillsItem}>
+              <h3>Programming languages</h3>
+              <ProgrammingLanguagesSlider />
+            </div>
+            <div className={styles.skillsItem}>
+              <h3>Databases</h3>
+              <DatabaseSlider />
+            </div>
           </div>
         </section>
 

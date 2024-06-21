@@ -4,17 +4,9 @@ import styles from './Slider.module.css';
 import { useResponsive } from '@/context/ResponsiveContext';
 import CustomSVGs from '../CustomSVGs/CustomSVGs';
 
-const frameworks = [
-  'NextJS',
-  'React',
-  'NodeJS',
-  'Angular',
-  'Flask',
-  'FastAPI',
-  'Spring Boot',
-];
+const frameworks = ['MongoDB', 'Oracle', 'MySQL', 'SQLite', 'PostgreSQL'];
 
-export const FrameworkSlider = () => {
+export const DatabaseSlider = () => {
   const { isMobile } = useResponsive();
 
   return (

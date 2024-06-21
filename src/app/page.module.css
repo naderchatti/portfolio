@@ -17,11 +17,12 @@
 
 .main section {
   display: grid;
-  place-content: center;
+  /* place-content: center; */
   text-align: center;
   gap: 4rem;
   padding: 2rem;
-  height: var(--height, calc(100dvh - 4rem));
+  min-height: calc(100dvh - 4rem);
+  /* height: var(--height, calc(100dvh - 4rem)); */
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
   scroll-snap-align: start;
 }
@@ -48,8 +49,14 @@
     blink-caret 1s step-end infinite;
 }
 
+.aboutSection {
+  height: calc(150dvh - 4rem);
+  position: relative;
+}
+
 .about {
   position: sticky;
+  margin: auto;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -73,9 +80,22 @@
   animation-range-end: 80vh;
 }
 
-.frameworks {
+.skills {
   width: 100%;
   overflow: hidden;
+  display: grid;
+  gap: 2rem;
+}
+
+.skillsItem {
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+}
+
+.files {
+  display: grid;
+  margin: auto;
 }
 
 .iconContainer {
@@ -167,6 +187,15 @@
 
   .role {
     font-size: 2rem;
+  }
+
+  .files {
+    width: 50%;
+  }
+
+  .iconContainer {
+    width: 50%;
+    margin: auto;
   }
 
   .iconContainer .icon {
