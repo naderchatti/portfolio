@@ -27,7 +27,7 @@
 }
 
 .slider .list .item p {
-    font-size: 0.75rem;
+    font-size: 0.5rem;
     margin-block-start: 0.5rem;
 }
 
@@ -50,6 +50,10 @@
 @media (min-width: 768px) {
     .slider {
         width: 80%;
+    }
+
+    .slider .list .item p {
+        font-size: 0.75rem;
     }
 }
 
