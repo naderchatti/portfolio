@@ -32,7 +32,14 @@ const Contact = () => {
 
   return (
     <div className={styles.wrapper}>
-      <section>
+      <section className={styles.contactSection}>
+        <Image
+          src="/images/N-Logo.svg"
+          alt="N-Logo"
+          width={500}
+          height={500}
+          className={styles.logo}
+        />
         <div className={styles.contactWrapper}>
           <form onSubmit={handleSubmit} className={styles.contactCard}>
             <span className={styles.subtitle}>Contact</span>
