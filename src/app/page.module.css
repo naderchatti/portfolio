@@ -177,12 +177,12 @@
   color: var(--default-text-color-muted);
 }
 
-.education {
+.steps {
   display: grid;
   gap: 1rem;
 }
 
-.educationHeader {
+.stepsHeader {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -191,7 +191,7 @@
   margin: 0 auto;
 }
 
-.educationWrapper {
+.stepsWrapper {
   width: 80%;
   margin: 0 auto;
   position: relative;
@@ -199,7 +199,7 @@
   padding-block-end: 4rem;
 }
 
-.educationTimelineIndicator {
+.stepsTimelineIndicator {
   position: absolute;
   top: 0;
   width: 1px;
@@ -207,7 +207,7 @@
   background-color: var(--default-border-color);
 }
 
-.educationTimelineIndex {
+.stepsTimelineIndex {
   position: absolute;
   left: -1.5rem;
   width: 3rem;
@@ -221,30 +221,17 @@
   backdrop-filter: blur(4px);
 }
 
-.educationTimelineIndex1 {
-  top: 3%;
-}
-
-.educationTimelineIndex2 {
-  top: 33%;
-}
-
-.educationTimelineIndex3 {
-  top: 62%;
-}
-
-.educationCards {
+.stepsCards {
   display: grid;
   gap: 8rem;
   position: relative;
 }
 
-.educationCard {
+.stepsCard {
   background-color: var(--primary-background-color-muted);
   padding: 1rem;
   border-radius: 0.25rem;
   border: 1px solid var(--default-border-color);
-  height: 12rem;
   width: 85%;
   margin-inline-start: auto;
   display: flex;
@@ -252,13 +239,13 @@
   gap: 1rem;
 }
 
-.educationCardWrapper {
+.stepsCardWrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.educationCardIndex {
+.stepsCardIndex {
   position: absolute;
   left: -1.5rem;
   width: 3rem;
@@ -274,7 +261,7 @@
   box-shadow: 0 0 0 1rem var(--default-background-color);
 }
 
-.educationCardDate {
+.stepsCardDate {
   font-family: 'Satoshi Light';
   font-weight: 100;
   font-size: 0.8rem;
@@ -286,14 +273,14 @@
   margin-inline-start: auto;
 }
 
-.educationCardTitle {
+.stepsCardTitle {
   font-family: 'Satoshi Light';
   font-weight: 100;
   font-size: 1.4rem;
   color: var(--default-text-color);
 }
 
-.educationCardDescription {
+.stepsCardDescription {
   font-family: 'Satoshi Light';
   font-weight: 100;
   font-size: 1rem;
@@ -319,45 +306,30 @@
     grid-template-rows: repeat(2, 1fr);
   }
 
-  .educationTimelineIndicator {
+  .stepsTimelineIndicator {
     left: 50%;
     transform: translateX(-50%);
   }
 
-  .educationTimelineIndex {
+  .stepsTimelineIndex {
     left: 50%;
     transform: translateX(-50%);
   }
 
-  .educationCard {
+  .stepsCard {
     width: 45%;
     margin: 0;
   }
 
-  /* .educationCard:nth-child(odd) {
-    margin-right: auto;
-    outline: 1px solid red;
-  }
-  
-  .educationCard:nth-child(even) {
-    align-self: flex-end;
-    margin-left: auto;
-  } */
-
-  /* .educationCards:nth-child(1) .educationCardWrapper .educationCard {
-    align-self: flex-start;
-    outline: 1px solid red;
-  } */
-
-  .educationCards:nth-child(2) .educationCardWrapper:nth-child(odd) .educationCard {
+  .stepsCards:nth-child(2) .stepsCardWrapper:nth-child(odd) .stepsCard {
     margin-left: auto;
   }
 
-  .educationCards:nth-child(2) .educationCardWrapper:nth-child(even) .educationCard {
+  .stepsCards:nth-child(2) .stepsCardWrapper:nth-child(even) .stepsCard {
     align-self: flex-end;
   }
 
-  .educationCardIndex {
+  .stepsCardIndex {
     left: 50%;
     transform: translateX(-50%);
   }

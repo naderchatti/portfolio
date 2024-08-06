@@ -137,57 +137,102 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.education}>
-        <div className={styles.educationHeader}>
-          <h2 className={styles.educationHeaderTitle}>Education</h2>
+      <section className={styles.steps}>
+        <div className={styles.stepsHeader}>
+          <h2 className={styles.stepsHeaderTitle}>Your project in 5 steps</h2>
         </div>
-        <div className={styles.educationWrapper}>
-          <div className={styles.educationTimelineIndicator} />
-          <div className={styles.educationCards}>
-            <div className={styles.educationCardWrapper}>
-              <div className={styles.educationCardIndex}>
+        <div className={styles.stepsWrapper}>
+          <div className={styles.stepsTimelineIndicator} />
+          <div className={styles.stepsCards}>
+            <div className={styles.stepsCardWrapper}>
+              <div className={styles.stepsCardIndex}>
                 <span>01</span>
               </div>
-              <div className={styles.educationCard}>
-                <div className={styles.educationCardDate}>
-                  <span>2019 - 2020 Nice, France</span>
+              <div className={styles.stepsCard}>
+                <div className={styles.stepsCardDate}>
+                  <span>2 HOURS</span>
                 </div>
-                <h2 className={styles.educationCardTitle}>
-                  Université Côte d&apos;Azur
-                </h2>
-                <p className={styles.educationCardDescription}>
-                  M2 MBDS : Master 2 in Big Data and System Integration
+                <span className={styles.stepsCardSubtitle}>DO WE MATCH?</span>
+                <h2 className={styles.stepsCardTitle}>DISCOVERY CALL</h2>
+                <p className={styles.stepsCardDescription}>
+                  Contact me to discuss your project, I will be happy to answer
+                  your questions. You can explain your project in detail and I
+                  will give you my feedback. I will also give you a quote for
+                  the project. I will also give you some advice on how to
+                  proceed.
                 </p>
               </div>
             </div>
-            <div className={styles.educationCardWrapper}>
-              <div className={styles.educationCardIndex}>
+            <div className={styles.stepsCardWrapper}>
+              <div className={styles.stepsCardIndex}>
                 <span>02</span>
               </div>
-              <div className={styles.educationCard}>
-                <div className={styles.educationCardDate}>
-                  <span>2018 - 2019 Nice, France</span>
+              <div className={styles.stepsCard}>
+                <div className={styles.stepsCardDate}>
+                  <span>1 WEEK</span>
                 </div>
-                <h2 className={styles.educationCardTitle}>
-                  Université Côte d&apos;Azur
-                </h2>
-                <p className={styles.educationCardDescription}>
-                  M1 MIAGE : Master 1 Computerized Methods Applied to Business
-                  Management
+                <span className={styles.stepsCardSubtitle}>
+                  DEFINE THE PROJECT
+                </span>
+                <h2 className={styles.stepsCardTitle}>CONCEPT & STRATEGY</h2>
+                <p className={styles.stepsCardDescription}>
+                  I will provide you with a detailed plan for your project.
+                  Including the scope of work, the timeline, the budget, and the
+                  resources needed. I will also provide you with a quote for the
+                  project.
                 </p>
               </div>
             </div>
-            <div className={styles.educationCardWrapper}>
-              <div className={styles.educationCardIndex}>
+            <div className={styles.stepsCardWrapper}>
+              <div className={styles.stepsCardIndex}>
                 <span>03</span>
               </div>
-              <div className={styles.educationCard}>
-                <div className={styles.educationCardDate}>
-                  <span>2013 - 2017 Sousse, Tunisia</span>
+              <div className={styles.stepsCard}>
+                <div className={styles.stepsCardDate}>
+                  <span>1 WEEK</span>
                 </div>
-                <h2 className={styles.educationCardTitle}>ISITCom</h2>
-                <p className={styles.educationCardDescription}>
-                  Applied License Degree in Computer Networking
+                <span className={styles.stepsCardSubtitle}>SOME MAGIC</span>
+                <h2 className={styles.stepsCardTitle}>DESIGN</h2>
+                <p className={styles.stepsCardDescription}>
+                  As I&apos;m not a designer, if you need a custom design, you
+                  will have to provide me with a design. Otherwise, I will
+                  provide you with a basic design that I think will fit your
+                  project.
+                </p>
+              </div>
+            </div>
+            <div className={styles.stepsCardWrapper}>
+              <div className={styles.stepsCardIndex}>
+                <span>04</span>
+              </div>
+              <div className={styles.stepsCard}>
+                <div className={styles.stepsCardDate}>
+                  <span>ESTIMATED TIME</span>
+                </div>
+                <span className={styles.stepsCardSubtitle}>MORE MAGIC</span>
+                <h2 className={styles.stepsCardTitle}>DEVELOPMENT</h2>
+                <p className={styles.stepsCardDescription}>
+                  I will proceed to the development of your project. I will keep
+                  you updated on the progress of the project. I will provide you
+                  with a demo of the project at the end of the development
+                  process.
+                </p>
+              </div>
+            </div>
+            <div className={styles.stepsCardWrapper}>
+              <div className={styles.stepsCardIndex}>
+                <span>05</span>
+              </div>
+              <div className={styles.stepsCard}>
+                <div className={styles.stepsCardDate}>
+                  <span>2 HOURS</span>
+                </div>
+                <span className={styles.stepsCardSubtitle}>READY TO GO</span>
+                <h2 className={styles.stepsCardTitle}>DEPLOYMENT</h2>
+                <p className={styles.stepsCardDescription}>
+                  Depending on your choice, the project will be deployed by me
+                  or the necessary resources will be provided to you that you
+                  can use to deploy the project yourself.
                 </p>
               </div>
             </div>
