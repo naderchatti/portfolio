@@ -143,53 +143,53 @@ export default function Home() {
         </div>
         <div className={styles.educationWrapper}>
           <div className={styles.educationTimelineIndicator} />
-          <div
-            className={`${styles.educationTimelineIndex} ${styles.educationTimelineIndex1}`}
-          >
-            <span>01</span>
-          </div>
-          <div
-            className={`${styles.educationTimelineIndex} ${styles.educationTimelineIndex2}`}
-          >
-            <span>02</span>
-          </div>
-          <div
-            className={`${styles.educationTimelineIndex} ${styles.educationTimelineIndex3}`}
-          >
-            <span>03</span>
-          </div>
           <div className={styles.educationCards}>
-            <div className={styles.educationCard}>
-              <div className={styles.educationCardDate}>
-                <span>2019 - 2020 Nice, France</span>
+            <div className={styles.educationCardWrapper}>
+              <div className={styles.educationCardIndex}>
+                <span>01</span>
               </div>
-              <h2 className={styles.educationCardTitle}>
-                Université Côte d&apos;Azur
-              </h2>
-              <p className={styles.educationCardDescription}>
-                M2 MBDS : Master 2 in Big Data and System Integration
-              </p>
+              <div className={styles.educationCard}>
+                <div className={styles.educationCardDate}>
+                  <span>2019 - 2020 Nice, France</span>
+                </div>
+                <h2 className={styles.educationCardTitle}>
+                  Université Côte d&apos;Azur
+                </h2>
+                <p className={styles.educationCardDescription}>
+                  M2 MBDS : Master 2 in Big Data and System Integration
+                </p>
+              </div>
             </div>
-            <div className={styles.educationCard}>
-              <div className={styles.educationCardDate}>
-                <span>2018 - 2019 Nice, France</span>
+            <div className={styles.educationCardWrapper}>
+              <div className={styles.educationCardIndex}>
+                <span>02</span>
               </div>
-              <h2 className={styles.educationCardTitle}>
-                Université Côte d&apos;Azur
-              </h2>
-              <p className={styles.educationCardDescription}>
-                M1 MIAGE : Master 1 Computerized Methods Applied to Business
-                Management
-              </p>
+              <div className={styles.educationCard}>
+                <div className={styles.educationCardDate}>
+                  <span>2018 - 2019 Nice, France</span>
+                </div>
+                <h2 className={styles.educationCardTitle}>
+                  Université Côte d&apos;Azur
+                </h2>
+                <p className={styles.educationCardDescription}>
+                  M1 MIAGE : Master 1 Computerized Methods Applied to Business
+                  Management
+                </p>
+              </div>
             </div>
-            <div className={styles.educationCard}>
-              <div className={styles.educationCardDate}>
-                <span>2013 - 2017 Sousse, Tunisia</span>
+            <div className={styles.educationCardWrapper}>
+              <div className={styles.educationCardIndex}>
+                <span>03</span>
               </div>
-              <h2 className={styles.educationCardTitle}>ISITCom</h2>
-              <p className={styles.educationCardDescription}>
-                Applied License Degree in Computer Networking
-              </p>
+              <div className={styles.educationCard}>
+                <div className={styles.educationCardDate}>
+                  <span>2013 - 2017 Sousse, Tunisia</span>
+                </div>
+                <h2 className={styles.educationCardTitle}>ISITCom</h2>
+                <p className={styles.educationCardDescription}>
+                  Applied License Degree in Computer Networking
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -9,12 +9,13 @@
 
 .footerContent {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
 
 .socials {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  place-content: center;
   gap: 1rem;
 }
 
@@ -27,19 +28,22 @@
 .socialsIcons {
   display: grid;
   gap: 1rem;
-  align-items: center;
-  justify-content: center;
+  place-content: center;
+  width: min-content;
 }
 
-.link {
+.socialLink, .link {
   font-size: 1rem;
   color: var(--default-text-color-muted);
   cursor: pointer;
   text-decoration: none;
-  display: flex;
+  display: grid;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
+}
+
+.socialLink {
+  grid-template-columns: 1fr 1fr;
 }
 
 .icon {
@@ -55,9 +59,8 @@
 }
 
 .pages {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  place-content: center;
   gap: 1rem;
 }
 
@@ -68,14 +71,20 @@
 }
 
 .links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+  grid-column: span 2;
+}
+
+.buttons {
+  display: grid;
   gap: 1rem;
 }
 
 .footerBottom {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
@@ -88,11 +97,6 @@
     margin: 0 auto;
   }
 
-  .socialsIcons {
-    grid-template-columns: 1fr;
-    place-items: flex-start;
-  }
-
   .logo{
     align-self: flex-start;
   }
@@ -103,6 +107,7 @@
 
   .links {
     align-items: flex-start;
+    grid-column: span 1;
   }
 
   .footerBottom {

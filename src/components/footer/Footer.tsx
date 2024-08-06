@@ -17,7 +17,7 @@ const Footer = () => {
             <Link
               href="https://www.linkedin.com/in/naderchatti"
               target="_blank"
-              className={styles.link}
+              className={styles.socialLink}
             >
               <div className={styles.icon}>
                 <TfiLinkedin size={'1rem'} color="var(--default-icon-color)" />
@@ -27,7 +27,7 @@ const Footer = () => {
             <Link
               href="https://github.com/chattinader"
               target="_blank"
-              className={styles.link}
+              className={styles.socialLink}
             >
               <div className={styles.icon}>
                 <TfiGithub size={'1rem'} color="var(--default-icon-color)" />
@@ -37,7 +37,7 @@ const Footer = () => {
             <Link
               href="https://twitter.com/naderchatti"
               target="_blank"
-              className={styles.link}
+              className={styles.socialLink}
             >
               <div className={styles.icon}>
                 <TfiTwitter size={'1rem'} color="var(--default-icon-color)" />
@@ -47,7 +47,7 @@ const Footer = () => {
             <Link
               href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
               target="_blank"
-              className={styles.link}
+              className={styles.socialLink}
             >
               <div className={styles.icon}>
                 <TfiEmail size={'1rem'} color="var(--default-icon-color)" />
@@ -62,6 +62,15 @@ const Footer = () => {
           <Link href="/" className={styles.link}>
             Home
           </Link>
+          <Link href="/about" className={styles.link}>
+            About
+          </Link>
+          <Link href="/contact" className={styles.link}>
+            Contact
+          </Link>
+          <Link href="/work" className={styles.link}>
+            Work
+          </Link>
           <Link href="/blog" className={styles.link}>
             Blog
           </Link>
@@ -69,23 +78,23 @@ const Footer = () => {
 
         <div className={styles.links}>
           <h3 className={styles.title}>Links</h3>
-          <Link href="/#" className={styles.link}>
-            Download CV
-          </Link>
-          <PrimaryButton>Let&apos;s talk</PrimaryButton>
+          <div className={styles.buttons}>
+            <PrimaryButton>Download CV</PrimaryButton>
+            <PrimaryButton>Let&apos;s talk</PrimaryButton>
+          </div>
         </div>
       </div>
       <div className={styles.footerBottom}>
-        <span>© {new Date().getFullYear()} - All rights reserved</span>
         <ButtonText
           iconName="ph_arrow-up-light"
-          text="To top"
+          text="Back to top"
           filled={true}
           animation={false}
           action={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />
+        <span>© {new Date().getFullYear()} - All rights reserved</span>
       </div>
     </footer>
   );
