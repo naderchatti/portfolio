@@ -1,155 +1,199 @@
 'use client';
 
-import Link from 'next/link';
+import { SkillsSlider } from '@/components/slider/SkillsSlider';
 import styles from './page.module.css';
-import { TfiLinkedin, TfiGithub, TfiTwitter, TfiEmail } from 'react-icons/tfi';
-import PrimaryButton from '@/components/PrimaryButton/PrimaryButton';
-import { useState } from 'react';
-import { useResponsive } from '@/context/ResponsiveContext';
-import ModalTwoOptions from '@/components/Modal/ModalTwoOptions';
-import { FrameworkSlider } from '@/components/Slider/FrameworkSlider';
-import LandingAnimation from '@/components/LandingAnimation/LandingAnimation';
-import { ProgrammingLanguagesSlider } from '@/components/Slider/ProgrammingLanguagesSlider';
-import { DatabaseSlider } from '@/components/Slider/DatabaseSlider';
+import ButtonText from '@/components/buttons/ButtonText';
+import Image from 'next/image';
 
 export default function Home() {
-  const { isMobile } = useResponsive();
-  const [showModal, setShowModal] = useState(false);
-
-  const toggleShowModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const downloadEnglish = () => {
-    downloadResume(
-      '/documents/CV_Nader_CHATTI_EN.pdf',
-      'CV Nader CHATTI EN.pdf'
-    );
-    toggleShowModal();
-  };
-
-  const downloadFrench = () => {
-    downloadResume(
-      '/documents/CV_Nader_CHATTI_FR.pdf',
-      'CV Nader CHATTI FR.pdf'
-    );
-    toggleShowModal();
-  };
-
-  const downloadResume = (path: string, filename: string) => {
-    const link = document.createElement('a');
-    link.href = path;
-    link.target = '_blank';
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-  };
-
   return (
-    <>
-      {showModal && (
-        <ModalTwoOptions
-          title="Download Resume"
-          description="Download my PDF resume English or French"
-          button1Text="English"
-          button2Text="French"
-          action1={downloadEnglish}
-          action2={downloadFrench}
-          toggleShowModal={toggleShowModal}
+    <div className={styles.wrapper}>
+      <section className={styles.hero}>
+        <Image
+          src="/images/N-Logo.svg"
+          alt="N-Logo"
+          width={500}
+          height={500}
+          className={styles.heroImage}
         />
-      )}
-      <main className={styles.main}>
-        <section>
-          <LandingAnimation />
+        <div className={styles.heroText}>
+          <h1 className={styles.title}>Software Engineer & Developer</h1>
+          <span className={styles.subtitle}>
+            Premium quality software development services to help your business
+            stand out.
+          </span>
+        </div>
+      </section>
 
-          <div className={styles.hero}>
-            <h2>Hello, I&apos;m</h2>
-            <h1 className={styles.name}>Nader CHATTI</h1>
-            <h3 className={styles.role}>Software Engineer</h3>
-          </div>
-        </section>
-
-        <section className={styles.aboutSection}>
-          <div className={styles.about}>
-            <h2>About Me</h2>
-            <p>
-              I am a software engineer, specializing in building exceptional
-              digital experiences. <br />
-              As a full stack developer, I have a passion for creating clean
-              architecture and continuously learning new technologies.
-              <br />
-              <br />
-              I am located in France and as a free-lancer, I work from every
-              corner of the world. <br />
-              So if you need the expert touch in your project, I can be your
-              partner.
+      <section className={styles.skills}>
+        <SkillsSlider />
+        <div className={styles.skillsCards}>
+          <div className={styles.skillsCard}>
+            <span className={styles.skillsCardIndex}>01</span>
+            <h3 className={styles.skillsCardTitle}>Backend Development</h3>
+            <p className={styles.skillsCardDescription}>
+              I have experience with backend development using python, node.js
+              and express. Databases used include MongoDB, PostgreSQL, and
+              MySQL.
             </p>
           </div>
-        </section>
+          <div className={styles.skillsCard}>
+            <span className={styles.skillsCardIndex}>02</span>
+            <h3 className={styles.skillsCardTitle}>Frontend Development</h3>
+            <p className={styles.skillsCardDescription}>
+              I have experience with frontend development using React, Next.js
+              for web development and React Native for mobile development.
+            </p>
+          </div>
+          <div className={styles.skillsCard}>
+            <span className={styles.skillsCardIndex}>03</span>
+            <h3 className={styles.skillsCardTitle}>
+              Infrastructure & Deployment
+            </h3>
+            <p className={styles.skillsCardDescription}>
+              I have experience with infrastructure using Cloudflare, Google
+              Cloud Platform, and custom VPS configurations.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        <section>
-          <h2>My skills</h2>
-          <div className={styles.skills}>
-            <div className={styles.skillsItem}>
-              <h3>Frameworks</h3>
-              <FrameworkSlider />
+      <section className={styles.works}>
+        <div className={styles.worksHeader}>
+          <h2 className={styles.worksHeaderTitle}>Recent Work</h2>
+          <ButtonText
+            text="See all"
+            iconName="ph_arrow-up-right-light"
+            filled={true}
+            animation={true}
+            action={() => {
+              console.log('clicked');
+            }}
+          />
+        </div>
+        <div className={styles.worksCards}>
+          <div className={styles.workCard}>
+            <div className={styles.workCardImageWrapper}>
+              <Image
+                src="/images/work1.png"
+                alt="MyHotelMatch"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className={styles.workCardImage}
+              />
             </div>
-            <div className={styles.skillsItem}>
-              <h3>Programming languages</h3>
-              <ProgrammingLanguagesSlider />
-            </div>
-            <div className={styles.skillsItem}>
-              <h3>Databases</h3>
-              <DatabaseSlider />
+            <div className={styles.workCardBar}>
+              <h1 className={styles.workCardTitle}>MyHotelMatch</h1>
+              <p className={styles.workCardType}>Full Stack Development</p>
             </div>
           </div>
-        </section>
+          <div className={styles.workCard}>
+            <div className={styles.workCardImageWrapper}>
+              <Image
+                src="/images/work2.png"
+                alt="Epsilon Groupe"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className={styles.workCardImage}
+              />
+            </div>
+            <div className={styles.workCardBar}>
+              <h1 className={styles.workCardTitle}>Epsilon Groupe</h1>
+              <p className={styles.workCardType}>Full Stack Development</p>
+            </div>
+          </div>
+          <div className={styles.workCard}>
+            <div className={styles.workCardImageWrapper}>
+              <Image
+                src="/images/work3.png"
+                alt="Université Côte d'Azur"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className={styles.workCardImage}
+              />
+            </div>
+            <div className={styles.workCardBar}>
+              <h1 className={styles.workCardTitle}>
+                Université Côte d&apos;Azur
+              </h1>
+              <p className={styles.workCardType}>Deep Learning</p>
+            </div>
+          </div>
+          <div className={styles.workCard}>
+            <div className={styles.workCardImageWrapper}>
+              <Image
+                src="/images/work4.png"
+                alt="HES"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className={styles.workCardImage}
+              />
+            </div>
+            <div className={styles.workCardBar}>
+              <h1 className={styles.workCardTitle}>HES</h1>
+              <p className={styles.workCardType}>Full Stack Development</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <section>
-          <div className={styles.files}>
-            <h2>Download my resume</h2>
-            <PrimaryButton type="button" action={toggleShowModal}>
-              Download Resume
-            </PrimaryButton>
+      <section className={styles.education}>
+        <div className={styles.educationHeader}>
+          <h2 className={styles.educationHeaderTitle}>Education</h2>
+        </div>
+        <div className={styles.educationWrapper}>
+          <div className={styles.educationTimelineIndicator} />
+          <div
+            className={`${styles.educationTimelineIndex} ${styles.educationTimelineIndex1}`}
+          >
+            <span>01</span>
           </div>
-          <div className={styles.social}>
-            <h2>Find me on socials</h2>
-            <div className={styles.iconContainer}>
-              <Link
-                href="https://www.linkedin.com/in/naderchatti"
-                target="_blank"
-                className={styles.icon}
-              >
-                <TfiLinkedin size={isMobile ? '1rem' : '2rem'} />
-              </Link>
-              <Link
-                href="https://github.com/chattinader"
-                target="_blank"
-                className={styles.icon}
-              >
-                <TfiGithub size={isMobile ? '1rem' : '2rem'} />
-              </Link>
-              <Link
-                href="https://twitter.com/naderchatti"
-                target="_blank"
-                className={styles.icon}
-              >
-                <TfiTwitter size={isMobile ? '1rem' : '2rem'} />
-              </Link>
-              <Link
-                href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
-                target="_blank"
-                className={styles.icon}
-              >
-                <TfiEmail size={isMobile ? '1rem' : '2rem'} />
-              </Link>
+          <div
+            className={`${styles.educationTimelineIndex} ${styles.educationTimelineIndex2}`}
+          >
+            <span>02</span>
+          </div>
+          <div
+            className={`${styles.educationTimelineIndex} ${styles.educationTimelineIndex3}`}
+          >
+            <span>03</span>
+          </div>
+          <div className={styles.educationCards}>
+            <div className={styles.educationCard}>
+              <div className={styles.educationCardDate}>
+                <span>2019 - 2020 Nice, France</span>
+              </div>
+              <h2 className={styles.educationCardTitle}>
+                Université Côte d&apos;Azur
+              </h2>
+              <p className={styles.educationCardDescription}>
+                M2 MBDS : Master 2 in Big Data and System Integration
+              </p>
+            </div>
+            <div className={styles.educationCard}>
+              <div className={styles.educationCardDate}>
+                <span>2018 - 2019 Nice, France</span>
+              </div>
+              <h2 className={styles.educationCardTitle}>
+                Université Côte d&apos;Azur
+              </h2>
+              <p className={styles.educationCardDescription}>
+                M1 MIAGE : Master 1 Computerized Methods Applied to Business
+                Management
+              </p>
+            </div>
+            <div className={styles.educationCard}>
+              <div className={styles.educationCardDate}>
+                <span>2013 - 2017 Sousse, Tunisia</span>
+              </div>
+              <h2 className={styles.educationCardTitle}>ISITCom</h2>
+              <p className={styles.educationCardDescription}>
+                Applied License Degree in Computer Networking
+              </p>
             </div>
           </div>
-        </section>
-      </main>
-    </>
+        </div>
+      </section>
+    </div>
   );
 }

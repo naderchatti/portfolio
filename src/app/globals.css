@@ -1,70 +1,121 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Italic';
+  src: url('/fonts/Satoshi-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi Light';
+  src: url('/fonts/Satoshi-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Light Italic';
+  src: url('/fonts/Satoshi-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi Medium';
+  src: url('/fonts/Satoshi-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Medium Italic';
+  src: url('/fonts/Satoshi-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi Bold';
+  src: url('/fonts/Satoshi-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Bold Italic';
+  src: url('/fonts/Satoshi-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi Black';
+  src: url('/fonts/Satoshi-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Black Italic';
+  src: url('/fonts/Satoshi-BlackItalic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+}
 
 :root {
     /* Color palette */
-    --primary-color: hsl(210, 20%, 35%);
-    --secondary-color: hsl(210, 15%, 45%);
-    --background-color: hsl(0, 0%, 90%);
-    --foreground-color: hsl(0, 0%, 15%);
-    --foreground-color-04: hsla(0, 0%, 15%, 0.4);
-    --border-color: hsl(0, 0%, 70%);
-    --label-color: hsl(0, 0%, 15%);
-    --white-color: hsl(0, 0%, 95%);
-    --black-color: hsl(0, 0%, 15%);
-    --error-color: hsl(0, 100%, 50%);
+    /* Text */
+    --default-text-color: hsla(35, 41%, 75%, 100%);
+    --default-text-color-muted: hsla(35, 41%, 75%, 60%);
+    --inverse-text-color: hsla(0, 0%, 5%, 100%);
+    --inverse-text-color-muted: hsla(0, 0%, 100%, 60%);
+
+    /* Background */
+    --default-background-color: hsla(0, 0%, 5%, 100%);
+    --primary-background-color: hsla(35, 41%, 75%, 100%);
+    --secondary-background-color: hsla(0, 0%, 10%, 100%);
+    --primary-background-color-muted: hsla(35, 41%, 75%, 5%);
+    --secondary-background-color-muted: hsla(0, 0%, 100%, 7%);
+
+    /* Borders */
+    --default-border-color: hsla(35, 41%, 75%, 15%);
+    --inverse-border-color: hsla(0, 0%, 100%, 12%);
+
+    /* Icons */
+    --default-icon-color: hsla(35, 41%, 75%, 100%);
+    --inverse-icon-color: hsla(0, 0%, 5%, 100%);
 
     /* Font family */
-    --font-family: 'Montserrat', sans-serif;
-
-    /* Font sizes */
-    --font-size-normal: 1rem;
-    --font-size-large: 2rem;
+    --font-family: 'Satoshi', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
+    /* :root { */
         /* Dark mode colors */
-        --background-color: hsl(0, 0%, 15%);
+        /* --background-color: hsl(0, 0%, 15%);
         --foreground-color: hsl(0, 0%, 95%);
         --foreground-color-04: hsla(0, 0%, 95%, 0.4);
         --border-color: hsl(0, 0%, 30%);
-        --inverse-label-color: hsl(0, 0%, 95%);
-    }
+        --inverse-label-color: hsl(0, 0%, 95%); */
+    /* } */
 }
 
 body {
-    background-color: var(--background-color);
-    color: var(--foreground-color);
+    background-color: var(--default-background-color);
+    color: var(--default-text-color);
     font-family: var(--font-family);
-    font-size: var(--font-size-normal);
-    border-color: var(--border-color);
+    position: relative;
 }
-
-/* h1, h2, h3 {
-    font-size: var(--font-size-large);
-    font-family: var(--font-family);
-} */
 
 * {
     margin: 0;
     padding: 0;
     font-family: var(--font-family);
     box-sizing: border-box;
-}
-
-a {
-    color: var(--foreground-color);
-    text-decoration: none;
-    transition: scale 0.3s ease;
-    font-family: var(--font-family);
-}
-
-a:hover {
-    scale: 1.02;
-}
-
-@media (min-width: 768px) {
-    a:hover {
-        scale: 1.05;
-    }
 }

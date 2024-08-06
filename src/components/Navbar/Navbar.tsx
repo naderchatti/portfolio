@@ -1,87 +1,65 @@
 'use client';
 
+import React, { useState } from 'react';
 import styles from './Navbar.module.css';
-import { useResponsive } from '@/context/ResponsiveContext';
-import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-
-const Links = ({ toggleDrawer }: { toggleDrawer?: () => void }) => {
-  return (
-    <>
-      <Link href="/" onClick={toggleDrawer}>
-        Home
-      </Link>
-      <Link href="/blog" onClick={toggleDrawer}>
-        Blog
-      </Link>
-      <Link href="/contact" onClick={toggleDrawer}>
-        Contact
-      </Link>
-    </>
-  );
-};
+import BurgerButton from '../buttons/BurgerButton';
+import PrimaryButton from '../buttons/PrimaryButton';
+import { useResponsive } from '@/context/ResponsiveContext';
 
 const Navbar = () => {
-  const router = useRouter();
   const { isMobile } = useResponsive();
-  const [isOpen, setIsOpen] = useState(false);
-  const menuCheckboxRef = useRef(null);
-
-  const toggleDrawer = () => {
-    setIsOpen((prevIsOpen) => {
-      const newIsOpen = !prevIsOpen;
-      const current = menuCheckboxRef.current as HTMLInputElement | null;
-      if (current) {
-        current.checked = newIsOpen;
-      }
-      return newIsOpen;
-    });
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const handleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
-
   return (
     <>
       <div className={styles.navbar}>
-        <h1
-          className={styles.logo}
-          onClick={() => {
-            router.push('/');
-          }}
-        >
+        <Link href="/" className={styles.logo}>
           Nader.
-        </h1>
-        {/* {isMobile ? (
-          <input
-            type="checkbox"
-            role="button"
-            aria-label="Menu"
-            className={styles.menuButton}
-            onClick={toggleDrawer}
-            ref={menuCheckboxRef}
-          />
+        </Link>
+        {window.innerWidth < 768 || isMobile ? (
+          <BurgerButton handleDropdown={handleDropdown} />
         ) : (
-          <div className={styles.navLinks}>
-            <Links />
-          </div>
-        )} */}
+          <>
+            <div className={styles.links}>
+              <Link href="/about" className={styles.link}>
+                About
+              </Link>
+              <Link href="/contact" className={styles.link}>
+                Contact
+              </Link>
+              <Link href="/work" className={styles.link}>
+                Work
+              </Link>
+              <Link href="/blog" className={styles.link}>
+                Blog
+              </Link>
+            </div>
+            <PrimaryButton>LETS&apos;S TALK</PrimaryButton>
+          </>
+        )}
       </div>
-      {/* {isMobile && <Drawer toggleDrawer={toggleDrawer} isOpen={isOpen} />} */}
+      {isDropdownOpen && (
+        <div className={styles.dropdown}>
+          <Link href="/about" className={styles.link}>
+            About
+          </Link>
+          <Link href="/contact" className={styles.link}>
+            Contact
+          </Link>
+          <Link href="/work" className={styles.link}>
+            Work
+          </Link>
+          <Link href="/blog" className={styles.link}>
+            Blog
+          </Link>
+          <PrimaryButton>Download CV</PrimaryButton>
+        </div>
+      )}
     </>
   );
 };
 
 export default Navbar;
-
-const Drawer = ({
-  toggleDrawer,
-  isOpen,
-}: {
-  toggleDrawer: () => void;
-  isOpen: boolean;
-}) => {
-  return (
-    <div className={`${styles.drawer} ${isOpen ? styles.open : ''}`}>
-      <Links toggleDrawer={toggleDrawer} />
-    </div>
-  );
-};
