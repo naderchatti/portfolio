@@ -4,6 +4,7 @@ import './globals.css';
 import { ResponsiveProvider } from '@/context/ResponsiveContext';
 import Navbar from '@/components/navbar/Navbar';
 import Footer from '@/components/footer/Footer';
+import { ModalProvider } from '@/context/ModalContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,13 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <ResponsiveProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <Navbar />
-          {children}
-          <Footer />
-        </body>
-      </html>
+      <ModalProvider>
+        <html lang="en">
+          <body className={inter.className}>
+            <Navbar />
+            {children}
+            <Footer />
+          </body>
+        </html>
+      </ModalProvider>
     </ResponsiveProvider>
   );
 }
