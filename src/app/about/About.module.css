@@ -1,9 +1,152 @@
-.wrapper {
-    min-height: 100dvh;
+.wrapper section {
+    margin-block-start: 6rem;
+    margin-block-end: 2rem;
 }
 
-.wrapper section {
-    padding-block: 8rem;
-    width: 90%;
+.logo {
+    display: none;
+}
+
+.hero {
+    width: 90vw;
     margin: 0 auto;
+}
+
+.title {
+    font-family: 'Satoshi Light';
+    font-size: 6rem;
+    font-weight: 100;
+}
+
+.subtitle {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    color: var(--default-text-color-muted);
+}
+
+.about {
+    width: 90vw;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+}
+
+.aboutCard {
+    background-color: var(--primary-background-color-muted);
+    border: 1px solid var(--default-border-color);
+    padding: 2rem;
+    border-radius: 0.25rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.aboutSubtitle {
+    font-family: 'Satoshi Light';
+    font-size: 0.875rem;
+    font-weight: 100;
+    text-transform: uppercase;
+    color: var(--default-text-color-muted);
+}
+
+.aboutTitle {
+    font-family: 'Satoshi Light';
+    font-size: 2rem;
+    font-weight: 100;
+}
+
+.aboutDescription {
+    font-family: 'Satoshi Light';
+    font-size: 1rem;
+    font-weight: 100;
+    color: var(--default-text-color-muted);
+}
+
+.socials {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.socialItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background-color: var(--primary-background-color-muted);
+    border: 1px solid var(--default-border-color);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--default-text-color);
+    font-family: 'Satoshi Light';
+    font-size: 0.75rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    font-weight: 100;
+}
+
+.leftSide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.education .educationItem:nth-child(3) {
+    border-bottom: none;
+}
+
+.educationItem {
+    border-bottom: 1px solid var(--default-border-color);
+    padding: 1rem 0;
+}
+
+.educationItemTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.educationItemTopTitle {
+    font-family: 'Satoshi Light';
+    font-size: 1rem;
+    font-weight: 100;
+}
+
+.educationItemTopDate {
+    font-family: 'Satoshi Light';
+    font-size: 0.75rem;
+    font-weight: 100;
+    color: var(--default-text-color);
+}
+
+@media (min-width: 768px) {
+    .wrapper section {
+        margin-block: 6rem;
+    }
+
+    .logo {
+        display: flex;
+        width: 50vw;
+        height: 50vw;
+        position: fixed;
+        margin: 0 auto;
+        top: 0;
+        left: 2rem;
+    }
+
+    .hero {
+        width: 40vw;
+        margin-left: 55vw;
+        margin-top: 8rem;
+    }
+
+    .about {
+        width: 40vw;
+        margin-left: 55vw;
+        margin-top: 8rem;
+    }
 }
