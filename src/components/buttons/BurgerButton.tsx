@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styles from './Buttons.module.css';
 
-const BurgerButton = ({ handleDropdown }: { handleDropdown: () => void }) => {
+const BurgerButton = forwardRef<
+  HTMLInputElement,
+  { handleDropdown: () => void }
+>(({ handleDropdown }, ref) => {
   return (
     <label className={styles.burgerBar} htmlFor="check">
       <input
@@ -9,6 +12,7 @@ const BurgerButton = ({ handleDropdown }: { handleDropdown: () => void }) => {
         id="check"
         className={styles.burgerCheck}
         onChange={handleDropdown}
+        ref={ref}
       />
 
       <span className={styles.burgerTop}></span>
@@ -16,6 +20,8 @@ const BurgerButton = ({ handleDropdown }: { handleDropdown: () => void }) => {
       <span className={styles.burgerBottom}></span>
     </label>
   );
-};
+});
+
+BurgerButton.displayName = 'BurgerButton';
 
 export default BurgerButton;

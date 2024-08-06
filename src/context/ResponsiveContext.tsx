@@ -3,8 +3,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface ResponsiveContextType {
-  isMobile: boolean;
-  setIsMobile: React.Dispatch<React.SetStateAction<boolean>>;
+  isMobile: boolean | null;
+  setIsMobile: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const ResponsiveContext = createContext<ResponsiveContextType | undefined>(
@@ -14,7 +14,7 @@ const ResponsiveContext = createContext<ResponsiveContextType | undefined>(
 export const ResponsiveProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
     const handleResize = () => {

@@ -61,14 +61,14 @@
     position: relative;
     cursor: pointer;
     width: 2rem;
-    height: 1.6rem;
+    height: 1rem;
     -webkit-tap-highlight-color: transparent;
 }
   
 .burgerBar span {
     position: absolute;
     width: 1.8rem;
-    height: 0.1rem;
+    height: 0.05rem;
     background: var(--default-icon-color);
     border-radius: 100px;
     display: inline-block;
@@ -81,7 +81,7 @@
 }
   
 .burgerBar span.burgerMiddle {
-    top: 0.75rem;
+    top: 0.45rem;
 }
   
 .burgerBar span.burgerBottom {
@@ -89,14 +89,14 @@
 }
   
 input[type]:checked ~ span.burgerTop {
-    transform: rotate(45deg);
+    transform: rotate(24deg);
     transform-origin: top left;
     width: 1.92rem;
     top: 0.1rem;
 }
   
 input[type]:checked ~ span.burgerBottom {
-    transform: rotate(-45deg);
+    transform: rotate(-24deg);
     transform-origin: top left;
     width: 1.92rem;
     bottom: 0.05rem;

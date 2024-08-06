@@ -15,6 +15,10 @@
   z-index: 100;
 }
 
+.navbar button {
+  padding-block: 0.5rem;
+}
+
 .logo {
   font-size: 26px;
   text-decoration: none;
