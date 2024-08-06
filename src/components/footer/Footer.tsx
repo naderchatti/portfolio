@@ -6,8 +6,9 @@ import Link from 'next/link';
 import { TfiLinkedin, TfiGithub, TfiTwitter, TfiEmail } from 'react-icons/tfi';
 import ButtonText from '../buttons/ButtonText';
 import PrimaryButton from '../buttons/PrimaryButton';
-
+import { useRouter } from 'next/navigation';
 const Footer = () => {
+  const router = useRouter();
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
@@ -79,8 +80,14 @@ const Footer = () => {
         <div className={styles.links}>
           <h3 className={styles.title}>Links</h3>
           <div className={styles.buttons}>
-            <PrimaryButton>Download CV</PrimaryButton>
-            <PrimaryButton>Let&apos;s talk</PrimaryButton>
+            <PrimaryButton onClick={() => {}}>Download CV</PrimaryButton>
+            <PrimaryButton
+              onClick={() => {
+                router.push('/contact');
+              }}
+            >
+              Let&apos;s talk
+            </PrimaryButton>
           </div>
         </div>
       </div>
