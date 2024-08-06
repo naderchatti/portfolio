@@ -5,6 +5,7 @@ import { ResponsiveProvider } from '@/context/ResponsiveContext';
 import Navbar from '@/components/navbar/Navbar';
 import Footer from '@/components/footer/Footer';
 import { ModalProvider } from '@/context/ModalContext';
+import ModalComponent from '@/components/modals/ModalComponent';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <Footer />
+            <ModalComponent />
           </body>
         </html>
       </ModalProvider>
