@@ -1,9 +1,17 @@
 import React from 'react';
 import styles from './Buttons.module.css';
 
-const PrimaryButton = ({ children }: { children: React.ReactNode }) => {
+const PrimaryButton = ({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) => {
   return (
-    <button className={`${styles.button} ${styles.primary}`}>{children}</button>
+    <button className={`${styles.button} ${styles.primary}`} onClick={onClick}>
+      {children}
+    </button>
   );
 };
 

@@ -6,12 +6,14 @@ import Link from 'next/link';
 import BurgerButton from '../buttons/BurgerButton';
 import PrimaryButton from '../buttons/PrimaryButton';
 import { useResponsive } from '@/context/ResponsiveContext';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const { isMobile } = useResponsive();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,9 +58,6 @@ const Navbar = () => {
                   <Link href="/about" className={styles.link}>
                     About
                   </Link>
-                  <Link href="/contact" className={styles.link}>
-                    Contact
-                  </Link>
                   <Link href="/work" className={styles.link}>
                     Work
                   </Link>
@@ -66,7 +65,13 @@ const Navbar = () => {
                     Blog
                   </Link>
                 </div>
-                <PrimaryButton>LETS&apos;S TALK</PrimaryButton>
+                <PrimaryButton
+                  onClick={() => {
+                    router.push('/contact');
+                  }}
+                >
+                  LETS&apos;S TALK
+                </PrimaryButton>
               </>
             )}
           </>
@@ -74,19 +79,53 @@ const Navbar = () => {
       </div>
       {isDropdownOpen && (
         <div className={styles.dropdown} ref={dropdownRef}>
-          <Link href="/about" className={styles.link}>
+          <Link
+            href="/about"
+            className={styles.link}
+            onClick={() => {
+              setIsDropdownOpen(false);
+              if (burgerRef.current) {
+                burgerRef.current.checked = false;
+              }
+            }}
+          >
             About
           </Link>
-          <Link href="/contact" className={styles.link}>
-            Contact
-          </Link>
-          <Link href="/work" className={styles.link}>
+          <Link
+            href="/work"
+            className={styles.link}
+            onClick={() => {
+              setIsDropdownOpen(false);
+              if (burgerRef.current) {
+                burgerRef.current.checked = false;
+              }
+            }}
+          >
             Work
           </Link>
-          <Link href="/blog" className={styles.link}>
+          <Link
+            href="/blog"
+            className={styles.link}
+            onClick={() => {
+              setIsDropdownOpen(false);
+              if (burgerRef.current) {
+                burgerRef.current.checked = false;
+              }
+            }}
+          >
             Blog
           </Link>
-          <PrimaryButton>Download CV</PrimaryButton>
+          <PrimaryButton
+            onClick={() => {
+              router.push('/contact');
+              setIsDropdownOpen(false);
+              if (burgerRef.current) {
+                burgerRef.current.checked = false;
+              }
+            }}
+          >
+            LETS&apos;S TALK
+          </PrimaryButton>
         </div>
       )}
     </>

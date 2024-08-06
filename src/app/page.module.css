@@ -2,6 +2,21 @@
   padding-block: 4rem;
 }
 
+.notFoundWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  gap: 1rem;
+}
+
+.notFoundDivider {
+  width: 0.125rem;
+  height: 3rem;
+  background-color: var(--default-border-color);
+}
+
 .hero {
   height: 100dvh;
   display: flex;
