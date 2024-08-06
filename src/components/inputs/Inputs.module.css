@@ -1,0 +1,14 @@
+.inputText,
+.textArea {
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--default-border-color);
+    border-radius: 0.25rem;
+    background-color: var(--primary-background-color-muted);
+    color: var(--default-text-color);
+    resize: none;
+}
+
+.inputText::placeholder,
+.textArea::placeholder {
+    color: var(--default-text-color);
+}

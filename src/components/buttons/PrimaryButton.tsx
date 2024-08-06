@@ -4,12 +4,18 @@ import styles from './Buttons.module.css';
 const PrimaryButton = ({
   children,
   onClick,
+  type,
 }: {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
 }) => {
   return (
-    <button className={`${styles.button} ${styles.primary}`} onClick={onClick}>
+    <button
+      className={`${styles.button} ${styles.primary}`}
+      onClick={onClick}
+      type={type}
+    >
       {children}
     </button>
   );
