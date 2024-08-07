@@ -1,6 +1,8 @@
 import { works } from '@/common/data';
 import styles from './WorkItem.module.css';
 
+export const runtime = 'edge';
+
 export default function WorkPage({ params }: { params: { id: string } }) {
   const work = works.find((item) => item.id === params.id);
   if (!work) {
