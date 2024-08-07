@@ -4,8 +4,11 @@ import { SkillsSlider } from '@/components/slider/SkillsSlider';
 import styles from './page.module.css';
 import ButtonText from '@/components/buttons/ButtonText';
 import Image from 'next/image';
+import { works } from '@/common/data';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className={styles.wrapper}>
       <section className={styles.hero}>
@@ -67,73 +70,32 @@ export default function Home() {
             filled={true}
             animation={true}
             action={() => {
-              console.log('clicked');
+              router.push('/work');
             }}
           />
         </div>
         <div className={styles.worksCards}>
-          <div className={styles.workCard}>
-            <div className={styles.workCardImageWrapper}>
-              <Image
-                src="/images/work1.png"
-                alt="MyHotelMatch"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className={styles.workCardImage}
-              />
+          {works.map((work) => (
+            <div
+              className={styles.workCard}
+              key={work.id}
+              onClick={() => router.push(`/work/${work.id}`)}
+            >
+              <div className={styles.workCardImageWrapper}>
+                <Image
+                  src={work.image}
+                  alt={work.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className={styles.workCardImage}
+                />
+              </div>
+              <div className={styles.workCardBar}>
+                <h1 className={styles.workCardTitle}>{work.title}</h1>
+                <p className={styles.workCardType}>{work.type}</p>
+              </div>
             </div>
-            <div className={styles.workCardBar}>
-              <h1 className={styles.workCardTitle}>MyHotelMatch</h1>
-              <p className={styles.workCardType}>Full Stack Development</p>
-            </div>
-          </div>
-          <div className={styles.workCard}>
-            <div className={styles.workCardImageWrapper}>
-              <Image
-                src="/images/work2.png"
-                alt="Epsilon Groupe"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className={styles.workCardImage}
-              />
-            </div>
-            <div className={styles.workCardBar}>
-              <h1 className={styles.workCardTitle}>Epsilon Groupe</h1>
-              <p className={styles.workCardType}>Full Stack Development</p>
-            </div>
-          </div>
-          <div className={styles.workCard}>
-            <div className={styles.workCardImageWrapper}>
-              <Image
-                src="/images/work3.png"
-                alt="Université Côte d'Azur"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className={styles.workCardImage}
-              />
-            </div>
-            <div className={styles.workCardBar}>
-              <h1 className={styles.workCardTitle}>
-                Université Côte d&apos;Azur
-              </h1>
-              <p className={styles.workCardType}>Deep Learning</p>
-            </div>
-          </div>
-          <div className={styles.workCard}>
-            <div className={styles.workCardImageWrapper}>
-              <Image
-                src="/images/work4.png"
-                alt="HES"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className={styles.workCardImage}
-              />
-            </div>
-            <div className={styles.workCardBar}>
-              <h1 className={styles.workCardTitle}>HES</h1>
-              <p className={styles.workCardType}>Full Stack Development</p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
