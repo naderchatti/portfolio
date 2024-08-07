@@ -142,7 +142,28 @@ export default function Home() {
           <h2 className={styles.stepsHeaderTitle}>Your project in 5 steps</h2>
         </div>
         <div className={styles.stepsWrapper}>
-          <div className={styles.stepsTimelineIndicator} />
+          <div className={styles.stepsTimelineIndicator}>
+            <div className={styles.stepsTimelineIndicatorIcon}>
+              <span>
+                <Image
+                  src="/icons/ph_arrow-down-light.png"
+                  alt="N-Logo"
+                  width={24}
+                  height={24}
+                />
+              </span>
+            </div>
+            <div className={styles.stepsTimelineIndicatorIcon}>
+              <span>
+                <Image
+                  src="/icons/ph_check-light.png"
+                  alt="N-Logo"
+                  width={24}
+                  height={24}
+                />
+              </span>
+            </div>
+          </div>
           <div className={styles.stepsCards}>
             <div className={styles.stepsCardWrapper}>
               <div className={styles.stepsCardIndex}>
