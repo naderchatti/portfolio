@@ -1,0 +1,38 @@
+.wrapper {
+    min-height: 100dvh;
+    padding-block-start: 8rem;
+    padding-block-end: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.wrapper section {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.hero {
+    text-align: center;
+}
+
+.title {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: var(--default-text-color);
+}
+
+.description {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    font-size: 1rem;
+    color: var(--default-text-color-muted);
+}
+
+@media (min-width: 768px) {
+    .wrapper section {
+        width: 60%;
+    }
+}
+
