@@ -1,6 +1,6 @@
 .wrapper section {
-    margin-block-start: 6rem;
-    margin-block-end: 2rem;
+    margin-block: 6rem;
+    width: 90vw;
 }
 
 .logo {
@@ -14,7 +14,7 @@
 
 .title {
     font-family: 'Satoshi Light';
-    font-size: 6rem;
+    font-size: clamp(4rem, 5vw, 6rem);
     font-weight: 100;
 }
 
@@ -25,7 +25,6 @@
 }
 
 .about {
-    width: 90vw;
     margin: 0 auto;
     display: grid;
     gap: 1rem;
@@ -105,9 +104,9 @@
 
 .educationItemTop {
     display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    text-align: right;
 }
 
 .educationItemTopTitle {
@@ -120,33 +119,12 @@
     font-family: 'Satoshi Light';
     font-size: 0.75rem;
     font-weight: 100;
-    color: var(--default-text-color);
+    color: var(--default-text-color-muted);
+    text-transform: uppercase;
 }
 
 @media (min-width: 768px) {
     .wrapper section {
-        margin-block: 6rem;
-    }
-
-    .logo {
-        display: flex;
-        width: 50vw;
-        height: 50vw;
-        position: fixed;
-        margin: 0 auto;
-        top: 0;
-        left: 2rem;
-    }
-
-    .hero {
-        width: 40vw;
-        margin-left: 55vw;
-        margin-top: 8rem;
-    }
-
-    .about {
-        width: 40vw;
-        margin-left: 55vw;
-        margin-top: 8rem;
+        width: 60%;
     }
 }

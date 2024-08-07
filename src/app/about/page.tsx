@@ -7,13 +7,6 @@ import { TfiEmail, TfiGithub, TfiLinkedin, TfiTwitter } from 'react-icons/tfi';
 const About = () => {
   return (
     <div className={styles.wrapper}>
-      <Image
-        src="/images/N-Logo.svg"
-        alt="N-Logo"
-        width={500}
-        height={500}
-        className={styles.logo}
-      />
       <section className={styles.hero}>
         <div className={styles.heroText}>
           <h2 className={styles.title}>Nader Chatti</h2>
@@ -122,7 +115,7 @@ const About = () => {
                   Université Côte d&apos;Azur
                 </span>
                 <span className={styles.educationItemTopDate}>
-                  Nice, France | 2019 - 2020
+                  Nice, France <br /> 2019 - 2020
                 </span>
               </div>
               <span className={styles.aboutDescription}>
@@ -135,7 +128,7 @@ const About = () => {
                   Université Côte d&apos;Azur
                 </span>
                 <span className={styles.educationItemTopDate}>
-                  Nice, France | 2018 - 2019
+                  Nice, France <br /> 2018 - 2019
                 </span>
               </div>
               <span className={styles.aboutDescription}>
@@ -149,7 +142,7 @@ const About = () => {
                   Université Côte d&apos;Azur
                 </span>
                 <span className={styles.educationItemTopDate}>
-                  Sousse, Tunisia | 2013 - 2017
+                  Sousse, Tunisia <br /> 2013 - 2017
                 </span>
               </div>
               <span className={styles.aboutDescription}>
