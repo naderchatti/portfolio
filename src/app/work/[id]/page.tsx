@@ -1,5 +1,6 @@
 import { works } from '@/common/data';
 import styles from './WorkItem.module.css';
+import Image from 'next/image';
 
 export const runtime = 'edge';
 
@@ -14,8 +15,66 @@ export default function WorkPage({ params }: { params: { id: string } }) {
       <section className={styles.hero}>
         <h1 className={styles.title}>{work.title}</h1>
         <p className={styles.description}>{work.description}</p>
+        <div className={styles.tags}>
+          <div className={styles.tag}>
+            <span className={styles.tagTitle}>Client</span>
+            <span className={styles.tagContent}>{work.company}</span>
+          </div>
+          <div className={styles.tag}>
+            <span className={styles.tagTitle}>Type</span>
+            <span className={styles.tagContent}>{work.type}</span>
+          </div>
+          <div className={styles.tag}>
+            <span className={styles.tagTitle}>From</span>
+            <span className={styles.tagContent}>{work.startDate}</span>
+          </div>
+          <div className={styles.tag}>
+            <span className={styles.tagTitle}>To</span>
+            <span className={styles.tagContent}>{work.endDate}</span>
+          </div>
+        </div>
       </section>
-      <section className={styles.content}></section>
+      <section className={styles.content}>
+        <Image
+          src={work.image}
+          alt={work.title}
+          width={1000}
+          height={1000}
+          className={styles.workCardImage}
+        />
+        <div className={styles.services}>
+          <h2 className={styles.servicesTitle}>Services</h2>
+          <div className={styles.servicesList}>
+            {work.services.map((service) => (
+              <span key={service} className={styles.service}>
+                {service}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className={styles.stack}>
+          <h2 className={styles.stackTitle}>Stack</h2>
+          <div className={styles.stackList}>
+            {work.stack.map((item) => (
+              <span key={item} className={styles.stackItem}>
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className={styles.about}>
+          <p className={styles.aboutTitle}>Challenge</p>
+          <div className={styles.aboutContent}>{work.challenge}</div>
+        </div>
+        <div className={styles.about}>
+          <p className={styles.aboutTitle}>Goal</p>
+          <div className={styles.aboutContent}>{work.goal}</div>
+        </div>
+        <div className={styles.about}>
+          <p className={styles.aboutTitle}>Result</p>
+          <div className={styles.aboutContent}>{work.result}</div>
+        </div>
+      </section>
     </div>
   );
 }

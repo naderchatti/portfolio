@@ -7,7 +7,7 @@ export const works = [
     type: 'Fullstack Developer',
     description: 'Development of a matching platform for hotels and travelers.',
     startDate: 'Jan 2023',
-    endDate: 'Mar 2024',
+    endDate: 'JAN 2024',
     services: ['Backend', 'Amadeus Certification', 'Web App', 'Mobile App'],
     stack: ['Python', 'FastAPI', 'React Native', 'React', 'Node.js', 'MongoDB'],
     challenge: 'Development of a matching platform for hotels and travelers.',

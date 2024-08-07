@@ -4,7 +4,7 @@
     padding-block-end: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .wrapper section {
@@ -13,13 +13,23 @@
 }
 
 .hero {
-    text-align: center;
+    display: grid;
+    gap: 1rem;
 }
 
 .title {
+    text-align: center;
     font-family: 'Satoshi Light';
     font-weight: 100;
     font-size: clamp(2rem, 5vw, 4rem);
+    color: var(--default-text-color);
+    line-height: 1;
+}
+
+.type {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    font-size: 1rem;
     color: var(--default-text-color);
 }
 
@@ -30,9 +40,128 @@
     color: var(--default-text-color-muted);
 }
 
+.company {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    font-size: 1rem;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--default-text-color-muted);
+}
+
+.tags {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    text-align: center;
+}
+
+.tag {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 4rem;
+    background-color: var(--primary-background-color-muted);
+    border: 1px solid var(--default-border-color);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    gap: 0.25rem;
+}
+
+.tagTitle, .tagContent {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    font-size: .65rem;
+    text-transform: uppercase;
+    color: var(--default-text-color-muted);
+}
+
+.tagContent {
+    color: var(--default-text-color);
+}
+
+.content {
+    display: grid;
+    gap: 1rem;
+}
+
+.workCardImageWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.workCardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.services, .stack {
+    display: grid;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid var(--default-border-color);
+    border-radius: 0.25rem;
+    background-color: var(--primary-background-color-muted);
+}
+
+.servicesTitle, .stackTitle {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: var(--default-text-color-muted);
+}
+
+.servicesList, .stackList {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.service, .stackItem {
+    font-family: 'Satoshi Light';
+    font-weight: 100;
+    font-size: 0.75rem;
+    color: var(--default-text-color);
+    background-color: var(--primary-background-color-muted);
+    padding: 0.5rem;
+    border: 1px solid var(--default-border-color);
+    border-radius: 0.25rem;
+}
+
+.about {
+    display: grid;
+    gap: 1rem;
+    padding: 2rem;
+    border: 1px solid var(--default-border-color);
+    border-radius: 0.25rem;
+    background-color: var(--primary-background-color-muted);
+}
+
+.aboutTitle {
+    font-size: 1.25rem;
+    color: var(--default-text-color);
+}
+
+.aboutContent {
+    font-size: 1rem;
+    color: var(--default-text-color-muted);
+}
+
 @media (min-width: 768px) {
     .wrapper section {
         width: 60%;
+    }
+
+    .tags {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .servicesList, .stackList {
+        grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
     }
 }
 
