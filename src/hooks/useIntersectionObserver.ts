@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 export const useIntersectionObserver = (
   options = {
-    threshold: 0.1, // Trigger when 10% of the element is visible
-    rootMargin: '0px 0px -50px 0px', // Trigger 50px before the element comes into view
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
   }
 ) => {
   const ref = useRef(null);
