@@ -2,7 +2,7 @@
 
 import { sendEmail } from '@/utils/mail.utils';
 
-// export const runtime = 'edge';
+export const runtime = 'edge';
 
 export async function POST(req: Request) {
   const { name, email, subject, message } = await req.json();
