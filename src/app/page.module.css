@@ -55,7 +55,7 @@
 
 .heroImage img {
   width: 90vw;
-  max-height: 500px;
+  height: 300px;
 }
 
 .heroText {
@@ -377,6 +377,10 @@
 }
 
 @media (min-width: 768px) {
+  .heroImage img {
+    height: 500px;
+  }
+  
   .heroText {
     width: 60%;
   }
