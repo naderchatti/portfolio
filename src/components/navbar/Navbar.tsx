@@ -78,7 +78,10 @@ const Navbar = () => {
         )}
       </div>
       {isDropdownOpen && (
-        <div className={styles.dropdown} ref={dropdownRef}>
+        <div
+          className={`${styles.dropdown} ${isDropdownOpen && styles.open}`}
+          ref={dropdownRef}
+        >
           <Link
             href="/about"
             className={styles.link}
