@@ -1,5 +1,8 @@
-export const runtime = 'edge';
+'use server';
+
 import { sendEmail } from '@/utils/mail.utils';
+
+// export const runtime = 'edge';
 
 export async function POST(req: Request) {
   const { name, email, subject, message } = await req.json();

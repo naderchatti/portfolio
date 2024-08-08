@@ -1,3 +1,5 @@
+'use server';
+
 import nodemailer from 'nodemailer';
 import ContactEmailTemplate from '../common/ContactEmailTemplate';
 import juice from 'juice';
