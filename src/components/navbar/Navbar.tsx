@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLInputElement>(null);
+  const burgerWrapperRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -22,7 +23,8 @@ const Navbar = () => {
         !dropdownRef.current.contains(event.target as Node) &&
         burgerRef.current &&
         !burgerRef.current.contains(event.target as Node) &&
-        !(event.target as HTMLElement).closest('.burger-button')
+        !(event.target as HTMLElement).closest('.burger-button') &&
+        !burgerWrapperRef.current?.contains(event.target as Node)
       ) {
         setIsDropdownOpen(false);
         if (burgerRef.current) {
@@ -54,7 +56,9 @@ const Navbar = () => {
         {isMobile !== null && (
           <>
             {isMobile ? (
-              <BurgerButton handleDropdown={handleDropdown} ref={burgerRef} />
+              <div className={styles.burgerWrapper} ref={burgerWrapperRef}>
+                <BurgerButton handleDropdown={handleDropdown} ref={burgerRef} />
+              </div>
             ) : (
               <>
                 <div className={styles.links}>
