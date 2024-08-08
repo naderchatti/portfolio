@@ -95,17 +95,6 @@
     --font-family: 'Satoshi', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-    /* :root { */
-        /* Dark mode colors */
-        /* --background-color: hsl(0, 0%, 15%);
-        --foreground-color: hsl(0, 0%, 95%);
-        --foreground-color-04: hsla(0, 0%, 95%, 0.4);
-        --border-color: hsl(0, 0%, 30%);
-        --inverse-label-color: hsl(0, 0%, 95%); */
-    /* } */
-}
-
 body {
     background-color: var(--default-background-color);
     color: var(--default-text-color);
@@ -118,4 +107,5 @@ body {
     padding: 0;
     font-family: var(--font-family);
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }

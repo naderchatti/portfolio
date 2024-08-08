@@ -21,10 +21,13 @@ const Navbar = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node) &&
         burgerRef.current &&
-        !burgerRef.current.contains(event.target as Node)
+        !burgerRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest('.burger-button')
       ) {
         setIsDropdownOpen(false);
-        burgerRef.current.checked = false;
+        if (burgerRef.current) {
+          burgerRef.current.checked = false;
+        }
       }
     };
 
@@ -40,7 +43,7 @@ const Navbar = () => {
   }, [isDropdownOpen]);
 
   const handleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
   return (
     <>
