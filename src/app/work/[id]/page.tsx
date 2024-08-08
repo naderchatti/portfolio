@@ -5,7 +5,8 @@ import { works } from '@/common/data';
 import styles from './WorkItem.module.css';
 import Image from 'next/image';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useRef } from 'react';
+
+export const runtime = 'edge';
 
 export default function WorkPage({ params }: { params: { id: string } }) {
   const work = works.find((item) => item.id === params.id);
