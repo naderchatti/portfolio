@@ -44,6 +44,10 @@
     color: var(--default-text-color);
 }
 
+.errorMessage {
+    color: red;
+}
+
 .socials {
     width: 100%;
     display: grid;

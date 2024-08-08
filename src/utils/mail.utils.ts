@@ -41,8 +41,9 @@ export async function sendEmail({
       text: message,
       html: inlinedHtml,
     });
-    return info;
+
+    return 'Email sent';
   } catch (error) {
-    throw error;
+    return 'Error sending email';
   }
 }

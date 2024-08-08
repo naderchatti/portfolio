@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Contact.module.css';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import InputText from '@/components/inputs/InputText';
@@ -10,10 +10,10 @@ import { TfiEmail, TfiGithub, TfiLinkedin, TfiTwitter } from 'react-icons/tfi';
 import Image from 'next/image';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import BarsLoader from '@/components/loaders/BarsLoader';
+import { sendEmail } from '@/utils/mail.utils';
 
 const Contact = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<any>({});
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -21,7 +21,7 @@ const Contact = () => {
   const [formRef, isFormVisible] = useIntersectionObserver();
   const [socialsRef, isSocialsVisible] = useIntersectionObserver();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const resetForm = () => {
     setName('');
     setEmail('');
@@ -56,29 +56,20 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     try {
-      const res = await fetch('api/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, subject, message }),
+      setLoading(true);
+      await sendEmail({
+        name,
+        email,
+        recipients: ['contact@naderchatti.com'],
+        subject,
+        message,
       });
-      const data = await res.json();
-      setResult(data);
-      if (res.ok) {
-        setShowSuccessMessage(true);
-        resetForm();
-      }
+      setShowSuccessMessage(true);
+      setLoading(false);
+      resetForm();
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error sending email:', error);
-        setResult({ error: error.message });
-      } else {
-        console.error('Error sending email:', error);
-        setResult({ error: 'An unknown error occurred' });
-      }
+      setShowErrorMessage(true);
     } finally {
       setLoading(false);
     }
@@ -142,6 +133,9 @@ const Contact = () => {
               <div className={styles.successMessage}>
                 Message sent successfully!
               </div>
+            )}
+            {showErrorMessage && (
+              <div className={styles.errorMessage}>Error sending message</div>
             )}
           </form>
           <div
