@@ -1,13 +1,53 @@
-import React from 'react';
+'use client';
+
+import React, { useRef, useEffect, useState } from 'react';
 import styles from './About.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TfiEmail, TfiGithub, TfiLinkedin, TfiTwitter } from 'react-icons/tfi';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+
+interface VisibleItems {
+  [key: string]: boolean;
+}
 
 const About = () => {
+  const [aboutRef, isAboutVisible] = useIntersectionObserver();
+  const [heroRef, isHeroVisible] = useIntersectionObserver();
+  const [educationRef, isEducationVisible] = useIntersectionObserver();
+  const [socialsRef, isSocialsVisible] = useIntersectionObserver();
+
+  const [visibleItems, setVisibleItems] = useState<VisibleItems>({});
+
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       entries.forEach((entry) => {
+  //         setVisibleItems((prev) => ({
+  //           ...prev,
+  //           [entry.target.id]: entry.isIntersecting,
+  //         }));
+  //       });
+  //     },
+  //     { threshold: 0.1 }
+  //   );
+
+  //   aboutCardRefs.forEach((ref, index) => {
+  //     if (ref.current) {
+  //       (ref.current as HTMLElement).id = `about-card-${index}`;
+  //       observer.observe(ref.current);
+  //     }
+  //   });
+
+  //   return () => observer.disconnect();
+  // }, []);
+
   return (
     <div className={styles.wrapper}>
-      <section className={styles.hero}>
+      <section
+        ref={heroRef as React.LegacyRef<HTMLElement>}
+        className={`${styles.hero} ${isHeroVisible ? styles.animate : ''}`}
+      >
         <div className={styles.heroText}>
           <h2 className={styles.title}>Nader Chatti</h2>
           <p className={styles.subtitle}>
@@ -17,7 +57,12 @@ const About = () => {
         </div>
       </section>
       <section className={styles.about}>
-        <div className={styles.aboutCard}>
+        <div
+          ref={aboutRef as React.LegacyRef<HTMLDivElement>}
+          className={`${styles.aboutCard} ${
+            isAboutVisible ? styles.animate : ''
+          }`}
+        >
           <span className={styles.aboutSubtitle}>Nader Chatti</span>
           <h2 className={styles.aboutTitle}>
             Your Partner in Bringing Your Project to Life
@@ -40,7 +85,12 @@ const About = () => {
             professionals and individuals, in developing their solutions.
           </p>
         </div>
-        <div className={styles.socials}>
+        <div
+          ref={socialsRef as React.LegacyRef<HTMLDivElement>}
+          className={`${styles.socials} ${
+            isSocialsVisible ? styles.animate : ''
+          }`}
+        >
           <Link
             href="https://www.linkedin.com/in/naderchatti"
             target="_blank"
@@ -106,7 +156,12 @@ const About = () => {
             />
           </Link>
         </div>
-        <div className={styles.aboutCard}>
+        <div
+          ref={educationRef as React.LegacyRef<HTMLDivElement>}
+          className={`${styles.educationCard} ${
+            isEducationVisible ? styles.animate : ''
+          }`}
+        >
           <span className={styles.aboutSubtitle}>Education</span>
           <div className={styles.education}>
             <div className={styles.educationItem}>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './Contact.module.css';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import InputText from '@/components/inputs/InputText';
@@ -8,10 +8,15 @@ import TextArea from '@/components/inputs/TextArea';
 import Link from 'next/link';
 import { TfiEmail, TfiGithub, TfiLinkedin, TfiTwitter } from 'react-icons/tfi';
 import Image from 'next/image';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+
+  const [formRef, isFormVisible] = useIntersectionObserver();
+  const [socialsRef, isSocialsVisible] = useIntersectionObserver();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.name) {
@@ -34,7 +39,13 @@ const Contact = () => {
     <div className={styles.wrapper}>
       <section className={styles.contactSection}>
         <div className={styles.contactWrapper}>
-          <form onSubmit={handleSubmit} className={styles.contactCard}>
+          <form
+            ref={formRef as React.RefObject<HTMLFormElement>}
+            onSubmit={handleSubmit}
+            className={`${styles.contactCard} ${
+              isFormVisible ? styles.animate : ''
+            }`}
+          >
             <span className={styles.subtitle}>Contact</span>
             <h1 className={styles.title}>Let&apos;s get in touch</h1>
             <InputText
@@ -59,7 +70,12 @@ const Contact = () => {
             />
             <PrimaryButton type="submit">Send message</PrimaryButton>
           </form>
-          <div className={styles.socials}>
+          <div
+            ref={socialsRef as React.RefObject<HTMLDivElement>}
+            className={`${styles.socials} ${
+              isSocialsVisible ? styles.animate : ''
+            }`}
+          >
             <Link
               href="https://www.linkedin.com/in/naderchatti"
               target="_blank"

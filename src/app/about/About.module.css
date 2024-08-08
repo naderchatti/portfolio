@@ -30,7 +30,8 @@
     gap: 1rem;
 }
 
-.aboutCard {
+.aboutCard,
+.educationCard {
     background-color: var(--primary-background-color-muted);
     border: 1px solid var(--default-border-color);
     padding: 2rem;
@@ -127,4 +128,29 @@
     .wrapper section {
         width: 60%;
     }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero.animate,
+.aboutCard.animate,
+.socials.animate,
+.educationCard.animate {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.hero,
+.aboutCard,
+.socials,
+.educationCard {
+  opacity: 0;
 }
