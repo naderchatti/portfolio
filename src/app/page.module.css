@@ -17,6 +17,28 @@
   background-color: var(--default-border-color);
 }
 
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero {
   height: 100dvh;
   display: flex;
@@ -27,11 +49,27 @@
 
 .heroImage {
   width: 90vw;
+  height: fit-content;
+  opacity: 0;
+}
+
+.heroImage img {
+  width: 90vw;
+  max-height: 500px;
 }
 
 .heroText {
   width: 90%;
   text-align: center;
+  opacity: 0;
+}
+
+.heroImage.animate {
+  animation: fade-in-up 1s ease-out forwards;
+}
+
+.heroText.animate {
+  animation: fade-in-up 1s ease-out forwards;
 }
 
 .title {
@@ -51,6 +89,14 @@
 .skills {
   display: grid;
   gap: 2rem;
+}
+
+.skillsCard {
+  opacity: 0;
+}
+
+.skillsCard.animate {
+  animation: fade-in-up 1s ease-out forwards;
 }
 
 .skillsCards {
@@ -99,6 +145,14 @@
 .works {
   display: grid;
   gap: 1rem;
+}
+
+.workCard {
+  opacity: 0;
+}
+
+.workCard.animate {
+  animation: fade-in-up 1s ease-out forwards;
 }
 
 .worksHeader {
@@ -180,6 +234,14 @@
 .steps {
   display: grid;
   gap: 1rem;
+}
+
+.stepsCard {
+  opacity: 0;
+}
+
+.stepsCard.animate {
+  animation: fade-in-up 1s ease-out forwards;
 }
 
 .stepsHeader {
@@ -302,6 +364,16 @@
   font-weight: 100;
   font-size: 1rem;
   color: var(--default-text-color-muted);
+}
+
+.sliderWrapper {
+  width: 90vw;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+.sliderWrapper.animate {
+  animation: fade-in-up 1s ease-out forwards;
 }
 
 @media (min-width: 768px) {

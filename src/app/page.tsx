@@ -4,22 +4,83 @@ import { SkillsSlider } from '@/components/slider/SkillsSlider';
 import styles from './page.module.css';
 import ButtonText from '@/components/buttons/ButtonText';
 import Image from 'next/image';
-import { works } from '@/common/data';
+import { skills, steps, works } from '@/common/data';
 import { useRouter } from 'next/navigation';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useRef, useEffect, useState, createRef } from 'react';
+import { title } from 'process';
 
 export default function Home() {
   const router = useRouter();
+  const [heroImageRef, isHeroImageVisible] = useIntersectionObserver();
+  const [heroTextRef, isHeroTextVisible] = useIntersectionObserver();
+  const [sliderWrapperRef, isSliderWrapperVisible] = useIntersectionObserver();
+
+  const skillsRefs = useRef([...Array(3)].map(() => createRef()));
+  const worksRefs = useRef(works.map(() => createRef()));
+  const stepsRefs = useRef([...Array(5)].map(() => createRef()));
+
+  const [visibleItems, setVisibleItems] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setVisibleItems((prev) => ({
+            ...prev,
+            [entry.target.id]: entry.isIntersecting,
+          }));
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    skillsRefs.current.forEach((ref, index) => {
+      if (ref.current instanceof Element) {
+        ref.current.id = `skill-${index}`;
+        observer.observe(ref.current);
+      }
+    });
+
+    worksRefs.current.forEach((ref, index) => {
+      if (ref.current instanceof Element) {
+        ref.current.id = `work-${index}`;
+        observer.observe(ref.current);
+      }
+    });
+
+    stepsRefs.current.forEach((ref, index) => {
+      if (ref.current instanceof Element) {
+        ref.current.id = `step-${index}`;
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className={styles.wrapper}>
       <section className={styles.hero}>
-        <Image
-          src="/images/N-Logo.svg"
-          alt="N-Logo"
-          width={500}
-          height={500}
-          className={styles.heroImage}
-        />
-        <div className={styles.heroText}>
+        <div
+          ref={heroImageRef as React.RefObject<HTMLDivElement>}
+          className={`${styles.heroImage} ${
+            isHeroImageVisible ? styles.animate : ''
+          }`}
+        >
+          <Image
+            src="/images/N-Logo.svg"
+            alt="N-Logo"
+            width={500}
+            height={500}
+          />
+        </div>
+        <div
+          ref={heroTextRef as React.RefObject<HTMLDivElement>}
+          className={`${styles.heroText} ${
+            isHeroTextVisible ? styles.animate : ''
+          }`}
+        >
           <h1 className={styles.title}>Software Engineer & Developer</h1>
           <span className={styles.subtitle}>
             Premium quality software development services to help your business
@@ -29,35 +90,32 @@ export default function Home() {
       </section>
 
       <section className={styles.skills}>
-        <SkillsSlider />
+        <div
+          ref={sliderWrapperRef as React.RefObject<HTMLDivElement>}
+          className={`${styles.sliderWrapper} ${
+            isSliderWrapperVisible ? styles.animate : ''
+          }`}
+        >
+          <SkillsSlider />
+        </div>
         <div className={styles.skillsCards}>
-          <div className={styles.skillsCard}>
-            <span className={styles.skillsCardIndex}>01</span>
-            <h3 className={styles.skillsCardTitle}>Backend Development</h3>
-            <p className={styles.skillsCardDescription}>
-              I have experience with backend development using python, node.js
-              and express. Databases used include MongoDB, PostgreSQL, and
-              MySQL.
-            </p>
-          </div>
-          <div className={styles.skillsCard}>
-            <span className={styles.skillsCardIndex}>02</span>
-            <h3 className={styles.skillsCardTitle}>Frontend Development</h3>
-            <p className={styles.skillsCardDescription}>
-              I have experience with frontend development using React, Next.js
-              for web development and React Native for mobile development.
-            </p>
-          </div>
-          <div className={styles.skillsCard}>
-            <span className={styles.skillsCardIndex}>03</span>
-            <h3 className={styles.skillsCardTitle}>
-              Infrastructure & Deployment
-            </h3>
-            <p className={styles.skillsCardDescription}>
-              I have experience with infrastructure using Cloudflare, Google
-              Cloud Platform, and custom VPS configurations.
-            </p>
-          </div>
+          {skills.map((skill, index) => (
+            <div
+              key={`skill-${index}`}
+              ref={skillsRefs.current[index] as React.RefObject<HTMLDivElement>}
+              className={`${styles.skillsCard} ${
+                visibleItems[`skill-${index}` as keyof typeof visibleItems]
+                  ? styles.animate
+                  : ''
+              }`}
+            >
+              <span className={styles.skillsCardIndex}>{skill.index}</span>
+              <h3 className={styles.skillsCardTitle}>{skill.title}</h3>
+              <p className={styles.skillsCardDescription}>
+                {skill.description}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -75,10 +133,15 @@ export default function Home() {
           />
         </div>
         <div className={styles.worksCards}>
-          {works.map((work) => (
+          {works.map((work, index) => (
             <div
-              className={styles.workCard}
               key={work.id}
+              ref={worksRefs.current[index] as React.RefObject<HTMLDivElement>}
+              className={`${styles.workCard} ${
+                visibleItems[`work-${index}` as keyof typeof visibleItems]
+                  ? styles.animate
+                  : ''
+              }`}
               onClick={() => router.push(`/work/${work.id}`)}
             >
               <div className={styles.workCardImageWrapper}>
@@ -127,98 +190,34 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.stepsCards}>
-            <div className={styles.stepsCardWrapper}>
-              <div className={styles.stepsCardIndex}>
-                <span>01</span>
-              </div>
-              <div className={styles.stepsCard}>
-                <div className={styles.stepsCardDate}>
-                  <span>2 HOURS</span>
+            {steps.map((step, index) => (
+              <div key={`step-${index}`} className={styles.stepsCardWrapper}>
+                <div className={styles.stepsCardIndex}>
+                  <span>{`0${index + 1}`}</span>
                 </div>
-                <span className={styles.stepsCardSubtitle}>DO WE MATCH?</span>
-                <h2 className={styles.stepsCardTitle}>DISCOVERY CALL</h2>
-                <p className={styles.stepsCardDescription}>
-                  Contact me to discuss your project, I will be happy to answer
-                  your questions. You can explain your project in detail and I
-                  will give you my feedback. I will also give you a quote for
-                  the project. I will also give you some advice on how to
-                  proceed.
-                </p>
-              </div>
-            </div>
-            <div className={styles.stepsCardWrapper}>
-              <div className={styles.stepsCardIndex}>
-                <span>02</span>
-              </div>
-              <div className={styles.stepsCard}>
-                <div className={styles.stepsCardDate}>
-                  <span>1 WEEK</span>
+                <div
+                  ref={
+                    stepsRefs.current[index] as React.RefObject<HTMLDivElement>
+                  }
+                  className={`${styles.stepsCard} ${
+                    visibleItems[`step-${index}` as keyof typeof visibleItems]
+                      ? styles.animate
+                      : ''
+                  }`}
+                >
+                  <div className={styles.stepsCardDate}>
+                    <span>{step.date}</span>
+                  </div>
+                  <span className={styles.stepsCardSubtitle}>
+                    {step.subtitle}
+                  </span>
+                  <h2 className={styles.stepsCardTitle}>{step.title}</h2>
+                  <p className={styles.stepsCardDescription}>
+                    {step.description}
+                  </p>
                 </div>
-                <span className={styles.stepsCardSubtitle}>
-                  DEFINE THE PROJECT
-                </span>
-                <h2 className={styles.stepsCardTitle}>CONCEPT & STRATEGY</h2>
-                <p className={styles.stepsCardDescription}>
-                  I will provide you with a detailed plan for your project.
-                  Including the scope of work, the timeline, the budget, and the
-                  resources needed. I will also provide you with a quote for the
-                  project.
-                </p>
               </div>
-            </div>
-            <div className={styles.stepsCardWrapper}>
-              <div className={styles.stepsCardIndex}>
-                <span>03</span>
-              </div>
-              <div className={styles.stepsCard}>
-                <div className={styles.stepsCardDate}>
-                  <span>1 WEEK</span>
-                </div>
-                <span className={styles.stepsCardSubtitle}>SOME MAGIC</span>
-                <h2 className={styles.stepsCardTitle}>DESIGN</h2>
-                <p className={styles.stepsCardDescription}>
-                  As I&apos;m not a designer, if you need a custom design, you
-                  will have to provide me with a design. Otherwise, I will
-                  provide you with a basic design that I think will fit your
-                  project.
-                </p>
-              </div>
-            </div>
-            <div className={styles.stepsCardWrapper}>
-              <div className={styles.stepsCardIndex}>
-                <span>04</span>
-              </div>
-              <div className={styles.stepsCard}>
-                <div className={styles.stepsCardDate}>
-                  <span>ESTIMATED TIME</span>
-                </div>
-                <span className={styles.stepsCardSubtitle}>MORE MAGIC</span>
-                <h2 className={styles.stepsCardTitle}>DEVELOPMENT</h2>
-                <p className={styles.stepsCardDescription}>
-                  I will proceed to the development of your project. I will keep
-                  you updated on the progress of the project. I will provide you
-                  with a demo of the project at the end of the development
-                  process.
-                </p>
-              </div>
-            </div>
-            <div className={styles.stepsCardWrapper}>
-              <div className={styles.stepsCardIndex}>
-                <span>05</span>
-              </div>
-              <div className={styles.stepsCard}>
-                <div className={styles.stepsCardDate}>
-                  <span>2 HOURS</span>
-                </div>
-                <span className={styles.stepsCardSubtitle}>READY TO GO</span>
-                <h2 className={styles.stepsCardTitle}>DEPLOYMENT</h2>
-                <p className={styles.stepsCardDescription}>
-                  Depending on your choice, the project will be deployed by me
-                  or the necessary resources will be provided to you that you
-                  can use to deploy the project yourself.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
