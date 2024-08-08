@@ -76,9 +76,9 @@ const Footer = () => {
           <Link href="/work" className={styles.link}>
             Work
           </Link>
-          <Link href="/blog" className={styles.link}>
+          {/* <Link href="/blog" className={styles.link}>
             Blog
-          </Link>
+          </Link> */}
         </div>
 
         <div className={styles.links}>

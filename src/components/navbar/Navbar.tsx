@@ -64,9 +64,9 @@ const Navbar = () => {
                   <Link href="/work" className={styles.link}>
                     Work
                   </Link>
-                  <Link href="/blog" className={styles.link}>
+                  {/* <Link href="/blog" className={styles.link}>
                     Blog
-                  </Link>
+                  </Link> */}
                 </div>
                 <PrimaryButton
                   onClick={() => {
@@ -109,7 +109,7 @@ const Navbar = () => {
           >
             Work
           </Link>
-          <Link
+          {/* <Link
             href="/blog"
             className={styles.link}
             onClick={() => {
@@ -120,7 +120,7 @@ const Navbar = () => {
             }}
           >
             Blog
-          </Link>
+          </Link> */}
           <PrimaryButton
             onClick={() => {
               router.push('/contact');
