@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import ContactEmailTemplate from '../common/ContactEmailTemplate';
+import juice from 'juice';
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -11,27 +13,31 @@ const transporter = nodemailer.createTransport({
 });
 
 type MailOptions = {
-  sender: string;
+  name: string;
+  email: string;
   recipients: string[];
   subject: string;
   message: string;
-  text: string;
 };
 
 export async function sendEmail({
-  sender,
+  name,
+  email,
   recipients,
   subject,
   message,
-  text,
 }: MailOptions) {
   try {
+    const htmlContent = ContactEmailTemplate({ name, email, subject, message });
+
+    const inlinedHtml = juice(htmlContent);
+
     const info = await transporter.sendMail({
-      from: sender,
+      from: { name, address: email },
       to: recipients.join(', '),
       subject: subject,
-      text: text,
-      html: message,
+      text: message,
+      html: inlinedHtml,
     });
     return info;
   } catch (error) {

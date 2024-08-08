@@ -3,22 +3,13 @@ import { sendEmail } from '@/utils/mail.utils';
 export async function POST(req: Request) {
   const { name, email, subject, message } = await req.json();
 
-  const text = `Name: ${name}\nEmail: ${email}\nMessage: ${message}`;
-
-  const html = `
-    <p>Name: ${name}</p>
-    <p>Email: ${email}</p>
-    <p>Subject: ${subject}</p>
-    <p>Message: ${message}</p>
-  `;
-
   try {
     await sendEmail({
-      sender: email,
+      name,
+      email,
       recipients: ['contact@naderchatti.com'],
       subject,
-      message: html,
-      text,
+      message,
     });
 
     return Response.json({ message: 'Email sent' }, { status: 200 });
