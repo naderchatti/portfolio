@@ -10,7 +10,6 @@ import { TfiEmail, TfiGithub, TfiLinkedin, TfiTwitter } from 'react-icons/tfi';
 import Image from 'next/image';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import BarsLoader from '@/components/loaders/BarsLoader';
-import { sendEmail } from '@/utils/mail.utils';
 
 const Contact = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -56,23 +55,26 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      setLoading(true);
-      await sendEmail({
-        name,
-        email,
-        recipients: ['contact@naderchatti.com'],
-        subject,
-        message,
-      });
-      setShowSuccessMessage(true);
-      setLoading(false);
-      resetForm();
-    } catch (error) {
+    setShowErrorMessage(false);
+    setShowSuccessMessage(false);
+    setLoading(true);
+    const res = await fetch('https://email-sender.chatti-tkd.workers.dev/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, subject, message }),
+    });
+
+    if (!res.ok) {
       setShowErrorMessage(true);
-    } finally {
       setLoading(false);
+      throw new Error('Failed to send message');
     }
+
+    setShowSuccessMessage(true);
+    setLoading(false);
+    resetForm();
   };
 
   return (
