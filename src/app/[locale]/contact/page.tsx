@@ -10,8 +10,11 @@ import { TfiEmail, TfiGithub, TfiLinkedin, TfiTwitter } from 'react-icons/tfi';
 import Image from 'next/image';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import BarsLoader from '@/components/loaders/BarsLoader';
+import { useTranslation } from '@/context/TranslationContext';
 
 const Contact = () => {
+  const { useTranslations } = useTranslation();
+  const t = useTranslations('Contact');
   const [isLoading, setLoading] = useState<boolean>(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -88,12 +91,12 @@ const Contact = () => {
               isFormVisible ? styles.animate : ''
             }`}
           >
-            <span className={styles.subtitle}>Contact</span>
-            <h1 className={styles.title}>Let&apos;s get in touch</h1>
+            <span className={styles.subtitle}>{t('subtitle')}</span>
+            <h1 className={styles.title}>{t('title')}</h1>
             <InputText
               required
               type="text"
-              placeholder="Name"
+              placeholder={t('namePlaceholder')}
               value={name}
               onChange={handleChange}
               name="name"
@@ -101,7 +104,7 @@ const Contact = () => {
             <InputText
               required
               type="email"
-              placeholder="Email"
+              placeholder={t('emailPlaceholder')}
               value={email}
               onChange={handleChange}
               name="email"
@@ -109,14 +112,14 @@ const Contact = () => {
             <InputText
               required
               type="text"
-              placeholder="Subject"
+              placeholder={t('subjectPlaceholder')}
               value={subject}
               onChange={handleChange}
               name="subject"
             />
             <TextArea
               required
-              placeholder="Message"
+              placeholder={t('messagePlaceholder')}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               name="message"
@@ -128,16 +131,14 @@ const Contact = () => {
                   size={'1.25rem'}
                 />
               ) : (
-                <span>Send message</span>
+                <span>{t('sendButton')}</span>
               )}
             </PrimaryButton>
             {showSuccessMessage && (
-              <div className={styles.successMessage}>
-                Message sent successfully!
-              </div>
+              <div className={styles.successMessage}>{t('successMessage')}</div>
             )}
             {showErrorMessage && (
-              <div className={styles.errorMessage}>Error sending message</div>
+              <div className={styles.errorMessage}>{t('errorMessage')}</div>
             )}
           </form>
           <div

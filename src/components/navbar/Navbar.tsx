@@ -7,6 +7,8 @@ import BurgerButton from '../buttons/BurgerButton';
 import PrimaryButton from '../buttons/PrimaryButton';
 import { useResponsive } from '@/context/ResponsiveContext';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/context/TranslationContext';
+import LanguageSelector from '../selectors/LanguageSelector';
 
 const Navbar = () => {
   const { isMobile } = useResponsive();
@@ -15,6 +17,8 @@ const Navbar = () => {
   const burgerRef = useRef<HTMLInputElement>(null);
   const burgerWrapperRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { useTranslations, currentLocale } = useTranslation();
+  const t = useTranslations('Navbar');
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,10 +51,11 @@ const Navbar = () => {
   const handleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
+
   return (
     <>
       <div className={styles.navbar}>
-        <Link href="/" className={styles.logo}>
+        <Link href={`/${currentLocale}`} className={styles.logo}>
           Nader.
         </Link>
         {isMobile !== null && (
@@ -62,23 +67,25 @@ const Navbar = () => {
             ) : (
               <>
                 <div className={styles.links}>
-                  <Link href="/about" className={styles.link}>
-                    About
+                  <Link
+                    href={`/${currentLocale}/about`}
+                    className={styles.link}
+                  >
+                    {t('aboutLink')}
                   </Link>
-                  <Link href="/work" className={styles.link}>
-                    Work
+                  <Link href={`/${currentLocale}/work`} className={styles.link}>
+                    {t('workLink')}
                   </Link>
-                  {/* <Link href="/blog" className={styles.link}>
-                    Blog
-                  </Link> */}
+                  <Link
+                    href={`/${currentLocale}/contact`}
+                    className={styles.link}
+                  >
+                    {t('contactLink')}
+                  </Link>
                 </div>
-                <PrimaryButton
-                  onClick={() => {
-                    router.push('/contact');
-                  }}
-                >
-                  LETS&apos;S TALK
-                </PrimaryButton>
+                <div className={styles.languageSelectorWrapper}>
+                  <LanguageSelector />
+                </div>
               </>
             )}
           </>
@@ -90,7 +97,7 @@ const Navbar = () => {
           ref={dropdownRef}
         >
           <Link
-            href="/about"
+            href={`/${currentLocale}/about`}
             className={styles.link}
             onClick={() => {
               setIsDropdownOpen(false);
@@ -99,10 +106,10 @@ const Navbar = () => {
               }
             }}
           >
-            About
+            {t('aboutLink')}
           </Link>
           <Link
-            href="/work"
+            href={`/${currentLocale}/work`}
             className={styles.link}
             onClick={() => {
               setIsDropdownOpen(false);
@@ -111,10 +118,10 @@ const Navbar = () => {
               }
             }}
           >
-            Work
+            {t('workLink')}
           </Link>
-          {/* <Link
-            href="/blog"
+          <Link
+            href={`/${currentLocale}/contact`}
             className={styles.link}
             onClick={() => {
               setIsDropdownOpen(false);
@@ -123,19 +130,11 @@ const Navbar = () => {
               }
             }}
           >
-            Blog
-          </Link> */}
-          <PrimaryButton
-            onClick={() => {
-              router.push('/contact');
-              setIsDropdownOpen(false);
-              if (burgerRef.current) {
-                burgerRef.current.checked = false;
-              }
-            }}
-          >
-            LETS&apos;S TALK
-          </PrimaryButton>
+            {t('contactLink')}
+          </Link>
+          <div className={styles.languageSelectorWrapper}>
+            <LanguageSelector />
+          </div>
         </div>
       )}
     </>

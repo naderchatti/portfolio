@@ -6,41 +6,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TfiEmail, TfiGithub, TfiLinkedin, TfiTwitter } from 'react-icons/tfi';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useTranslation } from '@/context/TranslationContext';
+import { education } from '@/common/data';
 
 interface VisibleItems {
   [key: string]: boolean;
 }
 
 const About = () => {
+  const { useTranslations } = useTranslation();
+  const t = useTranslations('About');
   const [aboutRef, isAboutVisible] = useIntersectionObserver();
   const [heroRef, isHeroVisible] = useIntersectionObserver();
   const [educationRef, isEducationVisible] = useIntersectionObserver();
   const [socialsRef, isSocialsVisible] = useIntersectionObserver();
 
   const [visibleItems, setVisibleItems] = useState<VisibleItems>({});
-
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       entries.forEach((entry) => {
-  //         setVisibleItems((prev) => ({
-  //           ...prev,
-  //           [entry.target.id]: entry.isIntersecting,
-  //         }));
-  //       });
-  //     },
-  //     { threshold: 0.1 }
-  //   );
-
-  //   aboutCardRefs.forEach((ref, index) => {
-  //     if (ref.current) {
-  //       (ref.current as HTMLElement).id = `about-card-${index}`;
-  //       observer.observe(ref.current);
-  //     }
-  //   });
-
-  //   return () => observer.disconnect();
-  // }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -49,11 +30,8 @@ const About = () => {
         className={`${styles.hero} ${isHeroVisible ? styles.animate : ''}`}
       >
         <div className={styles.heroText}>
-          <h2 className={styles.title}>Nader Chatti</h2>
-          <p className={styles.subtitle}>
-            Delivering Premium Web & Mobile Development Services to Boost Your
-            Online Presence.
-          </p>
+          <h2 className={styles.title}>{t('title')}</h2>
+          <p className={styles.subtitle}>{t('subtitle')}</p>
         </div>
       </section>
       <section className={styles.about}>
@@ -64,26 +42,10 @@ const About = () => {
           }`}
         >
           <span className={styles.aboutSubtitle}>Nader Chatti</span>
-          <h2 className={styles.aboutTitle}>
-            Your Partner in Bringing Your Project to Life
-          </h2>
-          <p className={styles.aboutDescription}>
-            Originally from Tunisia and living in France, I started with a
-            Bachelor&apos;s degree in network and telecommunications before
-            continuing my studies with a Master&apos;s degree in applied
-            management information systems and finishing with a Master&apos;s
-            degree in Mobility, Big Data, and Systems Integration.
-          </p>
-          <p className={styles.aboutDescription}>
-            I started working as a developer in 2017 and then as a Deep Learning
-            solutions developer in 2019. After obtaining my master&apos;s
-            degree, I specialized in Fullstack, web, and Mobile development
-            solutions.
-          </p>
-          <p className={styles.aboutDescription}>
-            Today, I assist large companies as well as small clients, both
-            professionals and individuals, in developing their solutions.
-          </p>
+          <h2 className={styles.aboutTitle}>{t('aboutTitle')}</h2>
+          <p className={styles.aboutDescription}>{t('aboutDescription1')}</p>
+          <p className={styles.aboutDescription}>{t('aboutDescription2')}</p>
+          <p className={styles.aboutDescription}>{t('aboutDescription3')}</p>
         </div>
         <div
           ref={socialsRef as React.LegacyRef<HTMLDivElement>}
@@ -164,47 +126,21 @@ const About = () => {
         >
           <span className={styles.aboutSubtitle}>Education</span>
           <div className={styles.education}>
-            <div className={styles.educationItem}>
-              <div className={styles.educationItemTop}>
-                <span className={styles.educationItemTopTitle}>
-                  Université Côte d&apos;Azur
-                </span>
-                <span className={styles.educationItemTopDate}>
-                  Nice, France <br /> 2019 - 2020
-                </span>
-              </div>
-              <span className={styles.aboutDescription}>
-                M2 MBDS: Master 2 in Big Data and System Integration
-              </span>
-            </div>
-            <div className={styles.educationItem}>
-              <div className={styles.educationItemTop}>
-                <span className={styles.educationItemTopTitle}>
-                  Université Côte d&apos;Azur
-                </span>
-                <span className={styles.educationItemTopDate}>
-                  Nice, France <br /> 2018 - 2019
+            {education.map((item, index) => (
+              <div className={styles.educationItem} key={index}>
+                <div className={styles.educationItemTop}>
+                  <span className={styles.educationItemTopTitle}>
+                    {t(item.title)}
+                  </span>
+                  <span className={styles.educationItemTopDate}>
+                    {t(item.location)} <br /> {t(item.date)}
+                  </span>
+                </div>
+                <span className={styles.aboutDescription}>
+                  {t(item.description)}
                 </span>
               </div>
-              <span className={styles.aboutDescription}>
-                M1 MIAGE: Master 1 in Computerized Methods Applied to Business
-                Management
-              </span>
-            </div>
-            <div className={styles.educationItem}>
-              <div className={styles.educationItemTop}>
-                <span className={styles.educationItemTopTitle}>
-                  Université Côte d&apos;Azur
-                </span>
-                <span className={styles.educationItemTopDate}>
-                  Sousse, Tunisia <br /> 2013 - 2017
-                </span>
-              </div>
-              <span className={styles.aboutDescription}>
-                Applied Licence Degree in Computer Network and
-                Telecommunications Techniques
-              </span>
-            </div>
+            ))}
           </div>
         </div>
       </section>

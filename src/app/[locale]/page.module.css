@@ -1,7 +1,7 @@
 .wrapper section {
   padding-block: 4rem;
 }
-
+  
 .notFoundWrapper {
   display: flex;
   flex-direction: row;

@@ -8,9 +8,12 @@ import { skills, steps, works } from '@/common/data';
 import { useRouter } from 'next/navigation';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useRef, useEffect, useState, createRef } from 'react';
-import { title } from 'process';
+import { useTranslation } from '@/context/TranslationContext';
 
 export default function Home() {
+  const { useTranslations, currentLocale } = useTranslation();
+  const t = useTranslations('Home');
+  const tw = useTranslations('Work');
   const router = useRouter();
   const [heroImageRef, isHeroImageVisible] = useIntersectionObserver();
   const [heroTextRef, isHeroTextVisible] = useIntersectionObserver();
@@ -81,11 +84,8 @@ export default function Home() {
             isHeroTextVisible ? styles.animate : ''
           }`}
         >
-          <h1 className={styles.title}>Software Engineer & Developer</h1>
-          <span className={styles.subtitle}>
-            Premium quality software development services to help your business
-            stand out.
-          </span>
+          <h1 className={styles.title}>{t('title')}</h1>
+          <span className={styles.subtitle}>{t('subtitle')}</span>
         </div>
       </section>
 
@@ -110,9 +110,9 @@ export default function Home() {
               }`}
             >
               <span className={styles.skillsCardIndex}>{skill.index}</span>
-              <h3 className={styles.skillsCardTitle}>{skill.title}</h3>
+              <h3 className={styles.skillsCardTitle}>{t(skill.titleKey)}</h3>
               <p className={styles.skillsCardDescription}>
-                {skill.description}
+                {t(skill.descriptionKey)}
               </p>
             </div>
           ))}
@@ -121,19 +121,19 @@ export default function Home() {
 
       <section className={styles.works}>
         <div className={styles.worksHeader}>
-          <h2 className={styles.worksHeaderTitle}>Recent Work</h2>
+          <h2 className={styles.worksHeaderTitle}>{t('worksHeaderTitle')}</h2>
           <ButtonText
-            text="See all"
+            text={t('worksButton')}
             iconName="ph_arrow-up-right-light"
             filled={true}
             animation={true}
             action={() => {
-              router.push('/work');
+              router.push(`/${currentLocale}/work`);
             }}
           />
         </div>
         <div className={styles.worksCards}>
-          {works.map((work, index) => (
+          {works.slice(0, 4).map((work, index) => (
             <div
               key={work.id}
               ref={worksRefs.current[index] as React.RefObject<HTMLDivElement>}
@@ -142,20 +142,43 @@ export default function Home() {
                   ? styles.animate
                   : ''
               }`}
-              onClick={() => router.push(`/work/${work.id}`)}
+              onClick={() =>
+                router.push(`/${currentLocale}/work/${tw(work.id)}`)
+              }
             >
               <div className={styles.workCardImageWrapper}>
-                <Image
-                  src={work.image}
-                  alt={work.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className={styles.workCardImage}
-                />
+                {(() => {
+                  try {
+                    const imageSrc = tw(work.image);
+                    const imageAlt = tw(work.title);
+
+                    const isValidImagePath =
+                      imageSrc &&
+                      (imageSrc.startsWith('/') || imageSrc.startsWith('http'));
+
+                    return isValidImagePath ? (
+                      <Image
+                        src={imageSrc}
+                        alt={imageAlt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className={styles.workCardImage}
+                      />
+                    ) : (
+                      <div className={styles.workCardImage} />
+                    );
+                  } catch (error) {
+                    console.error(
+                      `Error rendering image for work ${work.id}:`,
+                      error
+                    );
+                    return <div className={styles.workCardImage} />;
+                  }
+                })()}
               </div>
               <div className={styles.workCardBar}>
-                <h1 className={styles.workCardTitle}>{work.title}</h1>
-                <p className={styles.workCardType}>{work.type}</p>
+                <h1 className={styles.workCardTitle}>{tw(work.title)}</h1>
+                <p className={styles.workCardType}>{tw(work.type)}</p>
               </div>
             </div>
           ))}
@@ -164,7 +187,7 @@ export default function Home() {
 
       <section className={styles.steps}>
         <div className={styles.stepsHeader}>
-          <h2 className={styles.stepsHeaderTitle}>Your project in 5 steps</h2>
+          <h2 className={styles.stepsHeaderTitle}>{t('stepsHeaderTitle')}</h2>
         </div>
         <div className={styles.stepsWrapper}>
           <div className={styles.stepsTimelineIndicator}>
@@ -193,7 +216,7 @@ export default function Home() {
             {steps.map((step, index) => (
               <div key={`step-${index}`} className={styles.stepsCardWrapper}>
                 <div className={styles.stepsCardIndex}>
-                  <span>{`0${index + 1}`}</span>
+                  <span>{t(`steps.${index}.index`)}</span>
                 </div>
                 <div
                   ref={
@@ -205,15 +228,14 @@ export default function Home() {
                       : ''
                   }`}
                 >
-                  <div className={styles.stepsCardDate}>
-                    <span>{step.date}</span>
-                  </div>
                   <span className={styles.stepsCardSubtitle}>
-                    {step.subtitle}
+                    {t(`steps.${index}.subtitle`)}
                   </span>
-                  <h2 className={styles.stepsCardTitle}>{step.title}</h2>
+                  <h2 className={styles.stepsCardTitle}>
+                    {t(`steps.${index}.title`)}
+                  </h2>
                   <p className={styles.stepsCardDescription}>
-                    {step.description}
+                    {t(`steps.${index}.description`)}
                   </p>
                 </div>
               </div>

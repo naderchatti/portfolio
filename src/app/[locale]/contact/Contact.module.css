@@ -1,6 +1,14 @@
+.wrapper {
+    min-height: 100dvh;
+    padding-block: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .wrapper section {
-    padding-block-start: 8rem;
-    padding-block-end: 4rem;
+    width: 90%;
+    margin: 0 auto;
 }
 
 .contactWrapper {

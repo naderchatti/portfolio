@@ -1,7 +1,6 @@
 .wrapper {
     min-height: 100dvh;
-    padding-block-start: 8rem;
-    padding-block-end: 2rem;
+    padding-block: 6rem;
     display: grid;
     gap: 2rem;
 }

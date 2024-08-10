@@ -8,16 +8,18 @@ import ButtonText from '../buttons/ButtonText';
 import PrimaryButton from '../buttons/PrimaryButton';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/context/ModalContext';
+import { useTranslation } from '@/context/TranslationContext';
 
 const Footer = () => {
   const router = useRouter();
   const { toggleShowModal } = useModal();
-
+  const { useTranslations } = useTranslation();
+  const t = useTranslations('Footer');
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
         <div className={styles.socials}>
-          <h1 className={styles.logo}>Nader.</h1>
+          <h1 className={styles.title}>{t('socialsTitle')}</h1>
           <div className={styles.socialsIcons}>
             <Link
               href="https://www.linkedin.com/in/naderchatti"
@@ -63,34 +65,29 @@ const Footer = () => {
         </div>
 
         <div className={styles.pages}>
-          <h3 className={styles.title}>Pages</h3>
+          <h3 className={styles.title}>{t('pagesTitle')}</h3>
           <Link href="/" className={styles.link}>
-            Home
+            {t('pages.0')}
           </Link>
           <Link href="/about" className={styles.link}>
-            About
+            {t('pages.1')}
           </Link>
           <Link href="/contact" className={styles.link}>
-            Contact
+            {t('pages.2')}
           </Link>
           <Link href="/work" className={styles.link}>
-            Work
+            {t('pages.3')}
           </Link>
           {/* <Link href="/blog" className={styles.link}>
-            Blog
+            {t('pages.4')}
           </Link> */}
         </div>
 
         <div className={styles.links}>
-          <h3 className={styles.title}>Links</h3>
+          <h3 className={styles.title}>{t('documentsTitle')}</h3>
           <div className={styles.buttons}>
-            <PrimaryButton onClick={toggleShowModal}>Download CV</PrimaryButton>
-            <PrimaryButton
-              onClick={() => {
-                router.push('/contact');
-              }}
-            >
-              Let&apos;s talk
+            <PrimaryButton onClick={toggleShowModal}>
+              {t('documents.0')}
             </PrimaryButton>
           </div>
         </div>
@@ -98,14 +95,16 @@ const Footer = () => {
       <div className={styles.footerBottom}>
         <ButtonText
           iconName="ph_arrow-up-light"
-          text="Back to top"
+          text={t('topButton')}
           filled={true}
           animation={false}
           action={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />
-        <span>© {new Date().getFullYear()} - All rights reserved</span>
+        <span>
+          {t('copyright')} {new Date().getFullYear()}
+        </span>
       </div>
     </footer>
   );
