@@ -72,7 +72,7 @@
 .socials {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
 }
 
@@ -81,7 +81,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     background-color: var(--primary-background-color-muted);
     border: 1px solid var(--default-border-color);
     border-radius: 0.25rem;
