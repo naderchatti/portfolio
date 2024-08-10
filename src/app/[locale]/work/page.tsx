@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useTranslation } from '@/context/TranslationContext';
 
+export const runtime = 'edge';
+
 const Work = () => {
   const { useTranslations, currentLocale } = useTranslation();
   const t = useTranslations('Work');

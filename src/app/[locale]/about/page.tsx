@@ -9,6 +9,8 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useTranslation } from '@/context/TranslationContext';
 import { education } from '@/common/data';
 
+export const runtime = 'edge';
+
 interface VisibleItems {
   [key: string]: boolean;
 }

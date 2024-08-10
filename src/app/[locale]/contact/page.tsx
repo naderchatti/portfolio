@@ -12,6 +12,8 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import BarsLoader from '@/components/loaders/BarsLoader';
 import { useTranslation } from '@/context/TranslationContext';
 
+export const runtime = 'edge';
+
 const Contact = () => {
   const { useTranslations } = useTranslation();
   const t = useTranslations('Contact');

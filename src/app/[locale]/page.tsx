@@ -10,6 +10,8 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useRef, useEffect, useState, createRef } from 'react';
 import { useTranslation } from '@/context/TranslationContext';
 
+export const runtime = 'edge';
+
 export default function Home() {
   const { useTranslations, currentLocale } = useTranslation();
   const t = useTranslations('Home');
