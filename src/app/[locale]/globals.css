@@ -1,0 +1,111 @@
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/Satoshi-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Italic';
+    src: url('/fonts/Satoshi-Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Light';
+    src: url('/fonts/Satoshi-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Light Italic';
+    src: url('/fonts/Satoshi-LightItalic.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Medium';
+    src: url('/fonts/Satoshi-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Medium Italic';
+    src: url('/fonts/Satoshi-MediumItalic.otf') format('opentype');
+    font-weight: 500;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Bold';
+    src: url('/fonts/Satoshi-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Bold Italic';
+    src: url('/fonts/Satoshi-BoldItalic.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Black';
+    src: url('/fonts/Satoshi-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Satoshi Black Italic';
+    src: url('/fonts/Satoshi-BlackItalic.otf') format('opentype');
+    font-weight: 900;
+    font-style: italic;
+  }
+  
+  :root {
+      /* Color palette */
+      /* Text */
+      --default-text-color: hsla(35, 41%, 75%, 100%);
+      --default-text-color-muted: hsla(35, 41%, 75%, 60%);
+      --inverse-text-color: hsla(0, 0%, 5%, 100%);
+      --inverse-text-color-muted: hsla(0, 0%, 100%, 60%);
+  
+      /* Background */
+      --default-background-color: hsla(0, 0%, 5%, 100%);
+      --primary-background-color: hsla(35, 41%, 75%, 100%);
+      --secondary-background-color: hsla(0, 0%, 10%, 100%);
+      --primary-background-color-muted: hsla(35, 41%, 75%, 5%);
+      --secondary-background-color-muted: hsla(0, 0%, 100%, 7%);
+  
+      /* Borders */
+      --default-border-color: hsla(35, 41%, 75%, 15%);
+      --inverse-border-color: hsla(0, 0%, 100%, 12%);
+  
+      /* Icons */
+      --default-icon-color: hsla(35, 41%, 75%, 100%);
+      --inverse-icon-color: hsla(0, 0%, 5%, 100%);
+  
+      /* Font family */
+      --font-family: 'Satoshi', sans-serif;
+  }
+  
+  body {
+      background-color: var(--default-background-color);
+      color: var(--default-text-color);
+      font-family: var(--font-family);
+      position: relative;
+  }
+  
+  * {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+  }
