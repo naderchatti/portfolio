@@ -1,5 +1,5 @@
 .wrapper section {
-  padding-block: 4rem;
+  padding-block: 5rem;
 }
   
 .notFoundWrapper {
@@ -73,11 +73,13 @@
   width: 90vw;
   height: fit-content;
   opacity: 0;
+  display: grid;
+  place-items: center;
 }
 
 .heroImage img {
-  width: 90vw;
-  height: 300px;
+  width: 80%;
+  max-height: 300px;
 }
 
 .heroText {
@@ -399,10 +401,6 @@
 }
 
 @media (min-width: 768px) {
-  .heroImage img {
-    height: 500px;
-  }
-  
   .heroText {
     width: 60%;
   }

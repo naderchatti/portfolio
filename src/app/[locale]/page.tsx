@@ -73,12 +73,7 @@ export default function Home() {
             isHeroImageVisible ? styles.animate : ''
           }`}
         >
-          <Image
-            src="/images/N-Logo.svg"
-            alt="N-Logo"
-            width={500}
-            height={500}
-          />
+          <Image src="/images/logo.svg" alt="N-Logo" width={500} height={500} />
         </div>
         <div
           ref={heroTextRef as React.RefObject<HTMLDivElement>}
