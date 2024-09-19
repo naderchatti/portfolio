@@ -32,7 +32,7 @@ const Footer = () => {
               <span>LinkedIn</span>
             </Link>
             <Link
-              href="https://github.com/chattinader"
+              href="https://github.com/naderchatti"
               target="_blank"
               className={styles.socialLink}
             >
