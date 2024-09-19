@@ -72,7 +72,7 @@ const About = () => {
             />
           </Link>
           <Link
-            href="https://github.com/chattinader"
+            href="https://github.com/naderchatti"
             target="_blank"
             className={styles.socialItem}
           >
