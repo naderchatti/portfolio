@@ -15,6 +15,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Nader CHATTI',
   description: "Nader CHATTI's Portfolio and Blog",
+  icons: {
+    icon: '/icon.ico',
+  },
 };
 
 export default async function RootLayout({
