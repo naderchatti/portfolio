@@ -73,7 +73,13 @@ export default function Home() {
             isHeroImageVisible ? styles.animate : ''
           }`}
         >
-          <Image src="/images/logo.svg" alt="N-Logo" width={500} height={500} />
+          <Image
+            src="/images/logo.svg"
+            alt="Nader CHATTI"
+            width={500}
+            height={500}
+          />
+          <p className={styles.heroImageText}>Nader CHATTI</p>
         </div>
         <div
           ref={heroTextRef as React.RefObject<HTMLDivElement>}
@@ -192,7 +198,7 @@ export default function Home() {
               <span>
                 <Image
                   src="/icons/ph_arrow-down-light.png"
-                  alt="N-Logo"
+                  alt="arrow-down"
                   width={24}
                   height={24}
                 />
@@ -202,7 +208,7 @@ export default function Home() {
               <span>
                 <Image
                   src="/icons/ph_check-light.png"
-                  alt="N-Logo"
+                  alt="check"
                   width={24}
                   height={24}
                 />
