@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useRef, useEffect, useState, createRef } from 'react';
 import { useTranslation } from '@/context/TranslationContext';
+import Logo from '@/components/logo/Logo';
 
 export const runtime = 'edge';
 
@@ -26,6 +27,69 @@ export default function Home() {
   const stepsRefs = useRef([...Array(5)].map(() => createRef()));
 
   const [visibleItems, setVisibleItems] = useState({});
+
+  const logoRef = useRef<HTMLDivElement>(null);
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      setMousePosition({ x: event.clientX, y: event.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  useEffect(() => {
+    const logo = logoRef.current;
+    if (!logo) return;
+
+    const leftEye = logo.querySelector('#leftEye');
+    const rightEye = logo.querySelector('#rightEye');
+    const leftEyeCenter = { x: 200, y: 310 };
+    const rightEyeCenter = { x: 310, y: 310 };
+    const maxMovement = 3;
+
+    function moveEye(
+      eye: SVGElement,
+      eyeCenter: { x: number; y: number },
+      mouseX: number,
+      mouseY: number
+    ) {
+      const dx = mouseX - eyeCenter.x;
+      const dy = mouseY - eyeCenter.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx);
+
+      const moveX = Math.min(maxMovement, distance) * Math.cos(angle);
+      const moveY = Math.min(maxMovement, distance) * Math.sin(angle);
+
+      eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const svgRect = logo.getBoundingClientRect();
+      const mouseX = event.clientX - svgRect.left;
+      const mouseY = event.clientY - svgRect.top;
+
+      if (leftEye instanceof SVGElement) {
+        moveEye(leftEye, leftEyeCenter, mouseX, mouseY);
+      }
+      if (rightEye instanceof SVGElement) {
+        moveEye(rightEye, rightEyeCenter, mouseX, mouseY);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -73,12 +137,11 @@ export default function Home() {
             isHeroImageVisible ? styles.animate : ''
           }`}
         >
-          <Image
-            src="/images/logo.svg"
-            alt="Nader CHATTI"
-            width={500}
-            height={500}
-          />
+          <div
+            style={{ position: 'relative', width: '500px', height: '400px' }}
+          >
+            <Logo mouseX={mousePosition.x} mouseY={mousePosition.y} />
+          </div>
           <p className={styles.heroImageText}>Nader CHATTI</p>
         </div>
         <div
