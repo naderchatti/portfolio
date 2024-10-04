@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface LogoProps {
   mouseX: number;
@@ -7,6 +7,22 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [svgSize, setSvgSize] = useState({ width: 500, height: 400 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width <= 768) {
+        setSvgSize({ width: 300, height: 240 });
+      } else {
+        setSvgSize({ width: 500, height: 400 });
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const svg = svgRef.current;
@@ -52,10 +68,11 @@ const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
   return (
     <svg
       ref={svgRef}
-      width="500"
-      height="400"
+      width={svgSize.width}
+      height={svgSize.height}
       viewBox="0 0 500 400"
       xmlns="http://www.w3.org/2000/svg"
+      style={{ maxWidth: '100%', height: 'auto' }}
     >
       <path
         fill="#d9c4a5"
@@ -91,6 +108,12 @@ const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
         {`
           #leftEye, #rightEye {
             transition: transform 0.1s ease-out;
+          }
+          @media (max-width: 768px) {
+            svg {
+              max-width: 300px;
+              height: auto;
+            }
           }
         `}
       </style>

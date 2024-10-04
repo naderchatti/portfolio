@@ -137,9 +137,7 @@ export default function Home() {
             isHeroImageVisible ? styles.animate : ''
           }`}
         >
-          <div
-            style={{ position: 'relative', width: '500px', height: '400px' }}
-          >
+          <div style={{ position: 'relative' }}>
             <Logo mouseX={mousePosition.x} mouseY={mousePosition.y} />
           </div>
           <p className={styles.heroImageText}>Nader CHATTI</p>
