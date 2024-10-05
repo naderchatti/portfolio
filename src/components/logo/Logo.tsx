@@ -7,15 +7,15 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [svgSize, setSvgSize] = useState({ width: 500, height: 400 });
+  const [svgSize, setSvgSize] = useState({ width: 300, height: 300 });
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width <= 768) {
-        setSvgSize({ width: 300, height: 240 });
+        setSvgSize({ width: 200, height: 200 });
       } else {
-        setSvgSize({ width: 500, height: 400 });
+        setSvgSize({ width: 500, height: 500 });
       }
     };
 
@@ -68,11 +68,11 @@ const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
   return (
     <svg
       ref={svgRef}
-      width={svgSize.width}
-      height={svgSize.height}
-      viewBox="0 0 500 400"
+      // width={svgSize.width}
+      // height={svgSize.height}
+      viewBox="100 80 300 300"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ maxWidth: '100%', height: 'auto' }}
+      // style={{ maxWidth: '100%', height: 'auto' }}
     >
       <path
         fill="#d9c4a5"

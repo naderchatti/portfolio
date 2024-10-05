@@ -32,6 +32,8 @@ export default function Home() {
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({ x: event.clientX, y: event.clientY });
@@ -128,26 +130,41 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className={styles.wrapper}>
-      <section className={styles.hero}>
+      <div
+        className={`${styles.animatedLogo} ${
+          isScrolled ? styles.scrolled : ''
+        }`}
+      >
         <div
           ref={heroImageRef as React.RefObject<HTMLDivElement>}
           className={`${styles.heroImage} ${
             isHeroImageVisible ? styles.animate : ''
           }`}
         >
-          <div style={{ position: 'relative' }}>
-            <Logo mouseX={mousePosition.x} mouseY={mousePosition.y} />
-          </div>
-          <p className={styles.heroImageText}>Nader CHATTI</p>
+          <Logo mouseX={mousePosition.x} mouseY={mousePosition.y} />
         </div>
+      </div>
+      <section className={styles.hero}>
         <div
           ref={heroTextRef as React.RefObject<HTMLDivElement>}
           className={`${styles.heroText} ${
             isHeroTextVisible ? styles.animate : ''
           }`}
         >
+          <p className={styles.name}>Nader CHATTI</p>
           <h1 className={styles.title}>{t('title')}</h1>
           <span className={styles.subtitle}>{t('subtitle')}</span>
         </div>
