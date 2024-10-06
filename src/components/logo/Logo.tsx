@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useResponsive } from '@/context/ResponsiveContext';
+import React, { useEffect, useRef } from 'react';
 
 const Logo = () => {
+  const { isMobile } = useResponsive();
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -38,6 +40,8 @@ const Logo = () => {
     }
 
     const handleMouseMove = (event: MouseEvent) => {
+      if (isMobile) return;
+
       if (leftEye instanceof SVGElement) {
         moveEye(leftEye, leftEyeCenter, event.clientX, event.clientY);
       }
@@ -51,7 +55,7 @@ const Logo = () => {
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <svg
