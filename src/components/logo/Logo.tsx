@@ -1,28 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useResponsive } from '@/context/ResponsiveContext';
+import React, { useEffect, useRef } from 'react';
 
-interface LogoProps {
-  mouseX: number;
-  mouseY: number;
-}
-
-const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
+const Logo = () => {
+  const { isMobile } = useResponsive();
   const svgRef = useRef<SVGSVGElement>(null);
-  const [svgSize, setSvgSize] = useState({ width: 300, height: 300 });
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width <= 768) {
-        setSvgSize({ width: 200, height: 200 });
-      } else {
-        setSvgSize({ width: 500, height: 500 });
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     const svg = svgRef.current;
@@ -30,10 +11,10 @@ const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
 
     const leftEye = svg.querySelector('#leftEye');
     const rightEye = svg.querySelector('#rightEye');
-    const leftEyeCenter = { x: 200, y: 310 };
-    const rightEyeCenter = { x: 310, y: 310 };
-    const maxMovement = 10; // Increased from 3 to 10
-    const movementMultiplier = 1.5; // New multiplier to exaggerate movement
+    const leftEyeCenter = { x: 110, y: 250 };
+    const rightEyeCenter = { x: 230, y: 250 };
+    const maxMovement = 12;
+    const movementMultiplier = 1.5;
 
     function moveEye(
       eye: SVGElement,
@@ -43,36 +24,44 @@ const Logo: React.FC<LogoProps> = ({ mouseX, mouseY }) => {
     ) {
       const svgRect = svg?.getBoundingClientRect();
       if (!svgRect) return;
-      const dx = cursorX - svgRect.left - eyeCenter.x;
-      const dy = cursorY - svgRect.top - eyeCenter.y;
+      const dx = (cursorX - svgRect.left - eyeCenter.x) / svgRect.width;
+      const dy = (cursorY - svgRect.top - eyeCenter.y) / svgRect.height;
       const distance = Math.sqrt(dx * dx + dy * dy);
       const angle = Math.atan2(dy, dx);
 
-      // Apply the multiplier to increase movement
       const moveX =
-        Math.min(maxMovement, distance * movementMultiplier) * Math.cos(angle);
+        Math.min(maxMovement, distance * movementMultiplier * svgRect.width) *
+        Math.cos(angle);
       const moveY =
-        Math.min(maxMovement, distance * movementMultiplier) * Math.sin(angle);
+        Math.min(maxMovement, distance * movementMultiplier * svgRect.height) *
+        Math.sin(angle);
 
       eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
     }
 
-    if (leftEye instanceof SVGElement) {
-      moveEye(leftEye, leftEyeCenter, mouseX, mouseY);
-    }
-    if (rightEye instanceof SVGElement) {
-      moveEye(rightEye, rightEyeCenter, mouseX, mouseY);
-    }
-  }, [mouseX, mouseY]);
+    const handleMouseMove = (event: MouseEvent) => {
+      if (isMobile) return;
+
+      if (leftEye instanceof SVGElement) {
+        moveEye(leftEye, leftEyeCenter, event.clientX, event.clientY);
+      }
+      if (rightEye instanceof SVGElement) {
+        moveEye(rightEye, rightEyeCenter, event.clientX, event.clientY);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isMobile]);
 
   return (
     <svg
       ref={svgRef}
-      // width={svgSize.width}
-      // height={svgSize.height}
       viewBox="100 80 300 300"
       xmlns="http://www.w3.org/2000/svg"
-      // style={{ maxWidth: '100%', height: 'auto' }}
     >
       <path
         fill="#d9c4a5"
