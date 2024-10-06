@@ -9,6 +9,8 @@ import ModalComponent from '@/components/modals/ModalComponent';
 import { TranslationProvider } from '@/context/TranslationContext';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
+import { LogoProvider } from '@/context/LogoContext';
+import LogoWrapper from '@/components/logo/LogoWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -40,12 +42,15 @@ export default async function RootLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ResponsiveProvider>
             <TranslationProvider initialLocale={locale}>
-              <ModalProvider>
-                <Navbar />
-                {children}
-                <Footer />
-                <ModalComponent />
-              </ModalProvider>
+              <LogoProvider>
+                <LogoWrapper />
+                <ModalProvider>
+                  <Navbar />
+                  {children}
+                  <Footer />
+                  <ModalComponent />
+                </ModalProvider>
+              </LogoProvider>
             </TranslationProvider>
           </ResponsiveProvider>
         </NextIntlClientProvider>

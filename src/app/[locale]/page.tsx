@@ -80,20 +80,6 @@ export default function Home() {
 
   return (
     <div className={styles.wrapper}>
-      <div
-        className={`${styles.animatedLogo} ${
-          isScrolled ? styles.scrolled : ''
-        }`}
-      >
-        <div
-          ref={heroImageRef as React.RefObject<HTMLDivElement>}
-          className={`${styles.heroImage} ${
-            isHeroImageVisible ? styles.animate : ''
-          }`}
-        >
-          <Logo />
-        </div>
-      </div>
       <section className={styles.hero}>
         <div
           ref={heroTextRef as React.RefObject<HTMLDivElement>}

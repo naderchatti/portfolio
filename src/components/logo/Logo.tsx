@@ -98,12 +98,6 @@ const Logo = () => {
           #leftEye, #rightEye {
             transition: transform 0.1s ease-out;
           }
-          @media (max-width: 768px) {
-            svg {
-              max-width: 300px;
-              height: auto;
-            }
-          }
         `}
       </style>
     </svg>
