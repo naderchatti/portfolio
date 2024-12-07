@@ -5,18 +5,19 @@ import { Logo } from './logo';
 import { useLogo } from './logo-context';
 
 export function LogoWrapper() {
-  const { scrollProgress } = useLogo();
+  const { scrollProgress, isHomePage } = useLogo();
+
+  const isLarge = isHomePage && scrollProgress === 0;
 
   return (
     <div
       className="fixed z-50 transition-all duration-300 ease-out"
       style={{
-        width: scrollProgress === 0 ? 'min(22rem, 80vw)' : '3rem',
-        height: scrollProgress === 0 ? 'min(22rem, 80vw)' : '3rem',
+        width: isLarge ? 'min(22rem, 80vw)' : '3rem',
+        height: isLarge ? 'min(22rem, 80vw)' : '3rem',
         left: '50%',
-        top: scrollProgress === 0 ? '30%' : '0.25rem',
-        transform:
-          scrollProgress === 0 ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
+        top: isLarge ? '30%' : '0.25rem',
+        transform: isLarge ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
         pointerEvents: 'none',
       }}
     >

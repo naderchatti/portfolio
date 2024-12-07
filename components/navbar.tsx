@@ -6,6 +6,7 @@ import {
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
 import { ThemeToggle } from '@/components/theme-toggle';
+import Link from 'next/link';
 
 export function Navbar() {
   return (
@@ -14,7 +15,9 @@ export function Navbar() {
         <NavigationMenu className="mx-0">
           <NavigationMenuList>
             <NavigationMenuItem>
-              <p className="font-bold text-xl">Nader.</p>
+              <Link href="/">
+                <span className="font-bold text-xl">Nader.</span>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

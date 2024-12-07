@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function NotFound() {
   return (
-    <div className="h-[calc(100vh-6rem)] w-full flex flex-col items-center justify-end">
+    <div className="h-[calc(100vh-6rem)] w-full flex flex-col items-center justify-center">
       <motion.div
         className="text-center max-w-md mx-auto"
         initial={{ opacity: 0, y: 20 }}

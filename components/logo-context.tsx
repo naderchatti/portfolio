@@ -4,7 +4,7 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
+  useLayoutEffect,
   useCallback,
 } from 'react';
 import { usePathname } from 'next/navigation';
@@ -24,6 +24,8 @@ export function LogoProvider({ children }: { children: React.ReactNode }) {
   const isHomePage = pathname === '/';
 
   const handleScroll = useCallback(() => {
+    if (typeof window === 'undefined') return;
+
     const currentScroll =
       window.pageYOffset || document.documentElement.scrollTop;
     const scrollThreshold = 100;
@@ -40,7 +42,7 @@ export function LogoProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);

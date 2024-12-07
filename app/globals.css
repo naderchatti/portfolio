@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --logo-primary: 240 10% 3.9%;
+  --logo-secondary: 0 0% 100%;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
