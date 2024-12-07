@@ -34,7 +34,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
     },
     ref
   ) => {
-    const mouseX = useMotionValue(Infinity);
+    const mouseX = useMotionValue(-999999); // Set to a value far outside
     const isMobile = useMobileDetect();
 
     const renderChildren = () => {
@@ -56,7 +56,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
       <motion.div
         ref={ref}
         onMouseMove={(e) => !isMobile && mouseX.set(e.pageX)}
-        onMouseLeave={() => !isMobile && mouseX.set(Infinity)}
+        onMouseLeave={() => !isMobile && mouseX.set(-999999)}
         {...props}
         className={cn(dockVariants({ className }), {
           'items-start': direction === 'top',
@@ -104,13 +104,18 @@ const DockIcon = ({
   const widthSync = useTransform(
     distanceCalc,
     [-distance, 0, distance],
-    [MOBILE_ICON_SIZE, magnification, MOBILE_ICON_SIZE]
+    [MOBILE_ICON_SIZE, magnification, MOBILE_ICON_SIZE],
+    {
+      clamp: true, // Ensure the values stay within the specified range
+    }
   );
 
   const width = useSpring(widthSync, {
     mass: 0.1,
     stiffness: 150,
     damping: 12,
+    restDelta: 0.001,
+    restSpeed: 0.001,
   });
 
   const commonProps = {
@@ -131,7 +136,11 @@ const DockIcon = ({
   }
 
   return (
-    <motion.div {...commonProps} style={{ width }}>
+    <motion.div
+      {...commonProps}
+      initial={{ width: MOBILE_ICON_SIZE }}
+      style={{ width }}
+    >
       {children}
     </motion.div>
   );
