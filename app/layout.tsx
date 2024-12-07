@@ -8,8 +8,8 @@ import { satoshi } from './fonts';
 import { SocialsDock } from '@/components/socials-dock';
 
 export const metadata: Metadata = {
-  title: 'Portfolio',
-  description: 'My portfolio website',
+  title: 'Nader CHATTI',
+  description: "Nader CHATTI's Portfolio and Blog",
 };
 
 export default function RootLayout({
