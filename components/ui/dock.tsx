@@ -3,8 +3,8 @@
 import React, { PropsWithChildren, useRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-
 import { cn } from '@/lib/utils';
+import { useMobileDetect } from '@/lib/hooks/use-mobile-detect';
 
 export interface DockProps extends VariantProps<typeof dockVariants> {
   className?: string;
@@ -16,6 +16,7 @@ export interface DockProps extends VariantProps<typeof dockVariants> {
 
 const DEFAULT_MAGNIFICATION = 60;
 const DEFAULT_DISTANCE = 140;
+const MOBILE_ICON_SIZE = 40;
 
 const dockVariants = cva(
   'supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 mx-auto mt-8 flex h-[58px] w-max gap-2 rounded-2xl border p-2 backdrop-blur-md'
@@ -34,6 +35,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
     ref
   ) => {
     const mouseX = useMotionValue(Infinity);
+    const isMobile = useMobileDetect();
 
     const renderChildren = () => {
       return React.Children.map(children, (child) => {
@@ -43,6 +45,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
             mouseX: mouseX,
             magnification: magnification,
             distance: distance,
+            isMobile: isMobile,
           });
         }
         return child;
@@ -52,8 +55,8 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
     return (
       <motion.div
         ref={ref}
-        onMouseMove={(e) => mouseX.set(e.pageX)}
-        onMouseLeave={() => mouseX.set(Infinity)}
+        onMouseMove={(e) => !isMobile && mouseX.set(e.pageX)}
+        onMouseLeave={() => !isMobile && mouseX.set(Infinity)}
         {...props}
         className={cn(dockVariants({ className }), {
           'items-start': direction === 'top',
@@ -74,6 +77,7 @@ export interface DockIconProps {
   magnification?: number;
   distance?: number;
   mouseX?: any;
+  isMobile?: boolean;
   className?: string;
   children?: React.ReactNode;
   props?: PropsWithChildren;
@@ -84,14 +88,15 @@ const DockIcon = ({
   magnification = DEFAULT_MAGNIFICATION,
   distance = DEFAULT_DISTANCE,
   mouseX,
+  isMobile,
   className,
   children,
   ...props
 }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const distanceCalc = useTransform(mouseX || 0, (val: number) => {
-    if (typeof window === 'undefined' || !ref.current) return 0;
+  const distanceCalc = useTransform(mouseX, (val: number) => {
+    if (isMobile || typeof window === 'undefined' || !ref.current) return 0;
     const bounds = ref.current.getBoundingClientRect();
     return val - bounds.x - bounds.width / 2;
   });
@@ -99,7 +104,7 @@ const DockIcon = ({
   const widthSync = useTransform(
     distanceCalc,
     [-distance, 0, distance],
-    [40, magnification, 40]
+    [MOBILE_ICON_SIZE, magnification, MOBILE_ICON_SIZE]
   );
 
   const width = useSpring(widthSync, {
@@ -108,16 +113,25 @@ const DockIcon = ({
     damping: 12,
   });
 
+  const commonProps = {
+    ref,
+    className: cn(
+      'flex aspect-square cursor-pointer items-center justify-center rounded-full',
+      className
+    ),
+    ...props,
+  };
+
+  if (isMobile) {
+    return (
+      <div {...commonProps} style={{ width: MOBILE_ICON_SIZE }}>
+        {children}
+      </div>
+    );
+  }
+
   return (
-    <motion.div
-      ref={ref}
-      style={{ width }}
-      className={cn(
-        'flex aspect-square cursor-pointer items-center justify-center rounded-full',
-        className
-      )}
-      {...props}
-    >
+    <motion.div {...commonProps} style={{ width }}>
       {children}
     </motion.div>
   );

@@ -1,14 +1,18 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useMobileDetect } from '@/lib/hooks/use-mobile-detect';
 
 export function Logo() {
   const svgRef = useRef<SVGSVGElement>(null);
   const leftEyeRef = useRef<SVGPathElement>(null);
   const rightEyeRef = useRef<SVGPathElement>(null);
   const frameRef = useRef<number>();
+  const isMobile = useMobileDetect();
 
   useEffect(() => {
+    if (isMobile) return; // Skip animation on mobile
+
     const svg = svgRef.current;
     const leftEye = leftEyeRef.current;
     const rightEye = rightEyeRef.current;
@@ -25,16 +29,12 @@ export function Logo() {
       const eyeCenterX = eyeRect.left + eyeRect.width / 2;
       const eyeCenterY = eyeRect.top + eyeRect.height / 2;
 
-      // Calculate angle between mouse and eye center
       const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
-
-      // Calculate distance with increased sensitivity
       const distance = Math.min(
         1,
         Math.hypot(mouseX - eyeCenterX, mouseY - eyeCenterY) / 150
       );
 
-      // Calculate new position
       const moveX = Math.cos(angle) * distance * eyeMovementRange;
       const moveY = Math.sin(angle) * distance * eyeMovementRange;
 
@@ -74,7 +74,7 @@ export function Logo() {
         cancelAnimationFrame(frameRef.current);
       }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <svg
