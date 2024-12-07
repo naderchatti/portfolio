@@ -14,7 +14,7 @@ export function LogoWrapper() {
         width: scrollProgress === 0 ? 'min(22rem, 80vw)' : '3rem',
         height: scrollProgress === 0 ? 'min(22rem, 80vw)' : '3rem',
         left: '50%',
-        top: scrollProgress === 0 ? '35%' : '0.25rem',
+        top: scrollProgress === 0 ? '30%' : '0.25rem',
         transform:
           scrollProgress === 0 ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
         pointerEvents: 'none',
