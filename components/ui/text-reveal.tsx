@@ -24,28 +24,34 @@ export const TextRevealByWord: FC<TextRevealByWordProps> = ({
 
   return (
     <div ref={targetRef} className={cn('relative z-0 h-[200vh]', className)}>
-      <div className="sticky top-0 mx-auto flex h-[50%] max-w-4xl items-center bg-transparent px-[1rem] py-[5rem]">
-        <div ref={targetRef} className="flex flex-col space-y-8">
-          {allWords.map((words, pIndex) => (
-            <p
-              key={pIndex}
-              className="flex flex-wrap text-sm md:text-xl font-light text-foreground"
-            >
-              {words.map((word, i) => {
-                const wordIndex =
-                  allWords
-                    .slice(0, pIndex)
-                    .reduce((acc, curr) => acc + curr.length, 0) + i;
-                const start = wordIndex / totalWords;
-                const end = start + 1 / totalWords;
-                return (
-                  <Word key={i} progress={scrollYProgress} range={[start, end]}>
-                    {word}
-                  </Word>
-                );
-              })}
-            </p>
-          ))}
+      <div className="sticky top-0 flex h-[50%] items-center bg-transparent px-4">
+        <div className="mx-auto w-full lg:max-w-5xl">
+          <div ref={targetRef} className="flex flex-col space-y-8">
+            {allWords.map((words, pIndex) => (
+              <p
+                key={pIndex}
+                className="flex flex-wrap text-sm md:text-xl font-light text-foreground"
+              >
+                {words.map((word, i) => {
+                  const wordIndex =
+                    allWords
+                      .slice(0, pIndex)
+                      .reduce((acc, curr) => acc + curr.length, 0) + i;
+                  const start = wordIndex / totalWords;
+                  const end = start + 1 / totalWords;
+                  return (
+                    <Word
+                      key={i}
+                      progress={scrollYProgress}
+                      range={[start, end]}
+                    >
+                      {word}
+                    </Word>
+                  );
+                })}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </div>
