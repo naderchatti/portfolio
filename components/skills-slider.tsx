@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 const frameworks = [
   'NextJS',
   'React',
@@ -24,6 +26,17 @@ const frameworks = [
 ];
 
 export const SkillsSlider = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className="mx-auto overflow-hidden md:h-[8.5rem] h-24 [mask-image:linear-gradient(to_right,rgba(0,0,0,0),rgba(0,0,0,1)_20%_80%,rgb(0,0,0,0))]">
       <div className="flex w-full relative md:min-w-[calc(6rem*20)] min-w-[calc(3.5rem*20)]">
@@ -45,7 +58,7 @@ export const SkillsSlider = () => {
       <style jsx>{`
         @keyframes scrollLeft {
           to {
-            left: ${window.innerWidth < 768 ? '-3.5rem' : '-6rem'};
+            left: ${isMobile ? '-3.5rem' : '-6rem'};
           }
         }
       `}</style>
