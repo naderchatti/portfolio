@@ -42,8 +42,6 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
   ) => {
     const mouseX = useMotionValue(-999999); // Set to a value far outside
     const isMobile = useMobileDetect();
-    const dockRef = useRef<HTMLDivElement>(null);
-    const defaultMouseX = useMotionValue(0);
 
     const renderChildren = () => {
       return React.Children.map(children, (child) => {
