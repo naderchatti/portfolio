@@ -42,6 +42,8 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
   ) => {
     const mouseX = useMotionValue(-999999); // Set to a value far outside
     const isMobile = useMobileDetect();
+    const dockRef = useRef<HTMLDivElement>(null);
+    const defaultMouseX = useMotionValue(0);
 
     const renderChildren = () => {
       return React.Children.map(children, (child) => {
@@ -98,9 +100,10 @@ const DockIcon = ({
   ...props
 }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const defaultMouseX = useMotionValue(0);
 
   const distanceCalc = useTransform<number, number>(
-    mouseX ?? useMotionValue(0),
+    mouseX ?? defaultMouseX,
     (val: number) => {
       if (isMobile || typeof window === 'undefined' || !ref.current) return 0;
       const bounds = ref.current.getBoundingClientRect();
