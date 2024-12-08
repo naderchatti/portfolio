@@ -1,7 +1,9 @@
 'use client';
 
 import { Dock, DockIcon } from './ui/dock';
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { Github, Linkedin, Mail } from 'lucide-react';
+import { Discord } from './ui/icons/discord';
+import { X } from './ui/icons/x';
 
 export function SocialsDock() {
   return (
@@ -29,12 +31,22 @@ export function SocialsDock() {
         </DockIcon>
         <DockIcon>
           <a
-            href="https://twitter.com/naderchatti"
+            href="https://x.com/naderchatti"
             target="_blank"
             rel="noopener noreferrer"
             className="p-2"
           >
-            <Twitter className="h-6 w-6" />
+            <X className="h-6 w-6" />
+          </a>
+        </DockIcon>
+        <DockIcon>
+          <a
+            href="https://discord.com/users/naderchatti"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2"
+          >
+            <Discord className="h-6 w-6" />
           </a>
         </DockIcon>
         <DockIcon>
