@@ -2,7 +2,13 @@
 
 import React, { PropsWithChildren, useRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  MotionValue,
+} from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useMobileDetect } from '@/lib/hooks/use-mobile-detect';
 
@@ -73,10 +79,9 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
 Dock.displayName = 'Dock';
 
 export interface DockIconProps {
-  size?: number;
   magnification?: number;
   distance?: number;
-  mouseX?: any;
+  mouseX?: MotionValue<number>;
   isMobile?: boolean;
   className?: string;
   children?: React.ReactNode;
@@ -84,7 +89,6 @@ export interface DockIconProps {
 }
 
 const DockIcon = ({
-  size,
   magnification = DEFAULT_MAGNIFICATION,
   distance = DEFAULT_DISTANCE,
   mouseX,
@@ -95,11 +99,14 @@ const DockIcon = ({
 }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const distanceCalc = useTransform(mouseX, (val: number) => {
-    if (isMobile || typeof window === 'undefined' || !ref.current) return 0;
-    const bounds = ref.current.getBoundingClientRect();
-    return val - bounds.x - bounds.width / 2;
-  });
+  const distanceCalc = useTransform<number, number>(
+    mouseX ?? useMotionValue(0),
+    (val: number) => {
+      if (isMobile || typeof window === 'undefined' || !ref.current) return 0;
+      const bounds = ref.current.getBoundingClientRect();
+      return val - bounds.x - bounds.width / 2;
+    }
+  );
 
   const widthSync = useTransform(
     distanceCalc,

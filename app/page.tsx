@@ -2,7 +2,6 @@ import { SkillsSlider } from '@/components/skills-slider';
 import { Card } from '@/components/ui/card';
 import TextReveal from '@/components/ui/text-reveal';
 import { Timeline } from '@/components/ui/timeline';
-import Image from 'next/image';
 
 export default function Home() {
   const data = [
