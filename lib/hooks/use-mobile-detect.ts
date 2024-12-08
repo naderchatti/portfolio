@@ -6,6 +6,8 @@ export function useMobileDetect() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const checkMobile = () => {
       const userAgent = window.navigator.userAgent.toLowerCase();
       const mobileRegex = /mobile|android|ios|iphone|ipad|ipod|windows phone/i;

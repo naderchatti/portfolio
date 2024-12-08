@@ -11,7 +11,7 @@ export function Logo() {
   const isMobile = useMobileDetect();
 
   useEffect(() => {
-    if (isMobile) return; // Skip animation on mobile
+    if (isMobile || typeof window === 'undefined') return;
 
     const svg = svgRef.current;
     const leftEye = leftEyeRef.current;
