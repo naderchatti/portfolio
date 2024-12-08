@@ -77,7 +77,7 @@ export default function Home() {
         <section className="w-full lg:max-w-5xl mx-auto">
           <Timeline data={data} />
         </section>
-        <section className="h-full md:h-[calc(100dvh-10rem)] flex flex-col justify-center w-full lg:max-w-5xl mx-auto px-4">
+        <section className="h-full pb-24 md:pb-0 md:h-[100dvh] flex flex-col justify-center w-full lg:max-w-5xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
             <Card className="p-4">
               <p className="text-lg font-bold text-muted-foreground">01</p>
