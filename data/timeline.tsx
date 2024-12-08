@@ -66,12 +66,12 @@ export const timelineData = [
     title: '2023-2024',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">MHM Labs</p>
           <Separator orientation="vertical" className="w-1 rounded-full" />
           <p className="text-muted-foreground">Sophia Antipolis, France</p>
         </div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-4">
           <Hotel size={32} />
           <p className="text-lg md:text-4xl font-normal">MyHotelMatch</p>
         </div>
@@ -93,12 +93,12 @@ export const timelineData = [
     title: '2021-2022',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">Vasta Piscine</p>
           <Separator orientation="vertical" className="w-1 rounded-full" />
           <p className="text-muted-foreground">Saint-Laurent-du-Var, France</p>
         </div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-4">
           <Waves size={32} />
           <p className="text-lg md:text-4xl font-normal">Vast&apos;Appli</p>
         </div>
@@ -121,12 +121,12 @@ export const timelineData = [
     title: '2020-2021',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">Université Côte d&apos;Azur</p>
           <Separator orientation="vertical" className="w-1 rounded-full" />
           <p className="text-muted-foreground">Sophia Antipolis, France</p>
         </div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-4">
           <BrainCircuit size={32} />
           <p className="text-lg md:text-4xl font-normal">DeepBridge</p>
         </div>
@@ -149,12 +149,12 @@ export const timelineData = [
     title: '2018-2020',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">Université Côte d&apos;Azur</p>
           <Separator orientation="vertical" className="w-1 rounded-full" />
           <p className="text-muted-foreground">Nice, France</p>
         </div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-4">
           <GraduationCap size={32} />
           <p className="text-lg md:text-4xl font-normal">
             Master&apos;s Degree
@@ -179,12 +179,12 @@ export const timelineData = [
     title: '2017-2018',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">HES</p>
           <Separator orientation="vertical" className="w-1 rounded-full" />
           <p className="text-muted-foreground">Saint-Laurent-du-Var, France</p>
         </div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-4">
           <Router size={32} />
           <p className="text-lg md:text-4xl font-normal">SmartHome</p>
         </div>
@@ -207,12 +207,12 @@ export const timelineData = [
     title: '2013-2017',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">ISITcom</p>
           <Separator orientation="vertical" className="w-1 rounded-full" />
           <p className="text-muted-foreground">Sousse, Tunisia</p>
         </div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-4">
           <GraduationCap size={32} />
           <p className="text-lg md:text-4xl font-normal">
             Bachelor&apos;s Degree
