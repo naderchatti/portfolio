@@ -1,3 +1,4 @@
+import { Card } from '@/components/ui/card';
 import TextReveal from '@/components/ui/text-reveal';
 import { Timeline } from '@/components/ui/timeline';
 import Image from 'next/image';
@@ -75,6 +76,39 @@ export default function Home() {
         </section>
         <section className="w-full lg:max-w-5xl mx-auto">
           <Timeline data={data} />
+        </section>
+        <section className="h-full md:h-[calc(100dvh-10rem)] flex flex-col justify-center w-full lg:max-w-5xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+            <Card className="p-4">
+              <p className="text-lg font-bold text-muted-foreground">01</p>
+              <p className="text-2xl font-extrabold mb-2">
+                Backend Development
+              </p>
+              <p className="text-md font-light text-muted-foreground">
+                I have experience with backend development using python, node.js
+                and express. Databases used include MongoDB, PostgreSQL, and
+                MySQL.
+              </p>
+            </Card>
+            <Card className="p-4">
+              <p className="text-lg font-bold text-muted-foreground">02</p>
+              <p className="text-2xl font-extrabold mb-2">
+                Frontend Development
+              </p>
+              <p className="text-md font-light text-muted-foreground">
+                I have experience with frontend development using React, Next.js
+                for web development and React Native for mobile development.
+              </p>
+            </Card>
+            <Card className="p-4">
+              <p className="text-lg font-bold text-muted-foreground">03</p>
+              <p className="text-2xl font-extrabold mb-2">DevOps & Cloud</p>
+              <p className="text-md font-light text-muted-foreground">
+                I have experience with infrastructure using Cloudflare, Google
+                Cloud Platform, and custom VPS configurations.
+              </p>
+            </Card>
+          </div>
         </section>
       </div>
     </>
