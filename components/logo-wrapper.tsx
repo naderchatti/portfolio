@@ -1,17 +1,43 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Logo } from './logo';
 import { useLogo } from './logo-context';
 
 export function LogoWrapper() {
   const { scrollProgress, isHomePage } = useLogo();
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  const isLarge = isHomePage && scrollProgress === 0;
+  useEffect(() => {
+    const handleScrollPosition = () => {
+      const isAtTop = window.scrollY === 0;
+      if (isAtTop) {
+        const timeout = setTimeout(() => {
+          setShouldAnimate(true);
+        }, 100);
+        return () => clearTimeout(timeout);
+      } else {
+        setShouldAnimate(false);
+      }
+    };
+
+    // Initial check
+    handleScrollPosition();
+    setIsInitialLoad(false);
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScrollPosition, { passive: true });
+    return () => window.removeEventListener('scroll', handleScrollPosition);
+  }, []);
+
+  const isLarge = isHomePage && scrollProgress === 0 && shouldAnimate;
 
   return (
     <div
-      className="fixed z-50 transition-all duration-300 ease-out"
+      className={`fixed z-50 transition-all duration-300 ease-out ${
+        isInitialLoad ? 'transition-none' : ''
+      }`}
       style={{
         width: isLarge ? 'min(22rem, 80vw)' : '3rem',
         height: isLarge ? 'min(22rem, 80vw)' : '3rem',

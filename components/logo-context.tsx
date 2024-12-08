@@ -20,12 +20,11 @@ const LogoContext = createContext<LogoContextType | undefined>(undefined);
 export function LogoProvider({ children }: { children: React.ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
   const handleScroll = useCallback(() => {
-    if (typeof window === 'undefined') return;
-
     const currentScroll =
       window.pageYOffset || document.documentElement.scrollTop;
     const scrollThreshold = 100;
@@ -43,13 +42,20 @@ export function LogoProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useLayoutEffect(() => {
+    setIsClient(true);
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
   return (
-    <LogoContext.Provider value={{ isScrolled, isHomePage, scrollProgress }}>
+    <LogoContext.Provider
+      value={{
+        isScrolled: isClient ? isScrolled : false,
+        isHomePage,
+        scrollProgress: isClient ? scrollProgress : 0,
+      }}
+    >
       {children}
     </LogoContext.Provider>
   );
