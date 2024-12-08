@@ -1,6 +1,6 @@
 'use client';
 
-import React, { PropsWithChildren, useRef } from 'react';
+import React, { PropsWithChildren, useRef, useEffect, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import {
   motion,
@@ -99,12 +99,19 @@ const DockIcon = ({
 }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const defaultMouseX = useMotionValue(0);
+  const [bounds, setBounds] = useState({ x: 0, width: 0 });
+
+  useEffect(() => {
+    if (ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      setBounds({ x: rect.x, width: rect.width });
+    }
+  }, []);
 
   const distanceCalc = useTransform<number, number>(
     mouseX ?? defaultMouseX,
     (val: number) => {
-      if (isMobile || typeof window === 'undefined' || !ref.current) return 0;
-      const bounds = ref.current.getBoundingClientRect();
+      if (isMobile) return 0;
       return val - bounds.x - bounds.width / 2;
     }
   );
