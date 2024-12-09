@@ -27,7 +27,7 @@ export default function Home() {
             />
           </div>
         </section>
-        <section className="w-full px-4">
+        <section className="w-full">
           <div className="mx-auto w-full lg:max-w-5xl">
             <Timeline data={timelineData} />
           </div>

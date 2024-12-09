@@ -66,16 +66,19 @@ export const timelineData = [
     title: '2023-2024',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">MHM Labs</p>
-          <Separator orientation="vertical" className="w-1 rounded-full" />
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
           <p className="text-muted-foreground">Sophia Antipolis, France</p>
         </div>
         <div className="flex items-center gap-2 mb-4">
           <Hotel size={32} />
           <p className="text-lg md:text-4xl font-normal">MyHotelMatch</p>
         </div>
-        <p className="text-xs md:text-sm font-normal mb-8">
+        <p className="text-xs md:text-sm font-normal mb-4">
           Development of a matching platform for hotels and travelers that
           allows hotels to find the perfect match for their guests.
         </p>
@@ -93,16 +96,19 @@ export const timelineData = [
     title: '2021-2022',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">Vasta Piscine</p>
-          <Separator orientation="vertical" className="w-1 rounded-full" />
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
           <p className="text-muted-foreground">Saint-Laurent-du-Var, France</p>
         </div>
         <div className="flex items-center gap-2 mb-4">
           <Waves size={32} />
           <p className="text-lg md:text-4xl font-normal">Vast&apos;Appli</p>
         </div>
-        <p className="text-xs md:text-sm font-normal mb-8">
+        <p className="text-xs md:text-sm font-normal mb-4">
           Development of a web and mobile app allowing scheduling, appointment
           management, reports, and anomaly management to replace the old
           paper-based system.
@@ -121,16 +127,19 @@ export const timelineData = [
     title: '2020-2021',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">Université Côte d&apos;Azur</p>
-          <Separator orientation="vertical" className="w-1 rounded-full" />
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
           <p className="text-muted-foreground">Sophia Antipolis, France</p>
         </div>
         <div className="flex items-center gap-2 mb-4">
           <BrainCircuit size={32} />
           <p className="text-lg md:text-4xl font-normal">DeepBridge</p>
         </div>
-        <p className="text-xs md:text-sm font-normal mb-8">
+        <p className="text-xs md:text-sm font-normal mb-4">
           Development of a deep learning model for the detection of brain
           tumors. In partnership with the university hospital center of Nice, it
           allows doctors to detect brain tumors with a deep learning model.
@@ -149,9 +158,12 @@ export const timelineData = [
     title: '2018-2020',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">Université Côte d&apos;Azur</p>
-          <Separator orientation="vertical" className="w-1 rounded-full" />
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
           <p className="text-muted-foreground">Nice, France</p>
         </div>
         <div className="flex items-center gap-2 mb-4">
@@ -179,16 +191,19 @@ export const timelineData = [
     title: '2017-2018',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">HES</p>
-          <Separator orientation="vertical" className="w-1 rounded-full" />
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
           <p className="text-muted-foreground">Saint-Laurent-du-Var, France</p>
         </div>
         <div className="flex items-center gap-2 mb-4">
           <Router size={32} />
           <p className="text-lg md:text-4xl font-normal">SmartHome</p>
         </div>
-        <p className="text-xs md:text-sm font-normal mb-8">
+        <p className="text-xs md:text-sm font-normal mb-4">
           Development of a smart home platform allowing the control of home
           appliances through an app and a voice assistant. Make a non-smart home
           smart using IPX800 hardware and an app.
@@ -207,9 +222,12 @@ export const timelineData = [
     title: '2013-2017',
     content: (
       <div className="text-left">
-        <div className="flex h-5 items-center space-x-2 mb-1 text-xs md:text-sm font-bold text-muted-foreground">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
           <p className="font-bold">ISITcom</p>
-          <Separator orientation="vertical" className="w-1 rounded-full" />
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
           <p className="text-muted-foreground">Sousse, Tunisia</p>
         </div>
         <div className="flex items-center gap-2 mb-4">
