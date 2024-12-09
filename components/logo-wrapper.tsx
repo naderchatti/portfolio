@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Logo } from './logo';
 import { useLogo } from './logo-context';
+import Link from 'next/link';
 
 export function LogoWrapper() {
   const { scrollProgress, isHomePage } = useLogo();
@@ -47,9 +48,12 @@ export function LogoWrapper() {
         pointerEvents: 'none',
       }}
     >
-      <div style={{ pointerEvents: 'all', width: '100%', height: '100%' }}>
+      <Link
+        href="/"
+        style={{ pointerEvents: 'all', width: '100%', height: '100%' }}
+      >
         <Logo />
-      </div>
+      </Link>
     </div>
   );
 }
