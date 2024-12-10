@@ -1,69 +1,150 @@
 import {
   BrainCircuit,
   GraduationCap,
+  Hammer,
   Hotel,
   Router,
+  Stethoscope,
   Waves,
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
-export const stack = [
-  {
-    mhm: [
-      'Full Stack',
-      'Amadeus Certification',
-      'Web App',
-      'Mobile App',
-      'Python',
-      'FastAPI',
-      'React Native',
-      'React',
-      'Node.js',
-      'MongoDB',
-    ],
-    vasta: [
-      'Full Stack',
-      'Web App',
-      'Mobile App',
-      'React',
-      'React Native',
-      'Java',
-      'Spring Boot',
-      'Node.js',
-      'PostgreSQL',
-      'VPS',
-    ],
-    deepBridge: [
-      'ML/DL',
-      'Web App',
-      'Python',
-      'PyTorch',
-      'TensorFlow',
-      'Keras',
-      'Numpy',
-      'Pandas',
-      'Angular',
-    ],
-    hes: [
-      'Full Stack',
-      'Web App',
-      'Mobile App',
-      'IoT',
-      'Vue.js',
-      'Node.js',
-      'Express',
-      'Android',
-      'Kotlin',
-      'Jarvis',
-      'IPX800',
-    ],
-  },
-];
+export const stack = {
+  aidiagme: [
+    'Full Stack',
+    'Web App',
+    'Next.js',
+    'PostgreSQL',
+    'Wordpress',
+    'AI',
+    'LLM',
+    'OpenAI',
+    'Anthropic',
+  ],
+  renovationDevis: [
+    'Full Stack',
+    'Web App',
+    'Next.js',
+    'Node.js',
+    'Cloudflare',
+    'Workers',
+    'D1',
+  ],
+  mhm: [
+    'Full Stack',
+    'Amadeus Certification',
+    'Web App',
+    'Mobile App',
+    'Python',
+    'FastAPI',
+    'React Native',
+    'React',
+    'Node.js',
+    'MongoDB',
+  ],
+  vasta: [
+    'Full Stack',
+    'Web App',
+    'Mobile App',
+    'React',
+    'React Native',
+    'Java',
+    'Spring Boot',
+    'Node.js',
+    'PostgreSQL',
+    'VPS',
+  ],
+  deepBridge: [
+    'ML/DL',
+    'Web App',
+    'Python',
+    'PyTorch',
+    'TensorFlow',
+    'Keras',
+    'Numpy',
+    'Pandas',
+    'Angular',
+  ],
+  hes: [
+    'Full Stack',
+    'Web App',
+    'Mobile App',
+    'IoT',
+    'Vue.js',
+    'Node.js',
+    'Express',
+    'Android',
+    'Kotlin',
+    'Jarvis',
+    'IPX800',
+  ],
+};
 
 export const timelineData = [
   {
-    title: '2023-2024',
+    title: 'Current',
+    content: (
+      <div className="text-left">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
+          <p className="font-bold">AI Diag Me</p>
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
+          <p className="text-muted-foreground">Nice, France</p>
+        </div>
+        <div className="flex items-center gap-2 mb-4">
+          <Stethoscope size={32} />
+          <p className="text-lg md:text-4xl font-normal">AI Diag Me</p>
+        </div>
+        <p className="text-xs md:text-sm font-normal mb-4">
+          Development of an AI based platform that allows patients to get
+          detailed diagnosis of medical analyzes, scanners and personality
+          tests, etc.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {stack.aidiagme.map((skill) => (
+            <Card className="p-2 border-l-4" key={skill}>
+              <p className="text-sm font-bold text-muted-foreground">{skill}</p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: '2024',
+    content: (
+      <div className="text-left">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
+          <p className="font-bold">Bati Azure Reno</p>
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
+          <p className="text-muted-foreground">Nice, France</p>
+        </div>
+        <div className="flex items-center gap-2 mb-4">
+          <Hammer size={32} />
+          <p className="text-lg md:text-4xl font-normal">Rénovation Devis</p>
+        </div>
+        <p className="text-xs md:text-sm font-normal mb-4">
+          A web app that allows to get a detailed renovation estimate for a
+          house.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {stack.renovationDevis.map((skill) => (
+            <Card className="p-2 border-l-4" key={skill}>
+              <p className="text-sm font-bold text-muted-foreground">{skill}</p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: '2023',
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
@@ -83,7 +164,7 @@ export const timelineData = [
           allows hotels to find the perfect match for their guests.
         </p>
         <div className="flex flex-wrap gap-2">
-          {stack[0].mhm.map((skill) => (
+          {stack.mhm.map((skill) => (
             <Card className="p-2 border-l-4" key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
@@ -93,7 +174,7 @@ export const timelineData = [
     ),
   },
   {
-    title: '2021-2022',
+    title: '2022',
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
@@ -114,7 +195,7 @@ export const timelineData = [
           paper-based system.
         </p>
         <div className="flex flex-wrap gap-2">
-          {stack[0].vasta.map((skill) => (
+          {stack.vasta.map((skill) => (
             <Card className="p-2 border-l-4" key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
@@ -124,7 +205,7 @@ export const timelineData = [
     ),
   },
   {
-    title: '2020-2021',
+    title: '2021',
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
@@ -145,7 +226,7 @@ export const timelineData = [
           allows doctors to detect brain tumors with a deep learning model.
         </p>
         <div className="flex flex-wrap gap-2">
-          {stack[0].deepBridge.map((skill) => (
+          {stack.deepBridge.map((skill) => (
             <Card className="p-2 border-l-4" key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
@@ -155,7 +236,7 @@ export const timelineData = [
     ),
   },
   {
-    title: '2018-2020',
+    title: '2020',
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
@@ -188,7 +269,7 @@ export const timelineData = [
     ),
   },
   {
-    title: '2017-2018',
+    title: '2018',
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
@@ -209,7 +290,7 @@ export const timelineData = [
           smart using IPX800 hardware and an app.
         </p>
         <div className="flex flex-wrap gap-2">
-          {stack[0].hes.map((skill) => (
+          {stack.hes.map((skill) => (
             <Card className="p-2 border-l-4" key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
@@ -219,7 +300,7 @@ export const timelineData = [
     ),
   },
   {
-    title: '2013-2017',
+    title: '2017',
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
