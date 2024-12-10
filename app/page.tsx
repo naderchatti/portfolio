@@ -1,3 +1,5 @@
+'use client';
+
 import { SkillsSlider } from '@/components/skills-slider';
 import { Card } from '@/components/ui/card';
 import TextReveal from '@/components/ui/text-reveal';
@@ -6,12 +8,18 @@ import { timelineData } from '@/data/timeline';
 import { projects } from '@/data/projects';
 import { cn } from '@/lib/utils';
 import { LinkPreview } from '@/components/ui/link-preview';
+import { ArrowUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
       <div className="h-screen flex flex-col text-center space-y-24">
-        <section className="h-[calc(100dvh-10rem)] flex flex-col justify-end px-4">
+        <section className="h-[calc(100dvh-3.5rem)] flex flex-col justify-end px-4 pb-28">
           <p className="text-base sm:text-xl md:text-2xl text-muted-foreground">
             Welcome to my space
           </p>
@@ -106,6 +114,12 @@ export default function Home() {
           <div className="mx-auto w-full lg:max-w-5xl">
             <Timeline data={timelineData} />
           </div>
+        </section>
+        <section className="h-[calc((100dvh-3.5rem)/2.5)] flex justify-center items-start">
+          <Button variant={'outline'} onClick={scrollToTop}>
+            <ArrowUp size={24} className="mr-2" />
+            <span>Back to top</span>
+          </Button>
         </section>
       </div>
     </>
