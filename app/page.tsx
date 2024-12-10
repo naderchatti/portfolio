@@ -4,7 +4,6 @@ import TextReveal from '@/components/ui/text-reveal';
 import { Timeline } from '@/components/ui/timeline';
 import { timelineData } from '@/data/timeline';
 import { projects } from '@/data/projects';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { LinkPreview } from '@/components/ui/link-preview';
 
