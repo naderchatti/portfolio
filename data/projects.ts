@@ -22,7 +22,7 @@ export const projects: Project[] = [
     description:
       'A mobile app for finding and hiring skilled workers for various tasks.',
     tech: 'React Native, Node.js, MongoDB, Stripe',
-    status: 'Active',
+    status: 'In Development',
     link: 'https://goodworker.fr',
     redirect: true,
   },
