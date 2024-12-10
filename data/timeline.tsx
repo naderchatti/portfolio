@@ -105,7 +105,7 @@ export const timelineData = [
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.aidiagme.map((skill) => (
-            <Card className="p-2 border-l-4" key={skill}>
+            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
           ))}
@@ -135,7 +135,7 @@ export const timelineData = [
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.renovationDevis.map((skill) => (
-            <Card className="p-2 border-l-4" key={skill}>
+            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
           ))}
@@ -165,7 +165,7 @@ export const timelineData = [
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.mhm.map((skill) => (
-            <Card className="p-2 border-l-4" key={skill}>
+            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
           ))}
@@ -196,7 +196,7 @@ export const timelineData = [
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.vasta.map((skill) => (
-            <Card className="p-2 border-l-4" key={skill}>
+            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
           ))}
@@ -227,7 +227,7 @@ export const timelineData = [
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.deepBridge.map((skill) => (
-            <Card className="p-2 border-l-4" key={skill}>
+            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
           ))}
@@ -245,7 +245,7 @@ export const timelineData = [
             orientation="vertical"
             className="h-3 bg-muted-foreground rounded-full"
           />
-          <p className="text-muted-foreground">Nice, France</p>
+          <p className="text-muted-foreground">Sophia Antipolis, France</p>
         </div>
         <div className="flex items-center gap-2 mb-4">
           <GraduationCap size={32} />
@@ -253,18 +253,20 @@ export const timelineData = [
             Master&apos;s Degree
           </p>
         </div>
-        <Card className="p-2 border-l-4 mb-2">
-          <p className="text-xs md:text-sm font-normal">
-            <span className="font-bold">M2 MBDS:</span> Master 2 in Big Data and
-            System Integration
-          </p>
-        </Card>
-        <Card className="p-2 border-l-4">
-          <p className="text-xs md:text-sm font-normal">
-            <span className="font-bold">M1 MIAGE:</span> Master 1 in
-            Computerized Methods Applied to Business Management
-          </p>
-        </Card>
+        <div className="flex flex-wrap gap-2">
+          <Card className="p-2" style={{ borderLeftWidth: 4 }}>
+            <p className="text-xs md:text-sm font-normal">
+              <span className="font-bold">M2 MBDS:</span> Master 2 in Big Data
+              and System Integration
+            </p>
+          </Card>
+          <Card className="p-2" style={{ borderLeftWidth: 4 }}>
+            <p className="text-xs md:text-sm font-normal">
+              <span className="font-bold">M1 MIAGE:</span> Master 1 in
+              Computerized Methods Applied to Business Management
+            </p>
+          </Card>
+        </div>
       </div>
     ),
   },
@@ -291,7 +293,7 @@ export const timelineData = [
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.hes.map((skill) => (
-            <Card className="p-2 border-l-4" key={skill}>
+            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
               <p className="text-sm font-bold text-muted-foreground">{skill}</p>
             </Card>
           ))}
@@ -317,7 +319,7 @@ export const timelineData = [
             Bachelor&apos;s Degree
           </p>
         </div>
-        <Card className="p-2 border-l-4">
+        <Card className="p-2" style={{ borderLeftWidth: 4 }}>
           <p className="text-xs md:text-sm font-normal">
             Applied Licence Degree in Computer Network and Telecommunications
             Techniques
