@@ -11,6 +11,7 @@ import {
 } from 'framer-motion';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useMobileDetect } from '@/lib/hooks/use-mobile-detect';
 
 type LinkPreviewProps = {
   children: React.ReactNode;
@@ -38,6 +39,43 @@ export const LinkPreview = ({
   imageSrc = '',
   redirect = true,
 }: LinkPreviewProps) => {
+  const isMobile = useMobileDetect();
+  const [isOpen, setOpen] = React.useState(false);
+  const [isMounted, setIsMounted] = React.useState(false);
+  const springConfig = { stiffness: 100, damping: 15 };
+  const x = useMotionValue(0);
+  const translateX = useSpring(x, springConfig);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const targetRect = (event.target as HTMLElement).getBoundingClientRect();
+    const eventOffsetX = event.clientX - targetRect.left;
+    const offsetFromCenter = (eventOffsetX - targetRect.width / 2) / 2;
+    x.set(offsetFromCenter);
+  };
+
+  // If on mobile, just render the children with a link
+  if (isMobile) {
+    return redirect ? (
+      <Link
+        href={url}
+        className={cn('text-black dark:text-white cursor-pointer', className)}
+        target="_blank"
+      >
+        {children}
+      </Link>
+    ) : (
+      <div
+        className={cn('text-black dark:text-white cursor-pointer', className)}
+      >
+        {children}
+      </div>
+    );
+  }
+
   let src;
   if (!isStatic) {
     const params = encode({
@@ -55,26 +93,6 @@ export const LinkPreview = ({
   } else {
     src = imageSrc;
   }
-
-  const [isOpen, setOpen] = React.useState(false);
-
-  const [isMounted, setIsMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const springConfig = { stiffness: 100, damping: 15 };
-  const x = useMotionValue(0);
-
-  const translateX = useSpring(x, springConfig);
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const targetRect = (event.target as HTMLElement).getBoundingClientRect();
-    const eventOffsetX = event.clientX - targetRect.left;
-    const offsetFromCenter = (eventOffsetX - targetRect.width / 2) / 2;
-    x.set(offsetFromCenter);
-  };
 
   return (
     <>
