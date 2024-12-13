@@ -43,7 +43,7 @@ export function LogoWrapper() {
         width: isLarge ? 'min(22rem, 80vw)' : '3rem',
         height: isLarge ? 'min(22rem, 80vw)' : '3rem',
         left: '50%',
-        top: isLarge ? '30%' : '0.25rem',
+        top: isLarge ? '35%' : '0.25rem',
         transform: isLarge ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
         pointerEvents: 'none',
       }}
