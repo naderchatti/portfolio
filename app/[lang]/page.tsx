@@ -4,7 +4,6 @@ import { SkillsSlider } from '@/components/skills-slider';
 import { Card } from '@/components/ui/card';
 import TextReveal from '@/components/ui/text-reveal';
 import { Timeline } from '@/components/ui/timeline';
-import { timelineData } from '@/data/timeline';
 import { realisations } from '@/data/realisations';
 import { cn } from '@/lib/utils';
 import { LinkPreview } from '@/components/ui/link-preview';
@@ -16,6 +15,7 @@ import { ValidLocale } from '@/lib/i18n';
 import { getDictionary } from '@/lib/getDictionary';
 import { useEffect, useState } from 'react';
 import { use } from 'react';
+import { getTimelineData } from '@/data/timeline';
 
 export default function Home({
   params,
@@ -48,6 +48,8 @@ export default function Home({
   };
 
   if (!dict) return null;
+
+  const timelineData = getTimelineData(dict);
 
   return (
     <>
@@ -179,7 +181,7 @@ export default function Home({
           className="w-full flex justify-center items-center"
         >
           <div className="mx-auto w-full lg:max-w-5xl">
-            <Timeline data={timelineData} />
+            <Timeline data={timelineData} dict={dict} />
           </div>
         </section>
         <section className="h-[calc((100dvh-3.5rem)/2.5)] flex flex-col justify-end px-4 pb-28 space-y-4">

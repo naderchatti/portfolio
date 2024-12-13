@@ -24,7 +24,32 @@
     },
     "timeline": {
       "title": "Professional career & Studies",
-      "current": "Current"
+      "current": "Current",
+      "university": "Université Côte d'Azur",
+      "aidiagme": {
+        "description": "Development of an AI based platform that allows patients to get detailed diagnosis of medical analyzes, scanners and personality tests, etc."
+      },
+      "renovationDevis": {
+        "description": "A web app that allows to get a detailed renovation estimate for renovation, development and construction of a house."
+      },
+      "mhm": {
+        "description": "Development of a matching platform for hotels and travelers allowing them to find the perfect match."
+      },
+      "vasta": {
+        "description": "Development of a web and mobile app allowing scheduling, appointment management, reports, and anomaly management to replace the old paper-based system."
+      },
+      "deepBridge": {
+        "description": "Development of a deep learning model for the detection of brain tumors. In partnership with the university hospital center of Nice, it allows doctors to detect brain tumors with a deep learning model."
+      },
+      "masters": {
+        "title": "Master's Degree",
+        "m2": "Master 2 in Mobiquity, Big Data and System Integration",
+        "m1": "Master 1 in Computerized Methods Applied to Business Management"
+      },
+      "bachelors": {
+        "title": "Bachelor's Degree",
+        "description": "Applied Licence Degree in Computer Networks and Telecommunications"
+      }
     },
     "backToTop": "Back to top"
   },

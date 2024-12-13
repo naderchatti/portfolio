@@ -81,9 +81,9 @@ export const stack = {
   ],
 };
 
-export const timelineData = [
+export const getTimelineData = (dict: any) => [
   {
-    title: 'Current',
+    title: dict.home.timeline.current,
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
@@ -99,9 +99,7 @@ export const timelineData = [
           <p className="text-lg md:text-4xl font-normal">AI Diag Me</p>
         </div>
         <p className="text-xs md:text-sm font-normal mb-4">
-          Development of an AI based platform that allows patients to get
-          detailed diagnosis of medical analyzes, scanners and personality
-          tests, etc.
+          {dict.home.timeline.aidiagme.description}
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.aidiagme.map((skill) => (
@@ -130,8 +128,7 @@ export const timelineData = [
           <p className="text-lg md:text-4xl font-normal">Rénovation Devis</p>
         </div>
         <p className="text-xs md:text-sm font-normal mb-4">
-          A web app that allows to get a detailed renovation estimate for a
-          house.
+          {dict.home.timeline.renovationDevis.description}
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.renovationDevis.map((skill) => (
@@ -160,8 +157,7 @@ export const timelineData = [
           <p className="text-lg md:text-4xl font-normal">MyHotelMatch</p>
         </div>
         <p className="text-xs md:text-sm font-normal mb-4">
-          Development of a matching platform for hotels and travelers that
-          allows hotels to find the perfect match for their guests.
+          {dict.home.timeline.mhm.description}
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.mhm.map((skill) => (
@@ -190,9 +186,7 @@ export const timelineData = [
           <p className="text-lg md:text-4xl font-normal">Vast&apos;Appli</p>
         </div>
         <p className="text-xs md:text-sm font-normal mb-4">
-          Development of a web and mobile app allowing scheduling, appointment
-          management, reports, and anomaly management to replace the old
-          paper-based system.
+          {dict.home.timeline.vasta.description}
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.vasta.map((skill) => (
@@ -209,7 +203,7 @@ export const timelineData = [
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
-          <p className="font-bold">Université Côte d&apos;Azur</p>
+          <p className="font-bold">{dict.home.timeline.university}</p>
           <Separator
             orientation="vertical"
             className="h-3 bg-muted-foreground rounded-full"
@@ -221,9 +215,7 @@ export const timelineData = [
           <p className="text-lg md:text-4xl font-normal">DeepBridge</p>
         </div>
         <p className="text-xs md:text-sm font-normal mb-4">
-          Development of a deep learning model for the detection of brain
-          tumors. In partnership with the university hospital center of Nice, it
-          allows doctors to detect brain tumors with a deep learning model.
+          {dict.home.timeline.deepBridge.description}
         </p>
         <div className="flex flex-wrap gap-2">
           {stack.deepBridge.map((skill) => (
@@ -240,7 +232,7 @@ export const timelineData = [
     content: (
       <div className="text-left">
         <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
-          <p className="font-bold">Université Côte d&apos;Azur</p>
+          <p className="font-bold">{dict.home.timeline.university}</p>
           <Separator
             orientation="vertical"
             className="h-3 bg-muted-foreground rounded-full"
@@ -250,53 +242,22 @@ export const timelineData = [
         <div className="flex items-center gap-2 mb-4">
           <GraduationCap size={32} />
           <p className="text-lg md:text-4xl font-normal">
-            Master&apos;s Degree
+            {dict.home.timeline.masters.title}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Card className="p-2" style={{ borderLeftWidth: 4 }}>
             <p className="text-xs md:text-sm font-normal">
-              <span className="font-bold">M2 MBDS:</span> Master 2 in Big Data
-              and System Integration
+              <span className="font-bold">M2 MBDS:</span>{' '}
+              {dict.home.timeline.masters.m2}
             </p>
           </Card>
           <Card className="p-2" style={{ borderLeftWidth: 4 }}>
             <p className="text-xs md:text-sm font-normal">
-              <span className="font-bold">M1 MIAGE:</span> Master 1 in
-              Computerized Methods Applied to Business Management
+              <span className="font-bold">M1 MIAGE:</span>{' '}
+              {dict.home.timeline.masters.m1}
             </p>
           </Card>
-        </div>
-      </div>
-    ),
-  },
-  {
-    title: '2018',
-    content: (
-      <div className="text-left">
-        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
-          <p className="font-bold">HES</p>
-          <Separator
-            orientation="vertical"
-            className="h-3 bg-muted-foreground rounded-full"
-          />
-          <p className="text-muted-foreground">Saint-Laurent-du-Var, France</p>
-        </div>
-        <div className="flex items-center gap-2 mb-4">
-          <Router size={32} />
-          <p className="text-lg md:text-4xl font-normal">SmartHome</p>
-        </div>
-        <p className="text-xs md:text-sm font-normal mb-4">
-          Development of a smart home platform allowing the control of home
-          appliances through an app and a voice assistant. Make a non-smart home
-          smart using IPX800 hardware and an app.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {stack.hes.map((skill) => (
-            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
-              <p className="text-sm font-bold text-muted-foreground">{skill}</p>
-            </Card>
-          ))}
         </div>
       </div>
     ),
@@ -316,13 +277,12 @@ export const timelineData = [
         <div className="flex items-center gap-2 mb-4">
           <GraduationCap size={32} />
           <p className="text-lg md:text-4xl font-normal">
-            Bachelor&apos;s Degree
+            {dict.home.timeline.bachelors.title}
           </p>
         </div>
         <Card className="p-2" style={{ borderLeftWidth: 4 }}>
           <p className="text-xs md:text-sm font-normal">
-            Applied Licence Degree in Computer Network and Telecommunications
-            Techniques
+            {dict.home.timeline.bachelors.description}
           </p>
         </Card>
       </div>

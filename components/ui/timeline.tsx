@@ -7,7 +7,18 @@ interface TimelineEntry {
   content: React.ReactNode;
 }
 
-export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
+interface TimelineProps {
+  data: TimelineEntry[];
+  dict: {
+    home: {
+      timeline: {
+        title: string;
+      };
+    };
+  };
+}
+
+export const Timeline = ({ data, dict }: TimelineProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
@@ -31,7 +42,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
     <div ref={containerRef}>
       <div className="mb-10">
         <h2 className="text-3xl font-light text-muted-foreground">
-          Professional career & Studies
+          {dict.home.timeline.title}
         </h2>
       </div>
       <div ref={ref} className="relative pb-20">
