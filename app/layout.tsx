@@ -9,7 +9,7 @@ import { SocialsDock } from '@/components/socials-dock';
 import { defaultLocale } from '@/lib/i18n';
 import { use } from 'react';
 
-export const runtime = 'edge';
+export const runtime = 'experimental-edge';
 
 export const metadata: Metadata = {
   title: 'Nader CHATTI',

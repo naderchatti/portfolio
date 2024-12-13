@@ -1,6 +1,6 @@
 'use client';
 
-export const runtime = 'edge';
+export const runtime = 'experimental-edge';
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';

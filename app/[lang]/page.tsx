@@ -1,6 +1,6 @@
 'use client';
 
-export const runtime = 'edge';
+export const runtime = 'experimental-edge';
 
 import { SkillsSlider } from '@/components/skills-slider';
 import { Card } from '@/components/ui/card';
