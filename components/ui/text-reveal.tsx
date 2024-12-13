@@ -30,7 +30,7 @@ export const TextRevealByWord: FC<TextRevealByWordProps> = ({
             {allWords.map((words, pIndex) => (
               <p
                 key={pIndex}
-                className="flex flex-wrap text-sm md:text-xl font-light text-foreground"
+                className="flex flex-wrap items-baseline text-sm md:text-xl font-light text-foreground"
               >
                 {words.map((word, i) => {
                   const wordIndex =
@@ -66,11 +66,41 @@ interface WordProps {
 
 const Word: FC<WordProps> = ({ children, progress, range }) => {
   const opacity = useTransform(progress, range, [0, 1]);
+  const text = children as string;
+  const hasComma = text.includes(',');
+  const isBold = text === 'Nader' || text === 'Chatti' || text === 'Chatti,';
+
+  if (hasComma && isBold) {
+    const [word, comma] = [text.slice(0, -1), text.slice(-1)];
+    return (
+      <span className="relative mx-1 inline-flex items-baseline">
+        <span className="absolute inset-0 flex items-baseline">
+          <span className="opacity-30">
+            <span className="font-bold text-base md:text-2xl">{word}</span>
+            {comma}
+          </span>
+        </span>
+        <motion.span style={{ opacity: opacity }} className="text-primary">
+          <span className="font-bold text-base md:text-2xl">{word}</span>
+          {comma}
+        </motion.span>
+      </span>
+    );
+  }
+
   return (
-    <span className="relative mx-1">
-      <span className="absolute opacity-30">{children}</span>
+    <span className="relative mx-1 inline-flex items-baseline">
+      <span className="absolute inset-0 flex items-baseline">
+        <span className="opacity-30">
+          <span className={cn(isBold && 'font-bold text-base md:text-2xl')}>
+            {children}
+          </span>
+        </span>
+      </span>
       <motion.span style={{ opacity: opacity }} className="text-primary">
-        {children}
+        <span className={cn(isBold && 'font-bold text-base md:text-2xl')}>
+          {children}
+        </span>
       </motion.span>
     </span>
   );
