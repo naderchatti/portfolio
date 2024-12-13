@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "language": "Language"
+  },
+  "home": {
+    "title": "Welcome to my portfolio",
+    "description": "Enjoy your visit",
+    "about": {
+      "title": "About Me",
+      "description": [
+        "Originally from Tunisia and currently based in France, my name is Nader Chatti, I'm a passionate Fullstack developer and software engineer with a Master's degree, specializing in modern web technologies and software architecture.",
+        "Currently focused on freelance work and building SaaS products, I combine my multicultural background with technical expertise to create efficient and scalable solutions."
+      ]
+    },
+    "skills": {
+      "title": "Technical Expertise"
+    },
+    "realisations": {
+      "title": "Realisations",
+      "techStack": "Tech Stack",
+      "status": "Status",
+      "inDevelopment": "In Development",
+      "active": "Active"
+    },
+    "timeline": {
+      "title": "Professional career & Studies",
+      "current": "Current"
+    },
+    "backToTop": "Back to top"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "The page you are looking for doesn't exist or has been moved.",
+    "goHome": "Go Home"
+  }
+}

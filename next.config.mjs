@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   images: {
-    domains: ['api.microlink.io'],
+    domains: ['images.unsplash.com', 'api.microlink.io'],
   },
 };
 

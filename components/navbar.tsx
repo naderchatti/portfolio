@@ -6,6 +6,7 @@ import {
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { LocaleSwitcher } from '@/components/locale-switcher';
 import Link from 'next/link';
 
 export function Navbar() {
@@ -23,6 +24,7 @@ export function Navbar() {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="flex items-center gap-4">
+            <LocaleSwitcher />
             <ThemeToggle />
           </div>
         </div>

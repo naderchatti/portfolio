@@ -22,7 +22,8 @@ export function LogoProvider({ children }: { children: React.ReactNode }) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  const isHomePage =
+    pathname === '/en' || pathname === '/fr' || pathname === '/';
 
   const handleScroll = useCallback(() => {
     const currentScroll =

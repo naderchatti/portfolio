@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "language": "Langue"
+  },
+  "home": {
+    "title": "Bienvenue sur mon portfolio",
+    "description": "Bonne visite",
+    "about": {
+      "title": "À propos de moi",
+      "description": [
+        "Originaire de Tunisie et actuellement basé en France, je m'appelle Nader Chatti, je suis un développeur Fullstack passionné et ingénieur logiciel titulaire d'un Master, spécialisé dans les technologies web modernes et l'architecture logicielle.",
+        "Actuellement concentré sur le travail freelance et la création de produits SaaS, je combine mon background multiculturel avec mon expertise technique pour créer des solutions efficaces et évolutives."
+      ]
+    },
+    "skills": {
+      "title": "Expertise Technique"
+    },
+    "realisations": {
+      "title": "Réalisations",
+      "techStack": "Technologies",
+      "status": "Statut",
+      "inDevelopment": "En Développement",
+      "active": "Actif"
+    },
+    "timeline": {
+      "title": "Parcours professionnel & Études",
+      "current": "Actuel"
+    },
+    "backToTop": "Retour en haut"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Non Trouvée",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "goHome": "Retour à l'accueil"
+  }
+}
