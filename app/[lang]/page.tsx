@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import { SkillsSlider } from '@/components/skills-slider';
 import { Card } from '@/components/ui/card';
 import TextReveal from '@/components/ui/text-reveal';

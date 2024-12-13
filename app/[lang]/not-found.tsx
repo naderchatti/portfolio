@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
