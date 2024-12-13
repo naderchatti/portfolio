@@ -3,7 +3,6 @@ import {
   GraduationCap,
   Hammer,
   Hotel,
-  Router,
   Stethoscope,
   Waves,
 } from 'lucide-react';
