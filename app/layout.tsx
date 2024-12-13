@@ -9,6 +9,8 @@ import { SocialsDock } from '@/components/socials-dock';
 import { defaultLocale } from '@/lib/i18n';
 import { use } from 'react';
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   title: 'Nader CHATTI',
   description: "Nader CHATTI's Portfolio and Blog",
@@ -28,6 +30,12 @@ export default function RootLayout({
 
   return (
     <html lang={resolvedParams.lang || defaultLocale} suppressHydrationWarning>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+      </head>
       <body
         suppressHydrationWarning
         className={`${satoshi.variable} font-sans`}
