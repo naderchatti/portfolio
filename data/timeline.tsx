@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { TimelineDict } from '@/lib/types/dictionary';
 
 export const stack = {
   aidiagme: [
@@ -80,7 +81,7 @@ export const stack = {
   ],
 };
 
-export const getTimelineData = (dict: any) => [
+export const getTimelineData = (dict: TimelineDict) => [
   {
     title: dict.home.timeline.current,
     content: (

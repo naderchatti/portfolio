@@ -16,6 +16,7 @@ import { getDictionary } from '@/lib/getDictionary';
 import { useEffect, useState } from 'react';
 import { use } from 'react';
 import { getTimelineData } from '@/data/timeline';
+import { Dictionary } from '@/lib/types/dictionary';
 
 export default function Home({
   params,
@@ -23,7 +24,7 @@ export default function Home({
   params: Promise<{ lang: ValidLocale }>;
 }) {
   const resolvedParams = use(params);
-  const [dict, setDict] = useState<any>(null);
+  const [dict, setDict] = useState<Dictionary | null>(null);
 
   useEffect(() => {
     getDictionary(resolvedParams.lang).then(setDict);

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { getDictionary } from '@/lib/getDictionary';
 import { ValidLocale } from '@/lib/i18n';
 import { use } from 'react';
+import { NotFoundDict } from '@/lib/types/dictionary';
 
 export default function NotFound({
   params,
@@ -13,7 +14,7 @@ export default function NotFound({
   params: Promise<{ lang: ValidLocale }>;
 }) {
   const resolvedParams = use(params);
-  const [dict, setDict] = useState<any>(null);
+  const [dict, setDict] = useState<NotFoundDict | null>(null);
 
   useEffect(() => {
     getDictionary(resolvedParams.lang).then(setDict);
