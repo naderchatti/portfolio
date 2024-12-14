@@ -41,7 +41,7 @@ export function SocialsDock() {
         </DockIcon>
         <DockIcon>
           <a
-            href="https://discord.com/users/naderchatti"
+            href="https://discordapp.com/users/naderchatti"
             target="_blank"
             rel="noopener noreferrer"
             className="p-2"
