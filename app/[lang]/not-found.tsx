@@ -1,14 +1,14 @@
 'use client';
 
-export const runtime = 'edge';
-
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { use } from 'react';
 import { getDictionary } from '@/lib/getDictionary';
 import { ValidLocale } from '@/lib/i18n';
-import { use } from 'react';
 import { NotFoundDict } from '@/lib/types/dictionary';
+
+export const runtime = 'experimental-edge';
 
 export default function NotFound({
   params,

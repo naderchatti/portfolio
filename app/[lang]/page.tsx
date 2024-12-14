@@ -3,7 +3,7 @@ import { getDictionary } from '@/lib/getDictionary';
 import { getTimelineData } from '@/data/timeline';
 import ClientPage from './client-page';
 
-export const runtime = 'edge';
+export const runtime = 'experimental-edge';
 
 interface PageProps {
   params: Promise<{ lang: ValidLocale }>;
