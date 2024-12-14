@@ -8,7 +8,7 @@ import { getDictionary } from '@/lib/getDictionary';
 import { ValidLocale } from '@/lib/i18n';
 import { NotFoundDict } from '@/lib/types/dictionary';
 
-export const runtime = 'experimental-edge';
+export const runtime = 'edge';
 
 export default function NotFound({
   params,
