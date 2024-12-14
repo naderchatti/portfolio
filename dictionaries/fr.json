@@ -1,0 +1,62 @@
+{
+  "navigation": {
+    "language": "Langue"
+  },
+  "home": {
+    "title": "Bienvenue sur mon portfolio",
+    "description": "Bonne visite",
+    "about": {
+      "title": "À propos de moi",
+      "description": [
+        "Originaire de Tunisie et actuellement basé en France, je m'appelle Nader Chatti, je suis un développeur Fullstack passionné et ingénieur logiciel titulaire d'un Master, spécialisé dans les technologies web modernes et l'architecture logicielle.",
+        "Actuellement concentré sur le travail freelance et la création de produits SaaS, je combine mon background multiculturel avec mon expertise technique pour créer des solutions efficaces et évolutives."
+      ]
+    },
+    "skills": {
+      "title": "Expertise Technique"
+    },
+    "realisations": {
+      "title": "Réalisations",
+      "techStack": "Technologies",
+      "status": "Statut",
+      "inDevelopment": "En Développement",
+      "active": "Actif"
+    },
+    "timeline": {
+      "title": "Parcours professionnel & Études",
+      "current": "Actuel",
+      "university": "Université Côte d'Azur",
+      "aidiagme": {
+        "description": "Développement d'une plateforme basée sur l'IA permettant aux patients d'obtenir un diagnostic détaillé d'analyses médicales, de scanners et de tests de personnalité, etc."
+      },
+      "renovationDevis": {
+        "description": "Une application web permettant d'obtenir un devis détaillé pour la rénovation, l'aménagement et la construction d'une maison."
+      },
+      "mhm": {
+        "description": "Développement d'une plateforme de matching pour les hôtels et les voyageurs leur permettant de trouver le match parfait."
+      },
+      "vasta": {
+        "description": "Développement d'une application web et mobile permettant la planification, la gestion des rendez-vous, les rapports et la gestion des anomalies pour remplacer l'ancien système papier."
+      },
+      "deepBridge": {
+        "description": "Développement d'un modèle d'apprentissage profond pour la détection des tumeurs cérébrales. En partenariat avec le CHU de Nice, il permet aux médecins de détecter les tumeurs cérébrales avec un modèle d'apprentissage profond."
+      },
+      "masters": {
+        "title": "Master",
+        "m2": "Master 2 en Mobiquité, Big Data et Intégration de Systèmes",
+        "m1": "Master 1 en Méthodes Informatiques Appliquées à la Gestion des Entreprises"
+      },
+      "bachelors": {
+        "title": "Licence",
+        "description": "Licence Appliquée en des Réseaux Informatiques et Télécommunications"
+      }
+    },
+    "backToTop": "Retour en haut"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Non Trouvée",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "goHome": "Retour à l'accueil"
+  }
+}
