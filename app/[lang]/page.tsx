@@ -4,19 +4,13 @@ import { getTimelineData } from '@/data/timeline';
 import ClientPage from './client-page';
 
 interface PageProps {
-  params: Promise<{ lang: ValidLocale }>;
+  params: { lang: ValidLocale };
 }
 
 export default async function Home({ params }: PageProps) {
-  const resolvedParams = await params;
-  const dict = await getDictionary(resolvedParams.lang);
+  const { lang } = await Promise.resolve(params);
+  const dict = await getDictionary(lang);
   const timelineData = getTimelineData(dict);
 
-  return (
-    <ClientPage
-      dict={dict}
-      lang={resolvedParams.lang}
-      timelineData={timelineData}
-    />
-  );
+  return <ClientPage dict={dict} lang={lang} timelineData={timelineData} />;
 }

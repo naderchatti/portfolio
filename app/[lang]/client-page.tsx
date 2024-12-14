@@ -14,10 +14,15 @@ import { motion } from 'framer-motion';
 import { ValidLocale } from '@/lib/i18n';
 import { Dictionary } from '@/lib/types/dictionary';
 
+interface TimelineEntry {
+  title: string;
+  content: React.ReactNode;
+}
+
 interface ClientPageProps {
   dict: Dictionary;
   lang: ValidLocale;
-  timelineData: any;
+  timelineData: TimelineEntry[];
 }
 
 export default function ClientPage({
