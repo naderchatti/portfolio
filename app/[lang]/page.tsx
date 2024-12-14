@@ -1,7 +1,5 @@
 'use client';
 
-export const runtime = 'edge';
-
 import { SkillsSlider } from '@/components/skills-slider';
 import { Card } from '@/components/ui/card';
 import TextReveal from '@/components/ui/text-reveal';
@@ -16,21 +14,15 @@ import { motion } from 'framer-motion';
 import { ValidLocale } from '@/lib/i18n';
 import { getDictionary } from '@/lib/getDictionary';
 import { useEffect, useState } from 'react';
-import { use } from 'react';
 import { getTimelineData } from '@/data/timeline';
 import { Dictionary } from '@/lib/types/dictionary';
 
-export default function Home({
-  params,
-}: {
-  params: Promise<{ lang: ValidLocale }>;
-}) {
-  const resolvedParams = use(params);
+export default function Home({ params }: { params: { lang: ValidLocale } }) {
   const [dict, setDict] = useState<Dictionary | null>(null);
 
   useEffect(() => {
-    getDictionary(resolvedParams.lang).then(setDict);
-  }, [resolvedParams.lang]);
+    getDictionary(params.lang).then(setDict);
+  }, [params.lang]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -134,16 +126,16 @@ export default function Home({
                               'h-2.5 w-2.5 rounded-full',
                               {
                                 'bg-yellow-500':
-                                  realisation.status[resolvedParams.lang] ===
+                                  realisation.status[params.lang] ===
                                   dict.home.realisations.inDevelopment,
                               },
                               {
                                 'bg-green-500':
-                                  realisation.status[resolvedParams.lang] ===
+                                  realisation.status[params.lang] ===
                                   dict.home.realisations.active,
                               },
                               'relative',
-                              realisation.status[resolvedParams.lang] ===
+                              realisation.status[params.lang] ===
                                 dict.home.realisations.active &&
                                 'after:absolute after:inset-0 after:rounded-full after:bg-green-500 after:opacity-40 after:animate-ping'
                             )}
@@ -151,11 +143,11 @@ export default function Home({
                         </div>
                         {realisation.role && (
                           <Badge className="text-xs">
-                            {realisation.role[resolvedParams.lang]}
+                            {realisation.role[params.lang]}
                           </Badge>
                         )}
                         <p className="text-muted-foreground">
-                          {realisation.description[resolvedParams.lang]}
+                          {realisation.description[params.lang]}
                         </p>
                         <div className="space-y-2">
                           <p className="text-sm">
@@ -168,7 +160,7 @@ export default function Home({
                             <span className="text-muted-foreground">
                               {dict.home.realisations.status}:
                             </span>{' '}
-                            {realisation.status[resolvedParams.lang]}
+                            {realisation.status[params.lang]}
                           </p>
                         </div>
                       </div>
