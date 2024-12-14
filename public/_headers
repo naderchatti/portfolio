@@ -1,0 +1,7 @@
+/*
+  Permissions-Policy: browsing-topics=()
+  Permissions-Policy: private-state-token-redemption=()
+  Permissions-Policy: private-state-token-issuance=()
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+*/ 
