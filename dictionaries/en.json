@@ -58,5 +58,10 @@
     "heading": "Page Not Found",
     "description": "The page you are looking for doesn't exist or has been moved.",
     "goHome": "Go Home"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   }
 }

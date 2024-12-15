@@ -12,24 +12,6 @@ export interface Realisation {
 
 export const realisations: Realisation[] = [
   {
-    title: 'eGouvernement',
-    description: {
-      en: 'A platform, web app and mobile app providing quick and easy access to French administration procedures.',
-      fr: 'Une plateforme, application web et mobile offrant un accès rapide et facile aux démarches administratives françaises.',
-    },
-    role: {
-      en: 'Co-Founder',
-      fr: 'Co-Fondateur',
-    },
-    tech: 'Next.js, TypeScript, React Native, Swift, FastAPI, PostgreSQL, ML Model, LLM',
-    status: {
-      en: 'In Development',
-      fr: 'En Développement',
-    },
-    link: 'https://egouvernement.fr',
-    redirect: true,
-  },
-  {
     title: 'Goodworker',
     description: {
       en: 'A mobile app for finding and hiring skilled workers for various tasks.',
@@ -48,17 +30,21 @@ export const realisations: Realisation[] = [
     redirect: true,
   },
   {
-    title: 'Portfolio',
+    title: 'eGouvernement',
     description: {
-      en: 'My personal portfolio website',
-      fr: 'Mon site web portfolio personnel',
+      en: 'A platform, web app and mobile app providing quick and easy access to French administration procedures.',
+      fr: 'Une plateforme, application web et mobile offrant un accès rapide et facile aux démarches administratives françaises.',
     },
-    tech: 'Next.js, Tailwind, TypeScript, Cloudflare, Pages, Workers',
+    role: {
+      en: 'Co-Founder',
+      fr: 'Co-Fondateur',
+    },
+    tech: 'Next.js, TypeScript, React Native, Swift, FastAPI, PostgreSQL, ML Model, LLM',
     status: {
-      en: 'Active',
-      fr: 'Actif',
+      en: 'In Development',
+      fr: 'En Développement',
     },
-    link: 'https://naderchatti.com',
-    redirect: false,
+    link: 'https://egouvernement.fr',
+    redirect: true,
   },
 ];

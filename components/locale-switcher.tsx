@@ -1,25 +1,18 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useLanguage } from './language-provider';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  getLocaleFromPathname,
-  getLocaleFullName,
-  getAlternateLinks,
-  locales,
-} from '@/lib/i18n';
+import { getLocaleFullName, locales } from '@/lib/i18n';
 import { UkFlag } from '@/components/ui/icons/uk-flag';
 import { FrFlag } from '@/components/ui/icons/fr-flag';
 
 export function LocaleSwitcher() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const currentLocale = getLocaleFromPathname(pathname);
+  const { locale, setLocale, isLoading } = useLanguage();
 
   const getLocaleIcon = (locale: (typeof locales)[number]) => {
     switch (locale) {
@@ -30,28 +23,36 @@ export function LocaleSwitcher() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <button className="rounded-md p-2 hover:bg-accent hover:text-accent-foreground">
+        <div className="h-5 w-5 animate-pulse bg-muted rounded" />
+      </button>
+    );
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="rounded-md p-2 hover:bg-accent hover:text-accent-foreground">
-          {getLocaleIcon(currentLocale)}
+          {getLocaleIcon(locale)}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="space-y-1">
-        {locales.map((locale) => (
+        {locales.map((localeOption) => (
           <DropdownMenuItem
-            key={locale}
+            key={localeOption}
             className={`${
-              currentLocale === locale ? 'bg-accent' : ''
+              locale === localeOption ? 'bg-accent' : ''
             } cursor-pointer flex items-center gap-2`}
             onClick={() => {
-              if (currentLocale !== locale) {
-                router.push(getAlternateLinks(pathname));
+              if (locale !== localeOption) {
+                setLocale(localeOption);
               }
             }}
           >
-            {getLocaleIcon(locale)}
-            <span>{getLocaleFullName(locale)}</span>
+            {getLocaleIcon(localeOption)}
+            <span>{getLocaleFullName(localeOption)}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
