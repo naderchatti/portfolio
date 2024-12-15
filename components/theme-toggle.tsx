@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useLanguage } from './language-provider';
 import { getDictionary } from '@/lib/getDictionary';
+import { Dictionary } from '@/lib/types/dictionary';
 
 const themes = ['light', 'dark', 'system'] as const;
 
@@ -36,7 +37,7 @@ const getThemeIcon = (
 export function ThemeToggle() {
   const { resolvedTheme, theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
-  const [dict, setDict] = React.useState<any>(null);
+  const [dict, setDict] = React.useState<Dictionary | null>(null);
   const { locale } = useLanguage();
 
   React.useEffect(() => {

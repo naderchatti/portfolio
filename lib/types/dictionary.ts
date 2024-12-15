@@ -2,6 +2,11 @@ export interface Dictionary {
   navigation: {
     language: string;
   };
+  theme: {
+    light: string;
+    dark: string;
+    system: string;
+  };
   home: {
     title: string;
     description: string;
