@@ -13,11 +13,21 @@ export default function NotFound() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const lang = pathname.split('/')[1] || defaultLocale;
-    getDictionary(lang as ValidLocale).then(setDict);
+    const getInitialLocale = () => {
+      if (typeof window !== 'undefined') {
+        const savedLocale = localStorage.getItem('locale');
+        if (savedLocale) return savedLocale;
+      }
+      return pathname.split('/')[1] || defaultLocale;
+    };
+
+    const locale = getInitialLocale();
+    getDictionary(locale as ValidLocale).then(setDict);
   }, [pathname]);
 
-  if (!dict) return null;
+  if (!dict) {
+    return null;
+  }
 
   return (
     <div className="h-[calc(100vh-6rem)] w-full flex flex-col items-center justify-center">

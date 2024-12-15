@@ -8,6 +8,7 @@ import { satoshi } from './fonts';
 import { SocialsDock } from '@/components/socials-dock';
 import { defaultLocale } from '@/lib/i18n';
 import { use } from 'react';
+import { LanguageProvider } from '@/components/language-provider';
 
 export const metadata: Metadata = {
   title: 'Nader CHATTI',
@@ -44,12 +45,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LogoProvider>
-            <Navbar />
-            <LogoWrapper />
-            {children}
-          </LogoProvider>
-          <SocialsDock />
+          <LanguageProvider>
+            <LogoProvider>
+              <Navbar />
+              <LogoWrapper />
+              {children}
+            </LogoProvider>
+            <SocialsDock />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
