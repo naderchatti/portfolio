@@ -58,5 +58,10 @@
     "heading": "Page Non Trouvée",
     "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
     "goHome": "Retour à l'accueil"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
   }
 }
