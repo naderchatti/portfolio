@@ -83,6 +83,9 @@ export interface TimelineDict {
       deepBridge: {
         description: string;
       };
+      smartHome: {
+        description: string;
+      };
       masters: {
         title: string;
         m2: string;
