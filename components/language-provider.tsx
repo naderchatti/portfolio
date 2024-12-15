@@ -68,7 +68,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     }
 
     setIsLoading(false);
-  }, [pathname]);
+  }, [pathname, router]);
 
   const setLocale = (newLocale: ValidLocale) => {
     // Only store in localStorage if it differs from system preference
