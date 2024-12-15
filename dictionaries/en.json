@@ -41,6 +41,9 @@
       "deepBridge": {
         "description": "Development of a deep learning model for the detection of brain tumors. In partnership with the university hospital center of Nice, it allows doctors to detect brain tumors with a deep learning model."
       },
+      "smartHome": {
+        "description": "Development of a smart home platform allowing the control of home appliances through an app and a voice assistant. Make a non-smart home smart using IPX800 hardware and an app."
+      },
       "masters": {
         "title": "Master's Degree",
         "m2": "Master 2 in Mobiquity, Big Data and System Integration",

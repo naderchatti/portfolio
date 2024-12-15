@@ -3,6 +3,7 @@ import {
   GraduationCap,
   Hammer,
   Hotel,
+  Router,
   Stethoscope,
   Waves,
 } from 'lucide-react';
@@ -66,7 +67,7 @@ export const stack = {
     'Pandas',
     'Angular',
   ],
-  hes: [
+  smartHome: [
     'Full Stack',
     'Web App',
     'Mobile App',
@@ -258,6 +259,35 @@ export const getTimelineData = (dict: TimelineDict) => [
               {dict.home.timeline.masters.m1}
             </p>
           </Card>
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: '2018',
+    content: (
+      <div className="text-left">
+        <div className="flex h-5 items-center gap-2 mb-2 text-xs md:text-sm font-bold text-muted-foreground">
+          <p className="font-bold">HES</p>
+          <Separator
+            orientation="vertical"
+            className="h-3 bg-muted-foreground rounded-full"
+          />
+          <p className="text-muted-foreground">Saint-Laurent-du-Var, France</p>
+        </div>
+        <div className="flex items-center gap-2 mb-4">
+          <Router size={32} />
+          <p className="text-lg md:text-4xl font-normal">Smart Home</p>
+        </div>
+        <p className="text-xs md:text-sm font-normal mb-4">
+          {dict.home.timeline.smartHome.description}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {stack.smartHome.map((skill) => (
+            <Card className="p-2" style={{ borderLeftWidth: 4 }} key={skill}>
+              <p className="text-sm font-bold text-muted-foreground">{skill}</p>
+            </Card>
+          ))}
         </div>
       </div>
     ),

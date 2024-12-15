@@ -41,6 +41,9 @@
       "deepBridge": {
         "description": "Développement d'un modèle d'apprentissage profond pour la détection des tumeurs cérébrales. En partenariat avec le CHU de Nice, il permet aux médecins de détecter les tumeurs cérébrales avec un modèle d'apprentissage profond."
       },
+      "smartHome": {
+        "description": "Développement d'une plateforme intelligente permettant le contrôle des appareils ménagers via une application et une assistant vocale. Rendre une maison non intelligente intelligente en utilisant le matériel IPX800 et une application."
+      },
       "masters": {
         "title": "Master",
         "m2": "Master 2 en Mobiquité, Big Data et Intégration de Systèmes",
