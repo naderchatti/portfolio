@@ -3,24 +3,19 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { use } from 'react';
 import { getDictionary } from '@/lib/getDictionary';
-import { ValidLocale } from '@/lib/i18n';
 import { NotFoundDict } from '@/lib/types/dictionary';
+import { defaultLocale, ValidLocale } from '@/lib/i18n';
+import { usePathname } from 'next/navigation';
 
-export const runtime = 'edge';
-
-export default function NotFound({
-  params,
-}: {
-  params: Promise<{ lang: ValidLocale }>;
-}) {
-  const resolvedParams = use(params);
+export default function NotFound() {
   const [dict, setDict] = useState<NotFoundDict | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    getDictionary(resolvedParams.lang).then(setDict);
-  }, [resolvedParams.lang]);
+    const lang = pathname.split('/')[1] || defaultLocale;
+    getDictionary(lang as ValidLocale).then(setDict);
+  }, [pathname]);
 
   if (!dict) return null;
 
@@ -48,7 +43,7 @@ export default function NotFound({
             {dict.notFound.description}
           </p>
           <Link
-            href="/"
+            href={`/${pathname.split('/')[1] || defaultLocale}`}
             className="inline-flex items-center justify-center rounded-md bg-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <motion.span
