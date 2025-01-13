@@ -30,19 +30,33 @@ export const realisations: Realisation[] = [
     redirect: true,
   },
   {
-    title: 'eGouvernement',
+    title: 'CHTPRK',
     description: {
-      en: 'A platform, web app and mobile app providing quick and easy access to French administration procedures.',
-      fr: 'Une plateforme, application web et mobile offrant un accès rapide et facile aux démarches administratives françaises.',
+      en: `Our landing page, where we showcase our SaaS products and services.`,
+      fr: `Notre landing page, où nous présentons nos produits SaaS et services.`,
     },
     role: {
       en: 'Co-Founder',
       fr: 'Co-Fondateur',
     },
+    tech: 'Next.js, TypeScript, TailwindCSS',
+    status: {
+      en: 'Active',
+      fr: 'Actif',
+    },
+    link: 'https://chtprk.com',
+    redirect: true,
+  },
+  {
+    title: 'eGouvernement',
+    description: {
+      en: 'A platform, web app and mobile app providing quick and easy access to French administration procedures.',
+      fr: 'Une plateforme, application web et mobile offrant un accès rapide et facile aux démarches administratives françaises.',
+    },
     tech: 'Next.js, TypeScript, React Native, Swift, FastAPI, PostgreSQL, ML Model, LLM',
     status: {
-      en: 'In Development',
-      fr: 'En Développement',
+      en: 'Active',
+      fr: 'Actif',
     },
     link: 'https://egouvernement.fr',
     redirect: true,
