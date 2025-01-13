@@ -137,8 +137,8 @@ export default function ClientPage({
                             },
                             'relative',
                             realisation.status[lang] ===
-                              dict.home.realisations.active &&
-                              'after:absolute after:inset-0 after:rounded-full after:bg-green-500 after:opacity-40 after:animate-ping'
+                            dict.home.realisations.active &&
+                            'after:absolute after:inset-0 after:rounded-full after:bg-green-500 after:opacity-40 after:animate-ping'
                           )}
                         />
                       </div>
