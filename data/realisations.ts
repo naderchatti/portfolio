@@ -61,4 +61,18 @@ export const realisations: Realisation[] = [
     link: 'https://egouvernement.fr',
     redirect: true,
   },
+  {
+    title: 'UGCKit',
+    description: {
+      en: 'An AI-driven social network content creation platform with AI video generation.',
+      fr: 'Une plateforme de création de contenu pour réseaux sociaux avec IA et génération de vidéos',
+    },
+    tech: 'Next.js, TypeScript, OAuth, Stripe, Python, FastAPI, PostgreSQL, Prisma, ML Model, LLM, FFMPEG, S3',
+    status: {
+      en: 'In Development',
+      fr: 'En Développement',
+    },
+    link: 'https://ugckit.ai',
+    redirect: true,
+  },
 ];
