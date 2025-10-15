@@ -20,7 +20,8 @@
       "techStack": "Technologies",
       "status": "Statut",
       "inDevelopment": "En Développement",
-      "active": "Actif"
+      "active": "Actif",
+      "offline": "Hors ligne"
     },
     "timeline": {
       "title": "Carrière",

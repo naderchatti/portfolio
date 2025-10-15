@@ -23,6 +23,7 @@ export interface Dictionary {
       status: string;
       inDevelopment: string;
       active: string;
+      offline: string;
     };
     timeline: {
       title: string;

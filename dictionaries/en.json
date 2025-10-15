@@ -20,7 +20,8 @@
       "techStack": "Tech Stack",
       "status": "Status",
       "inDevelopment": "In Development",
-      "active": "Active"
+      "active": "Active",
+      "offline": "Offline"
     },
     "timeline": {
       "title": "Career",
