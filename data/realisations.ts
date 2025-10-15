@@ -12,24 +12,6 @@ export interface Realisation {
 
 export const realisations: Realisation[] = [
   {
-    title: 'Goodworker',
-    description: {
-      en: 'A mobile app for finding and hiring skilled workers for various tasks.',
-      fr: 'Une application mobile pour trouver et embaucher des travailleurs qualifiés pour diverses tâches.',
-    },
-    role: {
-      en: 'Co-Founder & CTO',
-      fr: 'Co-Fondateur & CTO',
-    },
-    tech: 'React Native, Node.js, MongoDB, Stripe',
-    status: {
-      en: 'In Development',
-      fr: 'En Développement',
-    },
-    link: 'https://goodworker.fr',
-    redirect: true,
-  },
-  {
     title: 'CHTPRK',
     description: {
       en: `Our landing page, where we showcase our SaaS products and services.`,
@@ -55,8 +37,8 @@ export const realisations: Realisation[] = [
     },
     tech: 'Next.js, TypeScript, React Native, Swift, FastAPI, PostgreSQL, ML Model, LLM',
     status: {
-      en: 'Active',
-      fr: 'Actif',
+      en: 'Offline',
+      fr: 'Hors ligne',
     },
     link: 'https://egouvernement.fr',
     redirect: true,

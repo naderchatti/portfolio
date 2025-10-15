@@ -111,12 +111,70 @@ export default function ClientPage({
               {realisations.map((realisation, index) => (
                 <Card
                   key={index}
-                  className="p-6 hover:bg-accent/50 transition-colors"
+                  className={cn(
+                    'p-6 transition-colors hover:bg-accent/50 cursor-pointer'
+                  )}
                 >
-                  <LinkPreview
-                    url={realisation.link}
-                    redirect={realisation.redirect}
-                  >
+                  {realisation.status[lang] === dict.home.realisations.active ? (
+                    <LinkPreview
+                      url={realisation.link}
+                      redirect={realisation.redirect}
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-medium">
+                            {realisation.title}
+                          </h3>
+                          <div
+                            className={cn(
+                              'h-2.5 w-2.5 rounded-full',
+                              {
+                                'bg-yellow-500':
+                                  realisation.status[lang] ===
+                                  dict.home.realisations.inDevelopment,
+                              },
+                              {
+                                'bg-green-500':
+                                  realisation.status[lang] ===
+                                  dict.home.realisations.active,
+                              },
+                              {
+                                'bg-red-500':
+                                  realisation.status[lang] ===
+                                  dict.home.realisations.offline,
+                              },
+                              'relative',
+                              realisation.status[lang] ===
+                              dict.home.realisations.active &&
+                              'after:absolute after:inset-0 after:rounded-full after:bg-green-500 after:opacity-40 after:animate-ping'
+                            )}
+                          />
+                        </div>
+                        {realisation.role && (
+                          <Badge className="text-xs">
+                            {realisation.role[lang]}
+                          </Badge>
+                        )}
+                        <p className="text-muted-foreground">
+                          {realisation.description[lang]}
+                        </p>
+                        <div className="space-y-2">
+                          <p className="text-sm">
+                            <span className="text-muted-foreground">
+                              {dict.home.realisations.techStack}:
+                            </span>{' '}
+                            {realisation.tech}
+                          </p>
+                          <p className="text-sm">
+                            <span className="text-muted-foreground">
+                              {dict.home.realisations.status}:
+                            </span>{' '}
+                            {realisation.status[lang]}
+                          </p>
+                        </div>
+                      </div>
+                    </LinkPreview>
+                  ) : (
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <h3 className="text-xl font-medium">
@@ -134,6 +192,11 @@ export default function ClientPage({
                               'bg-green-500':
                                 realisation.status[lang] ===
                                 dict.home.realisations.active,
+                            },
+                            {
+                              'bg-red-500':
+                                realisation.status[lang] ===
+                                dict.home.realisations.offline,
                             },
                             'relative',
                             realisation.status[lang] ===
@@ -165,7 +228,7 @@ export default function ClientPage({
                         </p>
                       </div>
                     </div>
-                  </LinkPreview>
+                  )}
                 </Card>
               ))}
             </div>
