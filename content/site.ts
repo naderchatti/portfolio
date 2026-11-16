@@ -8,7 +8,7 @@ export const profile = {
   location: { en: 'France', fr: 'France' },
   role: {
     en: 'Fullstack engineer — I build SaaS products and run my own infrastructure.',
-    fr: 'Ingénieur fullstack — je construis des produits SaaS et j’opère ma propre infrastructure.',
+    fr: 'Ingénieur fullstack — je construis des produits SaaS et je gère ma propre infrastructure.',
   },
   intro: {
     en: 'Freelance & SaaS founder, based in France. Next.js and TypeScript on the front, Python and Postgres behind it, and a homelab where most of it gets tested first.',

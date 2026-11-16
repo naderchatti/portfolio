@@ -1,7 +1,6 @@
-import Link from 'next/link';
 import { Rss } from 'lucide-react';
 import { SocialIcon } from '@/components/icons';
-import { navHref, navItems } from '@/components/layout/nav';
+import { NavLinks } from '@/components/layout/active-nav';
 import type { Locale, Messages } from '@/lib/i18n';
 import { socials } from '@/lib/site';
 
@@ -21,13 +20,12 @@ export function SiteFooter({ locale, messages }: SiteFooterProps) {
       <div className="mx-auto flex max-w-[1120px] flex-col gap-4 px-4 pt-6 pb-10 text-[13px] text-muted-foreground sm:px-8">
         <nav aria-label={messages.a11y.footerNav}>
           <ul className="-mx-2.5 flex flex-wrap items-center justify-center gap-x-1 sm:justify-start">
-            {navItems.map((item) => (
-              <li key={item.key}>
-                <Link href={navHref(locale, item)} className={linkClass}>
-                  {messages.nav[item.key]}
-                </Link>
-              </li>
-            ))}
+            <NavLinks
+              locale={locale}
+              labels={messages.nav}
+              listItems
+              linkClassName={`${linkClass} data-[active]:text-foreground`}
+            />
             <li>
               <a href={`/${locale}/log/rss.xml`} className={linkClass}>
                 <Rss aria-hidden="true" className="size-3.5" />

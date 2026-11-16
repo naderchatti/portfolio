@@ -55,7 +55,7 @@ export const projects: readonly Project[] = [
         en: 'Canvas for image and video generation, background removal, TTS',
         fr: 'Canvas pour générer images et vidéos, détourage, synthèse vocale',
       },
-      { en: 'AI avatars and a draft editor', fr: 'Avatars IA et éditeur de brouillons' },
+      { en: 'AI avatars and a video editor', fr: 'Avatars IA et éditeur vidéo' },
       { en: 'OAuth social publishing', fr: 'Publication sur les réseaux via OAuth' },
       { en: 'Stripe subscriptions and credits', fr: 'Abonnements Stripe et crédits' },
     ],
@@ -91,8 +91,8 @@ export const projects: readonly Project[] = [
     status: 'live',
     affiliation: { en: 'Co-founder', fr: 'Cofondateur' },
     summary: {
-      en: 'A studio of two independent engineers: a multilingual site and the shared production platform behind our products.',
-      fr: 'Un studio de deux ingénieurs indépendants : un site multilingue et la plateforme de production commune derrière nos produits.',
+      en: 'Our software company, run by two independent engineers: a multilingual site and the shared production platform behind our products.',
+      fr: 'Notre société, menée par deux ingénieurs indépendants : un site multilingue et la plateforme de production commune derrière nos produits.',
     },
     bullets: [
       {
@@ -122,10 +122,6 @@ export const projects: readonly Project[] = [
     credit: {
       before: { en: 'Co-founded with ', fr: 'Cofondé avec ' },
       ...erdal,
-      after: {
-        en: ', who also writes code and leads most of the infrastructure and servers.',
-        fr: ', qui code aussi et pilote l’essentiel de l’infrastructure et des serveurs.',
-      },
     },
     link: { href: 'https://chtprk.com', label: 'chtprk.com' },
   },

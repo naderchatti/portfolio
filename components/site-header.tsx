@@ -5,7 +5,7 @@ import { LocaleSwitch } from '@/components/locale-switch';
 import { CommandMenu } from '@/components/command-menu';
 import { MobileNav } from '@/components/mobile-nav';
 import type { Locale, Messages } from '@/lib/i18n';
-import { navHref, navItems } from '@/components/layout/nav';
+import { NavLinks } from '@/components/layout/active-nav';
 
 type SiteHeaderProps = {
   locale: Locale;
@@ -29,19 +29,13 @@ export function SiteHeader({ locale, messages }: SiteHeaderProps) {
 
         <nav aria-label={messages.a11y.primaryNav} className="ml-4 hidden min-[900px]:block">
           <ul className="flex gap-0.5">
-            {navItems.map((item) => (
-              <li key={item.key}>
-                <Link
-                  href={navHref(locale, item)}
-                  className="inline-flex h-9 items-center rounded-lg px-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                >
-                  <span className="mr-1.5 font-mono text-[11px]" aria-hidden="true">
-                    {item.index}
-                  </span>
-                  {messages.nav[item.key]}
-                </Link>
-              </li>
-            ))}
+            <NavLinks
+              locale={locale}
+              labels={messages.nav}
+              listItems
+              linkClassName="group relative inline-flex h-9 items-center rounded-lg px-2.5 text-sm text-muted-foreground transition-colors after:pointer-events-none after:absolute after:inset-x-2.5 after:-bottom-[11px] after:h-px after:bg-foreground after:opacity-0 after:transition-opacity hover:bg-secondary hover:text-foreground data-[active]:text-foreground data-[active]:after:opacity-100"
+              indexClassName="mr-1.5 font-mono text-[11px] group-data-[active]:text-foreground"
+            />
           </ul>
         </nav>
 

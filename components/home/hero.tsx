@@ -28,12 +28,12 @@ export function Hero({ lang, messages }: HeroProps) {
             <h1 id="hero-title" className="text-[44px] leading-none font-semibold tracking-[-0.045em] sm:text-[64px]">
               {profile.name}
             </h1>
-            <p className="mx-auto mt-3 max-w-[640px] text-xl tracking-[-0.01em] text-pretty sm:mx-0">
+            <p className="mx-auto mt-3 max-w-[60ch] text-xl tracking-[-0.01em] text-pretty sm:mx-0">
               {t(profile.role, lang)}
             </p>
           </div>
         </div>
-        <p className="mx-auto mt-5 max-w-[640px] text-base text-pretty text-muted-foreground sm:mx-0">
+        <p className="mx-auto mt-5 max-w-[70ch] text-base text-pretty text-muted-foreground sm:mx-0">
           {t(profile.intro, lang)}
         </p>
         <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">

@@ -27,7 +27,7 @@ export function PageHeader({ path, title, lead, size = 'md', className, children
       <p
         className={cn(
           'text-muted-foreground max-sm:mx-auto',
-          size === 'lg' ? 'max-w-[520px] text-lg' : 'max-w-[640px] text-[17px]',
+          size === 'lg' ? 'max-w-[68ch] text-lg' : 'max-w-[72ch] text-[17px]',
         )}
       >
         {lead}
