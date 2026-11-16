@@ -15,8 +15,8 @@ export const labIntro = {
   },
   /** One-line summary under the home-page lab title. */
   summaryLine: {
-    en: '14 LXC · 104 devices · 1,942 entities · 23 audio players',
-    fr: '14 LXC · 104 appareils · 1 942 entités · 23 lecteurs audio',
+    en: '14 Zigbee devices · 27 automations · 23 audio players · 14 containers (LXC)',
+    fr: '14 appareils Zigbee · 27 automatisations · 23 lecteurs audio · 14 conteneurs (LXC)',
   },
   hero: {
     image: 'desk-setup',
@@ -107,13 +107,12 @@ export const nodesFootnote: Localized = {
 
 export type LabStat = { value: Text; label: Localized };
 
-/** Read from Home Assistant's registries, not from memory. */
+/** Read from Home Assistant's registries and Proxmox, not from memory. */
 export const haStats: readonly LabStat[] = [
-  { value: '104', label: { en: 'devices', fr: 'appareils' } },
-  { value: { en: '1,942', fr: '1 942' }, label: { en: 'entities', fr: 'entités' } },
-  { value: '65', label: { en: 'integrations', fr: 'intégrations' } },
+  { value: '14', label: { en: 'Zigbee devices', fr: 'appareils Zigbee' } },
   { value: '27', label: { en: 'automations', fr: 'automatisations' } },
   { value: '23', label: { en: 'audio players', fr: 'lecteurs audio' } },
+  { value: '14', label: { en: 'containers (LXC)', fr: 'conteneurs (LXC)' } },
 ];
 
 export type LabTile = {
@@ -278,8 +277,8 @@ export const tiles: readonly LabTile[] = [
     slug: 'home-assistant-hub',
     title: { en: 'Home Assistant hub', fr: 'Le hub Home Assistant' },
     summary: {
-      en: '104 devices, 1,942 entities, 27 automations, Zigbee via ZHA, and the dashboards that run the flat.',
-      fr: '104 appareils, 1 942 entités, 27 automatisations, du Zigbee via ZHA, et les tableaux de bord qui font tourner l’appartement.',
+      en: '14 Zigbee devices via ZHA, 27 automations, and the dashboards that run the flat.',
+      fr: '14 appareils Zigbee via ZHA, 27 automatisations, et les tableaux de bord qui font tourner l’appartement.',
     },
     note: {
       en: 'Dumb wall switches made smart with Sonoff ZBMINIL2 Zigbee modules.',
@@ -289,7 +288,7 @@ export const tiles: readonly LabTile[] = [
     post: 'home-assistant-hub',
     compact: {
       title: { en: 'Home Assistant hub', fr: 'Le hub Home Assistant' },
-      meta: { en: '104 devices · 27 automations', fr: '104 appareils · 27 automatisations' },
+      meta: { en: '14 Zigbee devices · 27 automations', fr: '14 appareils Zigbee · 27 automatisations' },
     },
   },
   {

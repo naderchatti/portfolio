@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -9,7 +8,7 @@ import { LocaleSwitch } from '@/components/locale-switch';
 import { SocialIcon } from '@/components/icons';
 import type { Locale, Messages } from '@/lib/i18n';
 import { socials } from '@/lib/site';
-import { navHref, navItems } from '@/components/layout/nav';
+import { NavLinks } from '@/components/layout/active-nav';
 
 type MobileNavProps = {
   locale: Locale;
@@ -32,17 +31,13 @@ export function MobileNav({ locale, messages }: MobileNavProps) {
           <SheetDescription className="sr-only">{messages.a11y.primaryNav}</SheetDescription>
         </SheetHeader>
         <nav aria-label={messages.a11y.primaryNav} className="flex flex-col p-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.key}
-              href={navHref(locale, item)}
-              onClick={() => setOpen(false)}
-              className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-[15px] hover:bg-secondary"
-            >
-              <span className="font-mono text-xs text-muted-foreground">{item.index}</span>
-              {messages.nav[item.key]}
-            </Link>
-          ))}
+          <NavLinks
+            locale={locale}
+            labels={messages.nav}
+            onNavigate={() => setOpen(false)}
+            linkClassName="group flex min-h-11 items-center gap-3 rounded-lg px-3 text-[15px] text-muted-foreground hover:bg-secondary hover:text-foreground data-[active]:bg-secondary data-[active]:font-medium data-[active]:text-foreground"
+            indexClassName="font-mono text-xs text-muted-foreground group-data-[active]:text-foreground"
+          />
         </nav>
         <div className="mt-auto flex flex-col gap-4 border-t p-4">
           <LocaleSwitch locale={locale} label={messages.locale.label} names={{ en: messages.locale.en, fr: messages.locale.fr }} className="self-start" />

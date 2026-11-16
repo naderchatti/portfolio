@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Nader Chatti — Ingénieur fullstack",
-    "description": "Nader Chatti, ingénieur fullstack. Je construis des produits SaaS et j’opère ma propre infrastructure."
+    "description": "Nader Chatti, ingénieur fullstack. Je construis des produits SaaS et je gère ma propre infrastructure."
   },
   "a11y": {
     "skipToContent": "Aller au contenu",
@@ -46,7 +46,7 @@
     "fr": "Français"
   },
   "home": {
-    "role": "Ingénieur fullstack — je construis des produits SaaS et j’opère ma propre infrastructure.",
+    "role": "Ingénieur fullstack — je construis des produits SaaS et je gère ma propre infrastructure.",
     "intro": "Freelance et fondateur SaaS, basé en France. Next.js et TypeScript côté front, Python et Postgres derrière, et un homelab où presque tout est testé en premier.",
     "soon": "Bientôt.",
     "viewWork": "Voir les projets",
