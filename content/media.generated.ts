@@ -2469,7 +2469,7 @@ export const generatedVideos = {
     "name": "pc-rgb-loop",
     "src": "/media/pc-rgb-loop.mp4",
     "poster": "/media/pc-rgb-loop-poster.jpg",
-    "width": 406,
-    "height": 720
+    "width": 540,
+    "height": 960
   }
 } as const satisfies Record<string, GeneratedVideo>;
