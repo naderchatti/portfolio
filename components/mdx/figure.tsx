@@ -16,14 +16,16 @@ export function Figure({ name, alt, lang }: FigureProps) {
   }
   const caption = alt?.trim();
   const screenshot = !image.focal;
+  // Portrait photos would fill several screens at column width; keep them to a readable size.
+  const portrait = image.height > image.width * 1.05;
   return (
-    <figure className="my-8">
+    <figure className="my-8" style={portrait ? { maxWidth: 440 } : undefined}>
       <Picture
         image={image}
         lang={lang}
         alt={caption || undefined}
         fit={screenshot ? 'contain' : 'cover'}
-        sizes="(min-width: 768px) 720px, 100vw"
+        sizes={portrait ? '(min-width: 480px) 440px, 100vw' : '(min-width: 768px) 740px, 100vw'}
         className="rounded-card border"
       />
       {caption ? (
