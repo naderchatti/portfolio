@@ -1,97 +1,31 @@
 'use client';
 
-import * as React from 'react';
-import { Moon, Sun, Monitor } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import { useLanguage } from './language-provider';
-import { getDictionary } from '@/lib/getDictionary';
-import { Dictionary } from '@/lib/types/dictionary';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-const themes = ['light', 'dark', 'system'] as const;
-
-const getThemeIcon = (
-  theme: (typeof themes)[number],
-  resolvedTheme: string | undefined
-) => {
-  switch (theme) {
-    case 'light':
-      return <Sun className="h-5 w-5" />;
-    case 'dark':
-      return <Moon className="h-5 w-5" />;
-    case 'system':
-      return resolvedTheme === 'dark' ? (
-        <Moon className="h-5 w-5" />
-      ) : (
-        <Sun className="h-5 w-5" />
-      );
-  }
+type ThemeToggleProps = {
+  label: string;
+  className?: string;
 };
 
-export function ThemeToggle() {
-  const { resolvedTheme, theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-  const [dict, setDict] = React.useState<Dictionary | null>(null);
-  const { locale } = useLanguage();
-
-  React.useEffect(() => {
-    setMounted(true);
-    getDictionary(locale).then(setDict);
-  }, [locale]);
-
-  if (!mounted || !dict) {
-    return (
-      <button className="rounded-md p-2 hover:bg-accent hover:text-accent-foreground">
-        <div className="h-5 w-5 animate-pulse bg-muted rounded" />
-      </button>
-    );
-  }
+/** Flips between light and dark. Icons swap via CSS so no hydration flash. */
+export function ThemeToggle({ label, className }: ThemeToggleProps) {
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="rounded-md p-2 hover:bg-accent hover:text-accent-foreground">
-          {getThemeIcon(theme as (typeof themes)[number], resolvedTheme)}
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="space-y-1">
-        {themes.slice(0, 2).map((themeOption) => (
-          <DropdownMenuItem
-            key={themeOption}
-            className={`${
-              theme === themeOption ? 'bg-accent' : ''
-            } cursor-pointer flex items-center gap-2`}
-            onClick={() => {
-              if (theme !== themeOption) {
-                setTheme(themeOption);
-              }
-            }}
-          >
-            {getThemeIcon(themeOption, resolvedTheme)}
-            <span>{dict.theme[themeOption]}</span>
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className={`${
-            theme === 'system' ? 'bg-accent' : ''
-          } cursor-pointer flex items-center gap-2`}
-          onClick={() => {
-            if (theme !== 'system') {
-              setTheme('system');
-            }
-          }}
-        >
-          <Monitor className="h-5 w-5" />
-          <span>{dict.theme.system}</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      className={cn('size-11 sm:size-9', className)}
+      aria-label={label}
+      title={label}
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+    >
+      <Sun className="hidden dark:block" aria-hidden="true" />
+      <Moon className="block dark:hidden" aria-hidden="true" />
+    </Button>
   );
 }

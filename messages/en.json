@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "title": "Nader Chatti — Fullstack engineer",
+    "description": "Nader Chatti, fullstack engineer. I build SaaS products and run my own infrastructure."
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "home": "Nader Chatti, home",
+    "catLabel": "Cat logo, eyes follow the pointer",
+    "primaryNav": "Sections",
+    "socialNav": "Social links"
+  },
+  "nav": {
+    "built": "Built",
+    "experience": "Experience",
+    "lab": "Lab",
+    "log": "Log",
+    "uses": "Uses",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "command": {
+    "trigger": "Jump to…",
+    "open": "Open command menu",
+    "title": "Command menu",
+    "description": "Jump to a section or change a setting.",
+    "placeholder": "Type a command or search…",
+    "empty": "No results.",
+    "navigation": "Navigation",
+    "preferences": "Preferences",
+    "links": "Links"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Language",
+    "switchTo": "Lire en français",
+    "en": "English",
+    "fr": "Français"
+  },
+  "home": {
+    "role": "Fullstack engineer — I build SaaS products and run my own infrastructure.",
+    "intro": "Freelance & SaaS founder, based in France. Next.js and TypeScript on the front, Python and Postgres behind it, and a homelab where most of it gets tested first.",
+    "soon": "Coming soon."
+  },
+  "footer": {
+    "copyright": "© {year} Nader Chatti",
+    "tagline": "operator@nader ~ exit 0",
+    "backToTop": "Back to top",
+    "email": "Email"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "description": "This path doesn't exist — or it moved.",
+    "home": "Back home",
+    "shell": "cd: no such file or directory"
+  }
+}
