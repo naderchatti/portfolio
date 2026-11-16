@@ -15,7 +15,8 @@ import {
 } from '@/components/ui/command';
 import { SocialIcon } from '@/components/icons';
 import { localizePath, otherLocale, type Locale, type Messages } from '@/lib/i18n';
-import { navHref, navItems, socials } from '@/lib/site';
+import { socials } from '@/lib/site';
+import { navHref, navItems } from '@/components/layout/nav';
 import { cn } from '@/lib/utils';
 
 type CommandMenuProps = {
@@ -76,7 +77,7 @@ export function CommandMenu({ locale, messages, className }: CommandMenuProps) {
               <CommandItem
                 key={item.key}
                 value={`${item.index} ${messages.nav[item.key]}`}
-                onSelect={() => run(() => router.push(navHref(locale, item.key)))}
+                onSelect={() => run(() => router.push(navHref(locale, item)))}
               >
                 <Hash aria-hidden="true" />
                 <span>{messages.nav[item.key]}</span>

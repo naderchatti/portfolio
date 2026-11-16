@@ -8,7 +8,8 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { LocaleSwitch } from '@/components/locale-switch';
 import { SocialIcon } from '@/components/icons';
 import type { Locale, Messages } from '@/lib/i18n';
-import { navHref, navItems, socials } from '@/lib/site';
+import { socials } from '@/lib/site';
+import { navHref, navItems } from '@/components/layout/nav';
 
 type MobileNavProps = {
   locale: Locale;
@@ -34,7 +35,7 @@ export function MobileNav({ locale, messages }: MobileNavProps) {
           {navItems.map((item) => (
             <Link
               key={item.key}
-              href={navHref(locale, item.key)}
+              href={navHref(locale, item)}
               onClick={() => setOpen(false)}
               className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-[15px] hover:bg-secondary"
             >

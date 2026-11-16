@@ -5,7 +5,7 @@ import { LocaleSwitch } from '@/components/locale-switch';
 import { CommandMenu } from '@/components/command-menu';
 import { MobileNav } from '@/components/mobile-nav';
 import type { Locale, Messages } from '@/lib/i18n';
-import { navHref, navItems } from '@/lib/site';
+import { navHref, navItems } from '@/components/layout/nav';
 
 type SiteHeaderProps = {
   locale: Locale;
@@ -32,7 +32,7 @@ export function SiteHeader({ locale, messages }: SiteHeaderProps) {
             {navItems.map((item) => (
               <li key={item.key}>
                 <Link
-                  href={navHref(locale, item.key)}
+                  href={navHref(locale, item)}
                   className="inline-flex h-9 items-center rounded-lg px-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                 >
                   <span className="mr-1.5 font-mono text-[11px]" aria-hidden="true">
