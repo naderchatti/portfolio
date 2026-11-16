@@ -1,4 +1,5 @@
 import { Picture } from '@/components/media/picture';
+import { Zoomable, type ZoomOptions } from '@/components/media/zoomable';
 import { getImage, type MediaName } from '@/content/media';
 import type { Locale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
@@ -26,7 +27,7 @@ export function isScreenshot(name: MediaName): boolean {
   return screenshots.has(name);
 }
 
-export type FrameRatio = '4/3' | '3/4' | '16/9' | 'native';
+export type FrameRatio = '4/3' | '3/4' | '1/1' | '16/9' | 'native';
 
 type FramedImageProps = {
   name: MediaName;
@@ -37,6 +38,12 @@ type FramedImageProps = {
   priority?: boolean;
   /** Corner radius: `card` (12px) for large frames, `lg` (8px) for thumbnails. */
   radius?: 'card' | 'lg';
+  /** Per-placement focal point (overrides the manifest's). */
+  focal?: string;
+  /** Zoom into `focal` (photos only). */
+  scale?: number;
+  /** Opens the image in the lightbox, browsable within `zoom.group`. */
+  zoom?: ZoomOptions;
   className?: string;
 };
 
@@ -48,26 +55,33 @@ export function FramedImage({
   sizes,
   priority,
   radius = 'card',
+  focal,
+  scale,
+  zoom,
   className,
 }: FramedImageProps) {
   const image = getImage(name);
   const screenshot = isScreenshot(name);
   const aspectRatio = ratio === 'native' ? `${image.width} / ${image.height}` : ratio.replace('/', ' / ');
 
-  return (
+  const rounded = radius === 'card' ? 'rounded-card' : 'rounded-lg';
+  const picture = (
     <Picture
       image={image}
       lang={lang}
       fit={screenshot ? 'contain' : 'cover'}
       sizes={sizes}
       priority={priority}
-      className={cn(
-        'w-full border',
-        radius === 'card' ? 'rounded-card' : 'rounded-lg',
-        screenshot ? 'bg-secondary' : 'bg-muted',
-        className,
-      )}
+      focal={focal}
+      scale={scale}
+      className={cn('w-full border', rounded, screenshot ? 'bg-secondary' : 'bg-muted', className)}
       style={{ aspectRatio }}
     />
+  );
+  if (!zoom) return picture;
+  return (
+    <Zoomable image={image} lang={lang} group={zoom.group} caption={zoom.caption} className={rounded}>
+      {picture}
+    </Zoomable>
   );
 }

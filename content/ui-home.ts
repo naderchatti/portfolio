@@ -22,6 +22,7 @@ export const uiHome = {
   contact: {
     breadcrumb: { en: 'contact', fr: 'contact' },
   },
+  newTab: { en: '(opens in a new tab)', fr: '(s’ouvre dans un nouvel onglet)' },
 } as const satisfies {
   heroPath: Localized;
   activity: { region: Localized; languagesLabel: Localized };
@@ -29,4 +30,5 @@ export const uiHome = {
   experience: { list: Localized };
   lab: { index: Localized };
   contact: { breadcrumb: Localized };
+  newTab: Localized;
 };

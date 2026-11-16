@@ -11,6 +11,8 @@ export type Experience = {
   /** At most three. */
   bullets: readonly Localized[];
   stack: readonly string[];
+  /** Muted extra tag after the stack chips (e.g. a later rebuild). */
+  stackNote?: Localized;
   /** One engineering decision worth calling out. */
   detail?: Localized;
   link?: { href: string; label: string };
@@ -51,7 +53,7 @@ export const experience: readonly Experience[] = [
     slug: 'aidiagme',
     period: { en: '2024 — now', fr: '2024 — auj.' },
     current: true,
-    role: { en: 'Lead fullstack · top contributor', fr: 'Lead fullstack · principal contributeur' },
+    role: { en: 'Lead fullstack', fr: 'Lead fullstack' },
     org: 'AI Diag Me',
     summary: {
       en: 'AI health platform interpreting lab reports and questionnaires for humans and animals: multi-brand, 5 languages, multi-currency Stripe, telehealth.',
@@ -82,10 +84,16 @@ export const experience: readonly Experience[] = [
     role: { en: 'Fullstack developer', fr: 'Développeur fullstack' },
     org: 'Bati Azure Reno',
     summary: {
-      en: 'Rénovation Devis, a web app producing detailed estimates for renovation and construction.',
-      fr: 'Rénovation Devis, une application web qui produit des devis détaillés pour la rénovation et la construction.',
+      en: 'Rénovation Devis, a client’s web app that produces detailed estimates for renovation and construction work.',
+      fr: 'Rénovation Devis, l’application web d’un client qui produit des devis détaillés pour la rénovation et la construction.',
     },
-    bullets: [],
+    bullets: [
+      {
+        en: 'Estimate builder for renovation and construction jobs',
+        fr: 'Création de devis pour les chantiers de rénovation et de construction',
+      },
+      { en: 'Built-in blog section', fr: 'Section blog intégrée' },
+    ],
     stack: ['Next.js', 'Node.js', 'Cloudflare Workers', 'D1'],
   },
   {
@@ -113,6 +121,7 @@ export const experience: readonly Experience[] = [
     },
     bullets: [],
     stack: ['Java (Android)', 'Spring Boot', 'React Native/Expo'],
+    stackNote: { en: 'Rebuilt 2024 · Expo · FastAPI · MongoDB', fr: 'Refonte 2024 · Expo · FastAPI · MongoDB' },
   },
   {
     slug: 'hes',

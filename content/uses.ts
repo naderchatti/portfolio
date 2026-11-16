@@ -13,8 +13,8 @@ export type UsesSection = {
   title: Localized;
   items: readonly UsesItem[];
   figures?: readonly UsesFigure[];
-  /** Ordered build log shown as numbered thumbnails. */
-  buildLog?: readonly UsesFigure[];
+  /** Build gallery: numbered thumbnails that open in the lightbox as one group. */
+  gallery?: readonly UsesFigure[];
   video?: { name: VideoName; fallback: MediaName; label: Localized; caption: Localized };
 };
 
@@ -87,10 +87,15 @@ export const usesSections: readonly UsesSection[] = [
       },
       caption: { en: 'Lights on', fr: 'Lumières allumées' },
     },
-    buildLog: [
-      { index: '01', image: 'pc-parts', caption: { en: 'Parts', fr: 'Pièces' } },
-      { index: '02', image: 'pc-build', caption: { en: 'Build', fr: 'Montage' } },
-      { index: '03', image: 'pc-rgb-side', caption: { en: 'Lights on', fr: 'Lumières allumées' } },
+    gallery: [
+      { index: '01', image: 'pc-gallery-flatlay', caption: { en: 'Parts', fr: 'Pièces' } },
+      { index: '02', image: 'pc-gallery-case', caption: { en: 'Case', fr: 'Boîtier' } },
+      { index: '03', image: 'pc-gallery-motherboard', caption: { en: 'Motherboard', fr: 'Carte mère' } },
+      { index: '04', image: 'pc-gallery-cpu', caption: { en: 'CPU', fr: 'Processeur' } },
+      { index: '05', image: 'pc-gallery-ram', caption: { en: 'RAM', fr: 'Mémoire' } },
+      { index: '06', image: 'pc-gallery-ssd', caption: { en: 'Storage', fr: 'Stockage' } },
+      { index: '07', image: 'pc-gallery-gpu', caption: { en: 'GPU', fr: 'Carte graphique' } },
+      { index: '08', image: 'pc-gallery-lights-on', caption: { en: 'Lights on', fr: 'Lumières allumées' } },
     ],
   },
   {

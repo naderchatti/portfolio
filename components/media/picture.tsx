@@ -15,6 +15,10 @@ type PictureProps = {
   sizes?: string;
   /** Eager-load and raise fetch priority (above-the-fold images). */
   priority?: boolean;
+  /** Overrides the manifest focal point for this placement (`cover` only). */
+  focal?: string;
+  /** Zooms into the focal point (`cover` only), to frame one detail of a wider photo. */
+  scale?: number;
   className?: string;
   imgClassName?: string;
   style?: CSSProperties;
@@ -31,12 +35,22 @@ export function Picture({
   fit = 'cover',
   sizes = '100vw',
   priority = false,
+  focal,
+  scale,
   className,
   imgClassName,
   style,
 }: PictureProps) {
   const media = typeof image === 'string' ? getImage(image) : image;
   const fallback = media.sources.webp[media.sources.webp.length - 1];
+  const position = fit === 'cover' ? (focal ?? media.focal) : undefined;
+  const imgStyle: CSSProperties | undefined =
+    fit === 'cover' && (position || scale)
+      ? {
+          objectPosition: position,
+          ...(scale ? { transform: `scale(${scale})`, transformOrigin: position ?? 'center' } : {}),
+        }
+      : undefined;
 
   return (
     <picture
@@ -55,7 +69,7 @@ export function Picture({
         decoding="async"
         fetchPriority={priority ? 'high' : 'auto'}
         className={cn('block size-full', fit === 'cover' ? 'object-cover' : 'object-contain', imgClassName)}
-        style={fit === 'cover' && media.focal ? { objectPosition: media.focal } : undefined}
+        style={imgStyle}
       />
     </picture>
   );

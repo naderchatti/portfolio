@@ -95,7 +95,7 @@ for (const slug of compactOrder) {
 screens.forEach((s) => refImage(s.image, 'lab screens'));
 usesIntro.figures.forEach((f) => refImage(f.image, 'uses intro'));
 for (const section of usesSections) {
-  [...(section.figures ?? []), ...(section.buildLog ?? [])].forEach((f) => refImage(f.image, `uses/${section.id}`));
+  [...(section.figures ?? []), ...(section.gallery ?? [])].forEach((f) => refImage(f.image, `uses/${section.id}`));
   if (section.video) {
     refImage(section.video.fallback, `uses/${section.id}`);
     if (!(section.video.name in generatedVideos)) errors.push(`uses/${section.id}: unknown video "${section.video.name}"`);

@@ -61,6 +61,7 @@ export default async function LabPage({ params }: PageProps<'/[lang]/lab'>) {
           lang={lang}
           ratio="16/9"
           priority
+          zoom={{ group: 'lab-hero', caption: t(labIntro.hero.caption, lang) }}
           sizes="(min-width: 1120px) 1056px, 100vw"
         />
         <figcaption className="font-mono text-[11.5px] text-muted-foreground max-sm:text-center">

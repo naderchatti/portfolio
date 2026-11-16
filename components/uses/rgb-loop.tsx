@@ -67,7 +67,7 @@ export function RgbLoop({ src, poster, width, height, label, playLabel, pauseLab
         aria-label={label}
         onPlay={() => setPaused(false)}
         onPause={() => setPaused(true)}
-        className="block w-full rounded-card border bg-muted object-cover motion-reduce:hidden"
+        className="block h-auto w-full rounded-card border bg-muted object-contain motion-reduce:hidden"
         style={style}
       />
       {/* eslint-disable-next-line @next/next/no-img-element -- static export, poster is a plain JPEG */}
@@ -78,7 +78,7 @@ export function RgbLoop({ src, poster, width, height, label, playLabel, pauseLab
         height={height}
         loading="lazy"
         decoding="async"
-        className="hidden w-full rounded-card border bg-muted object-cover motion-reduce:block"
+        className="hidden h-auto w-full rounded-card border bg-muted object-contain motion-reduce:block"
         style={style}
       />
       <button

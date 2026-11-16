@@ -35,7 +35,8 @@ export type LabNode = {
   name: Localized;
   hardware: Localized;
   status: 'up' | 'down';
-  image?: { name: MediaName; caption: Localized };
+  /** `focal` crops a shared rack photo onto this machine. */
+  image?: { name: MediaName; caption: Localized; focal?: string; scale?: number };
 };
 
 export const nodes: readonly LabNode[] = [
@@ -47,6 +48,12 @@ export const nodes: readonly LabNode[] = [
       fr: 'Raspberry Pi 4B 8 Go : Home Assistant, Traefik v3.7, Pi-hole, Tailscale, snapclient',
     },
     status: 'up',
+    image: {
+      name: 'rack-night',
+      focal: '58% 30%',
+      scale: 1.9,
+      caption: { en: 'Pi and switch, top shelf', fr: 'Pi et switch, étagère du haut' },
+    },
   },
   {
     id: 'node/02',
@@ -56,6 +63,12 @@ export const nodes: readonly LabNode[] = [
       fr: 'Proxmox VE 8.2 sur un portable recyclé, un ASUS VivoBook S14 (i7-8550U, 16 Go) : 14 LXC, sauvegardes hebdomadaires vers le NAS',
     },
     status: 'up',
+    image: {
+      name: 'rack-front',
+      focal: '50% 42%',
+      scale: 1.35,
+      caption: { en: 'Laptops on the middle shelves', fr: 'Portables sur les étagères du milieu' },
+    },
   },
   {
     id: 'node/03',
@@ -78,6 +91,12 @@ export const nodes: readonly LabNode[] = [
       fr: 'Portable ASUS (i5, 8 Go) : Postgres/pgvector, Temporal, S3 (Garage), BuildKit',
     },
     status: 'up',
+    image: {
+      name: 'rack-side',
+      focal: '82% 28%',
+      scale: 1.7,
+      caption: { en: 'Stacked laptops, side view', fr: 'Portables empilés, vue de côté' },
+    },
   },
 ];
 

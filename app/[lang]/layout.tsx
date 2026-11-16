@@ -5,6 +5,9 @@ import { fontVariables } from '../fonts';
 import { ThemeProvider } from '@/components/theme-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { Lightbox } from '@/components/media/lightbox';
+import { t } from '@/content/types';
+import { uiMedia } from '@/content/ui-media';
 import { getMessages, isLocale, locales } from '@/lib/i18n';
 import { site } from '@/lib/site';
 
@@ -78,6 +81,15 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
             </main>
             <SiteFooter locale={lang} messages={messages} />
           </div>
+          <Lightbox
+            strings={{
+              dialog: t(uiMedia.dialog, lang),
+              close: t(uiMedia.close, lang),
+              previous: t(uiMedia.previous, lang),
+              next: t(uiMedia.next, lang),
+              position: t(uiMedia.position, lang),
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

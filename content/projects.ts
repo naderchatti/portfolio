@@ -9,6 +9,16 @@ export type ProjectMedia =
   /** A row of phone screenshots. */
   | { kind: 'screens'; items: readonly MediaName[] };
 
+/** Attribution line: `before` + linked `name` + optional `after`. */
+export type Credit = { before: Localized; name: string; href: string; after?: Localized };
+
+const erdal = { name: 'Erdal Toprak', href: 'https://erdaltoprak.com/' } as const;
+
+const builtAtChtprk: Credit = {
+  before: { en: 'Built at CHTPRK with ', fr: 'Réalisé chez CHTPRK avec ' },
+  ...erdal,
+};
+
 export type Project = {
   slug: string;
   name: string;
@@ -21,8 +31,10 @@ export type Project = {
   summary: Localized;
   bullets: readonly Localized[];
   stack: readonly string[];
-  /** One engineering decision worth calling out. */
+  /** One engineering decision worth calling out (kept as data; not rendered on the home page). */
   detail: Localized;
+  /** Who it was built with. */
+  credit?: Credit;
   media: ProjectMedia;
   link?: { href: string; label: string };
 };
@@ -69,6 +81,7 @@ export const projects: readonly Project[] = [
       light: 'ugckit-landing-light',
       caption: { en: 'ugckit.ai · landing', fr: 'ugckit.ai · accueil' },
     },
+    credit: builtAtChtprk,
     link: { href: 'https://ugckit.ai', label: 'ugckit.ai' },
   },
   {
@@ -105,6 +118,14 @@ export const projects: readonly Project[] = [
       dark: 'chtprk-landing',
       light: 'chtprk-landing-light',
       caption: { en: 'chtprk.com · landing', fr: 'chtprk.com · accueil' },
+    },
+    credit: {
+      before: { en: 'Co-founded with ', fr: 'Cofondé avec ' },
+      ...erdal,
+      after: {
+        en: ', who also writes code and leads most of the infrastructure and servers.',
+        fr: ', qui code aussi et pilote l’essentiel de l’infrastructure et des serveurs.',
+      },
     },
     link: { href: 'https://chtprk.com', label: 'chtprk.com' },
   },
@@ -145,14 +166,14 @@ export const projects: readonly Project[] = [
       en: 'Every screen is reviewed against its design board in light and dark.',
       fr: 'Chaque écran est vérifié par rapport à sa maquette, en thème clair comme en thème sombre.',
     },
-    media: { kind: 'screens', items: ['fourma-home', 'fourma-live-light', 'fourma-editor'] },
+    media: { kind: 'screens', items: ['fourma-store-home', 'fourma-store-live', 'fourma-store-progress'] },
   },
   {
     slug: 'egouvernement',
     name: 'eGouvernement',
     period: '2024–25',
     status: 'archived',
-    affiliation: { en: 'Co-founder · top contributor', fr: 'Cofondateur · principal contributeur' },
+    affiliation: { en: 'Co-founder · CHTPRK', fr: 'Cofondateur · CHTPRK' },
     summary: {
       en: 'AI assistant for French administrative procedures: streaming chat with tool calls to official sources (legal texts, Service-Public, government news), on web, Android and iOS.',
       fr: 'Assistant IA pour les démarches administratives françaises : chat en streaming avec appels d’outils vers les sources officielles (textes de loi, Service-Public, actualités du gouvernement), sur le web, Android et iOS.',
@@ -163,6 +184,11 @@ export const projects: readonly Project[] = [
       en: 'Tool registry + executor so answers cite official sources instead of model memory.',
       fr: 'Un registre d’outils et un exécuteur pour que les réponses citent les sources officielles plutôt que la mémoire du modèle.',
     },
-    media: { kind: 'screens', items: ['egov-1', 'egov-2', 'egov-3'] },
+    credit: builtAtChtprk,
+    media: {
+      kind: 'landing',
+      dark: 'egov-desktop',
+      caption: { en: 'Web · Android · iOS', fr: 'Web · Android · iOS' },
+    },
   },
 ];

@@ -6,7 +6,7 @@ export const uiUses = {
     en: 'The hardware and software Nader Chatti builds, games and streams with: PC, desk, streaming gear and dev laptop.',
     fr: 'Le matériel et les logiciels avec lesquels Nader Chatti développe, joue et streame : PC, bureau, matériel de streaming et portable de dev.',
   },
-  buildLog: { en: 'Build log', fr: 'Journal de montage' },
+  gallery: { en: 'Build gallery', fr: 'Galerie du montage' },
   playVideo: { en: 'Play video', fr: 'Lire la vidéo' },
   pauseVideo: { en: 'Pause video', fr: 'Mettre la vidéo en pause' },
   newTab: { en: '(opens in a new tab)', fr: '(s’ouvre dans un nouvel onglet)' },

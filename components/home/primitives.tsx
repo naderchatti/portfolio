@@ -1,4 +1,7 @@
 import type { ReactNode } from 'react';
+import type { Credit } from '@/content/projects';
+import { t } from '@/content/types';
+import type { Locale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 /** Corner registration marks around a framed box (decorative). */
@@ -58,7 +61,15 @@ export function Section({ id, index, title, tag, lead, children, className }: Se
   );
 }
 
-export function Chips({ items, label, className }: { items: readonly string[]; label?: string; className?: string }) {
+type ChipsProps = {
+  items: readonly string[];
+  /** Muted, dashed extra tag after the stack (e.g. a later rebuild). */
+  note?: string;
+  label?: string;
+  className?: string;
+};
+
+export function Chips({ items, note, label, className }: ChipsProps) {
   return (
     <ul aria-label={label} className={cn('flex flex-wrap gap-1', className)}>
       {items.map((item) => (
@@ -69,6 +80,11 @@ export function Chips({ items, label, className }: { items: readonly string[]; l
           {item}
         </li>
       ))}
+      {note ? (
+        <li className="rounded-md border border-dashed px-[7px] py-px font-mono text-[11.5px] text-muted-foreground">
+          {note}
+        </li>
+      ) : null}
     </ul>
   );
 }
@@ -76,7 +92,7 @@ export function Chips({ items, label, className }: { items: readonly string[]; l
 export function Bullets({ items }: { items: readonly string[] }) {
   if (items.length === 0) return null;
   return (
-    <ul className="mb-3 grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-x-6 gap-y-1 text-[13.5px]">
+    <ul className="mb-3 flex max-w-[720px] flex-col gap-1 text-[13.5px]">
       {items.map((item) => (
         <li key={item} className="flex gap-2">
           <span aria-hidden="true" className="mt-2 size-1 flex-none rounded-[1px] bg-muted-foreground" />
@@ -87,13 +103,21 @@ export function Bullets({ items }: { items: readonly string[] }) {
   );
 }
 
-/** `› engineering detail` line. */
-export function Detail({ text, label }: { text: string; label: string }) {
+/** “Built with …” attribution line with an external link on the person's name. */
+export function CreditLine({ credit, lang, newTab }: { credit: Credit; lang: Locale; newTab: string }) {
   return (
-    <p className="mt-3 mb-1.5 font-mono text-xs text-muted-foreground">
-      <span aria-hidden="true">› </span>
-      <span className="sr-only">{label}: </span>
-      {text}
+    <p className="mt-3 mb-1.5 text-[13px] text-muted-foreground">
+      {t(credit.before, lang)}
+      <a
+        href={credit.href}
+        target="_blank"
+        rel="noopener"
+        className="font-medium text-foreground underline underline-offset-[3px] hover:text-muted-foreground"
+      >
+        {credit.name}
+        <span className="sr-only"> {newTab}</span>
+      </a>
+      {credit.after ? t(credit.after, lang) : null}
     </p>
   );
 }

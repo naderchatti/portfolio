@@ -15,6 +15,7 @@ export function ScreensGrid({ lang }: { lang: Locale }) {
               name={screen.image}
               lang={lang}
               ratio="native"
+              zoom={{ group: 'lab-screens', caption: t(screen.caption, lang) }}
               sizes={index === 0 ? '(min-width: 1120px) 1056px, 100vw' : '(min-width: 1120px) 520px, (min-width: 768px) 50vw, 100vw'}
             />
             <figcaption className="font-mono text-[11.5px] text-muted-foreground">{t(screen.caption, lang)}</figcaption>

@@ -590,86 +590,46 @@ export const generatedImages = {
       ]
     }
   },
-  "egov-1": {
-    "name": "egov-1",
-    "width": 1080,
-    "height": 2340,
-    "placeholder": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAAAQBACdASoQACMAPt1cpU2opSOiNUgBEBuJaACdHX+hr7XyboKX40w4iAD+6ZqUPef8KPE8Skbxgd/zBe1clTljzZaobTY46kLPNrTwNdekbuRP+n4PdtGGQLWqSvz9d0c0kUWfvFrn8eMtU7npwXBavk9NEAAA",
+  "egov-desktop": {
+    "name": "egov-desktop",
+    "width": 2560,
+    "height": 1415,
+    "placeholder": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAwAgCdASoQAAkAA4BaJagCdAEPUnY18/R2IAD+iXFoTBLYRvJOxqHElfcFXGX3GnQfMFlRL3rDrrGeb+dhiRkAZIhb3gAA",
     "sources": {
       "avif": [
         {
-          "src": "/media/egov-1-640.avif",
+          "src": "/media/egov-desktop-640.avif",
           "width": 640
         },
         {
-          "src": "/media/egov-1-1080.avif",
-          "width": 1080
+          "src": "/media/egov-desktop-1280.avif",
+          "width": 1280
+        },
+        {
+          "src": "/media/egov-desktop-1920.avif",
+          "width": 1920
+        },
+        {
+          "src": "/media/egov-desktop-1920.avif",
+          "width": 1920
         }
       ],
       "webp": [
         {
-          "src": "/media/egov-1-640.webp",
+          "src": "/media/egov-desktop-640.webp",
           "width": 640
         },
         {
-          "src": "/media/egov-1-1080.webp",
-          "width": 1080
-        }
-      ]
-    }
-  },
-  "egov-2": {
-    "name": "egov-2",
-    "width": 1080,
-    "height": 2340,
-    "placeholder": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAACQBACdASoQACMAPt1Yo02opSMiNUgBEBuJZQDMWC039RH6PHAnZs/1fbQmYYAA/un1zBQlE3MRdsIoIrXgWEUEbjOmSXfvdB/ZGoJjSCyYCYp+JkfGMfrTe8/k7/tIZlttn8/xYUkETrsCczoUfk+H0p2gh4YFIN/xRpJ7wnhBi9gGk+9IDGcFSDAAAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/egov-2-640.avif",
-          "width": 640
+          "src": "/media/egov-desktop-1280.webp",
+          "width": 1280
         },
         {
-          "src": "/media/egov-2-1080.avif",
-          "width": 1080
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/egov-2-640.webp",
-          "width": 640
+          "src": "/media/egov-desktop-1920.webp",
+          "width": 1920
         },
         {
-          "src": "/media/egov-2-1080.webp",
-          "width": 1080
-        }
-      ]
-    }
-  },
-  "egov-3": {
-    "name": "egov-3",
-    "width": 1080,
-    "height": 2340,
-    "placeholder": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoQACMAPulkp02pJaOiNVgIASAdCWkAxzAWGJ6faX04R7EsAP7loWMdtEBdwFT2YwkH4UaOriBB8KLuegF+440R1lWyzgRASl4uuZUCONy2VkLE8SF4QnX9BnBLXHZ7oG8s6WEeZk+oAAAA",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/egov-3-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/egov-3-1080.avif",
-          "width": 1080
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/egov-3-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/egov-3-1080.webp",
-          "width": 1080
+          "src": "/media/egov-desktop-1920.webp",
+          "width": 1920
         }
       ]
     }
@@ -702,86 +662,110 @@ export const generatedImages = {
       ]
     }
   },
-  "fourma-editor": {
-    "name": "fourma-editor",
-    "width": 1080,
-    "height": 2400,
-    "placeholder": "data:image/webp;base64,UklGRsAAAABXRUJQVlA4ILQAAAAwBQCdASoQACQAPuVgp02pJaOiNVgIASAciWMAv+8sASKcH+4dCtIx6RuEOSMHqTIs8AD+711SL0Tw73NFqMu3Zt+GJo3iB640e8b+M/iWXYM6HeErjv6bgKzQAlyTxHfnNWAcg66KSC66jciG1xMd1SkiRX7abuP5CdZp2C/08/nzwzqPM/wx78G8x11SHASyfFE273MHYr9blKSTB8B+vDvqAP1H29wMxPEOHi/y2T+zAAA=",
+  "fourma-store-home": {
+    "name": "fourma-store-home",
+    "width": 1320,
+    "height": 2868,
+    "placeholder": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAABwBACdASoQACMAPu1krE2ppaSiKqwBMB2JaQAAPZPYejwk9xdqy/kkXWi0AAD+8dwv68SlT7zQpaxL9+9+uI+SBoKYKfklHEiFlN/K3VPf4REznG7iNFZrDMqu2uhgfohbg+3wbr5XrDV9PtiyoCTeiYornb0JOItB4AAA",
     "sources": {
       "avif": [
         {
-          "src": "/media/fourma-editor-640.avif",
+          "src": "/media/fourma-store-home-640.avif",
           "width": 640
         },
         {
-          "src": "/media/fourma-editor-1080.avif",
-          "width": 1080
+          "src": "/media/fourma-store-home-1280.avif",
+          "width": 1280
+        },
+        {
+          "src": "/media/fourma-store-home-1320.avif",
+          "width": 1320
         }
       ],
       "webp": [
         {
-          "src": "/media/fourma-editor-640.webp",
+          "src": "/media/fourma-store-home-640.webp",
           "width": 640
         },
         {
-          "src": "/media/fourma-editor-1080.webp",
-          "width": 1080
+          "src": "/media/fourma-store-home-1280.webp",
+          "width": 1280
+        },
+        {
+          "src": "/media/fourma-store-home-1320.webp",
+          "width": 1320
         }
       ]
     }
   },
-  "fourma-home": {
-    "name": "fourma-home",
-    "width": 1080,
-    "height": 2400,
-    "placeholder": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAACQBACdASoQACQAPulipk2pJaOiNVgIASAdCUAZGoL785L7hZDToV0cRNCv9wAA/uleeEB3alvNKAKXxHKoygyci4bU1z53PL5JoPw68G233350u/4wv+ZS97rBoQ6zP+H1/pHDdasePxLbv7puqc6cQ41JMOHs0h57kdm9BDGf/gubqjCPUMwz4E/H2aDrNK8HlcacAAA=",
+  "fourma-store-live": {
+    "name": "fourma-store-live",
+    "width": 1320,
+    "height": 2868,
+    "placeholder": "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAADwBACdASoQACMAPuVkp02pJiOiNVgIASAciWcAzjgWbTjuZy2Jj611SV7NOjvYbwAA/vN/DvLfzUs8QpzO+CrF1IiCsrCMcEeKI39ca4xaNJNeOIU7j9r1OtHJFr4tjvsmzxhb+5cpsJZ74FbEQ9+C6A18BXBSLg6Y667HMTEw1yO3k+7kkYT1IzFN0250nW0HDCAA",
     "sources": {
       "avif": [
         {
-          "src": "/media/fourma-home-640.avif",
+          "src": "/media/fourma-store-live-640.avif",
           "width": 640
         },
         {
-          "src": "/media/fourma-home-1080.avif",
-          "width": 1080
+          "src": "/media/fourma-store-live-1280.avif",
+          "width": 1280
+        },
+        {
+          "src": "/media/fourma-store-live-1320.avif",
+          "width": 1320
         }
       ],
       "webp": [
         {
-          "src": "/media/fourma-home-640.webp",
+          "src": "/media/fourma-store-live-640.webp",
           "width": 640
         },
         {
-          "src": "/media/fourma-home-1080.webp",
-          "width": 1080
+          "src": "/media/fourma-store-live-1280.webp",
+          "width": 1280
+        },
+        {
+          "src": "/media/fourma-store-live-1320.webp",
+          "width": 1320
         }
       ]
     }
   },
-  "fourma-live-light": {
-    "name": "fourma-live-light",
-    "width": 1080,
-    "height": 2400,
-    "placeholder": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAQBACdASoQACQAPu1mqE6ppaOiKqwBMB2JaQAAPZCA6SLnylXSI7EV2AD+8cTD4GQBxjinMMLQiYG4F8930IaQbeN7pANaAPSCDDhnykM9sG822EH905IbG/01ZvOrrDKgAA==",
+  "fourma-store-progress": {
+    "name": "fourma-store-progress",
+    "width": 1320,
+    "height": 2868,
+    "placeholder": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAACwBACdASoQACMAPu1srlCppiQiqqgBMB2JaQDI1BZtBYaWLkZknjUVDiVN7qIAAP7x3C/r1UlQlH8KD5CpbkzcC07n3vs4u9nX6dR2OxI/SMQHUdfdysHwv9Efq4G2KOTmVHbebpiqQanYCjihEebVutmYS3X88LXu1sHFH9OmSqXqAAA=",
     "sources": {
       "avif": [
         {
-          "src": "/media/fourma-live-light-640.avif",
+          "src": "/media/fourma-store-progress-640.avif",
           "width": 640
         },
         {
-          "src": "/media/fourma-live-light-1080.avif",
-          "width": 1080
+          "src": "/media/fourma-store-progress-1280.avif",
+          "width": 1280
+        },
+        {
+          "src": "/media/fourma-store-progress-1320.avif",
+          "width": 1320
         }
       ],
       "webp": [
         {
-          "src": "/media/fourma-live-light-640.webp",
+          "src": "/media/fourma-store-progress-640.webp",
           "width": 640
         },
         {
-          "src": "/media/fourma-live-light-1080.webp",
-          "width": 1080
+          "src": "/media/fourma-store-progress-1280.webp",
+          "width": 1280
+        },
+        {
+          "src": "/media/fourma-store-progress-1320.webp",
+          "width": 1320
         }
       ]
     }
@@ -1317,6 +1301,254 @@ export const generatedImages = {
         },
         {
           "src": "/media/pc-case-1200.webp",
+          "width": 1200
+        }
+      ]
+    }
+  },
+  "pc-gallery-case": {
+    "name": "pc-gallery-case",
+    "width": 1200,
+    "height": 1600,
+    "placeholder": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAACwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JQBYdgqlE/RaiG6wVQAD9vbzNUGcEEHQjbNxwmS9FiJP3rju31Ezil4HXFrykcGM9v2mSmozf6T8Wvj8FMlcumjN0hi5slXKw+D/rCjWq++67yiS4UAls8tfqK/7Dg1XnpD9p1dKdtECeunAAAA==",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-case-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-case-1200.avif",
+          "width": 1200
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-case-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-case-1200.webp",
+          "width": 1200
+        }
+      ]
+    }
+  },
+  "pc-gallery-cpu": {
+    "name": "pc-gallery-cpu",
+    "width": 1200,
+    "height": 1600,
+    "placeholder": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAwAwCdASoQABUAPu1iqU2ppaQiMAgBMB2JYwAAW7dRcCWwAP7r2Nx+fN8MXYxU74jgQjqZ/Ik11P3Cy88Qap0NbkBTOqRZC0qHAAAA",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-cpu-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-cpu-1200.avif",
+          "width": 1200
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-cpu-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-cpu-1200.webp",
+          "width": 1200
+        }
+      ]
+    }
+  },
+  "pc-gallery-flatlay": {
+    "name": "pc-gallery-flatlay",
+    "width": 1600,
+    "height": 1200,
+    "placeholder": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAQAgCdASoQAAwAA4BaJYgAAufhfYDuL84QAP5+r1k5oVxVzDxIpKCa+pBJh+4pfKIvuSInyOiMVWNUu5ZrKZqwHnbT2Om7P6FfKq4ZIq4k0z/r+UIXXFHoAAA=",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-flatlay-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-flatlay-1280.avif",
+          "width": 1280
+        },
+        {
+          "src": "/media/pc-gallery-flatlay-1600.avif",
+          "width": 1600
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-flatlay-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-flatlay-1280.webp",
+          "width": 1280
+        },
+        {
+          "src": "/media/pc-gallery-flatlay-1600.webp",
+          "width": 1600
+        }
+      ]
+    }
+  },
+  "pc-gallery-gpu": {
+    "name": "pc-gallery-gpu",
+    "width": 1600,
+    "height": 1200,
+    "placeholder": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAACwAQCdASoQAAwAA4BaJaQAAn9nNXrAAP7pA51AbifDqo2uBDOI9JksOhr6T3L7yyNZVBfU/+BE73wZnYAAAA==",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-gpu-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-gpu-1280.avif",
+          "width": 1280
+        },
+        {
+          "src": "/media/pc-gallery-gpu-1600.avif",
+          "width": 1600
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-gpu-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-gpu-1280.webp",
+          "width": 1280
+        },
+        {
+          "src": "/media/pc-gallery-gpu-1600.webp",
+          "width": 1600
+        }
+      ]
+    }
+  },
+  "pc-gallery-lights-on": {
+    "name": "pc-gallery-lights-on",
+    "width": 1200,
+    "height": 1600,
+    "placeholder": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAADQAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JQAAKL2L5AGCf1I0zaYAA/mFRforUy1BycGiT7PhUdV8VPOwz+OgzYm8oG51xo3cl9YDQsMwXHtW0IJjyjPFk4PdgXD2+R+CI869isueed5Gv+VTrVn9FAUYsQz4AKUVDXofNXkG6wD7YTG055p/yNI/wAA==",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-lights-on-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-lights-on-1200.avif",
+          "width": 1200
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-lights-on-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-lights-on-1200.webp",
+          "width": 1200
+        }
+      ]
+    }
+  },
+  "pc-gallery-motherboard": {
+    "name": "pc-gallery-motherboard",
+    "width": 1600,
+    "height": 1200,
+    "placeholder": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABQAgCdASoQAAwAA4BaJZwC7AEDH6G3DxDWGAAA/ttyxKz7E550a8V/Z8l4Yz6+wtDaSZwWUYgn4hRFvRyA93dZnKL5IT5TAJExU9I+FNclevRYObyDxAo7zSIAAA==",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-motherboard-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-motherboard-1280.avif",
+          "width": 1280
+        },
+        {
+          "src": "/media/pc-gallery-motherboard-1600.avif",
+          "width": 1600
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-motherboard-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-motherboard-1280.webp",
+          "width": 1280
+        },
+        {
+          "src": "/media/pc-gallery-motherboard-1600.webp",
+          "width": 1600
+        }
+      ]
+    }
+  },
+  "pc-gallery-ram": {
+    "name": "pc-gallery-ram",
+    "width": 1200,
+    "height": 1600,
+    "placeholder": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAACQAwCdASoQABUAPu1iqk4ppaQiMAgBMB2JZwAAW9oKnX2Qb7EsAP7r8n0lH/z2t2K9I7tNySqli5EkywTkCyTDwWQnuJ1txm4KyGW3SSNgUVkwx06zhYN/Fg3Q3B8mHMHsWShP16gAAA==",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-ram-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-ram-1200.avif",
+          "width": 1200
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-ram-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-ram-1200.webp",
+          "width": 1200
+        }
+      ]
+    }
+  },
+  "pc-gallery-ssd": {
+    "name": "pc-gallery-ssd",
+    "width": 1200,
+    "height": 1600,
+    "placeholder": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAACwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZwAAXrnoVmkaHRqACAD+ih8jyb37EIsLwPnWy9t1QBA4NYzzjU5R3MbiPFcYmA76LFYqiwjTS+vIMCnj9KCEOU+mlggwazrzrFRvSWLC+0bZY4+yx6MXDWEeuILC8G0fRO6YQAA=",
+    "sources": {
+      "avif": [
+        {
+          "src": "/media/pc-gallery-ssd-640.avif",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-ssd-1200.avif",
+          "width": 1200
+        }
+      ],
+      "webp": [
+        {
+          "src": "/media/pc-gallery-ssd-640.webp",
+          "width": 640
+        },
+        {
+          "src": "/media/pc-gallery-ssd-1200.webp",
           "width": 1200
         }
       ]
