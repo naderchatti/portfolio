@@ -81,7 +81,9 @@ function BuildTile({
         featured && 'md:col-span-2 md:grid md:grid-cols-2 md:items-start',
       )}
     >
-      {tile.media ? <TileMedia media={tile.media} lang={lang} featured={featured} /> : null}
+      {tile.media ? (
+        <TileMedia media={tile.media} lang={lang} featured={featured} group={`lab-${tile.slug}`} title={title} />
+      ) : null}
       <div className="flex h-full flex-col gap-2.5">
         <h3 className="text-[15px] font-semibold">{title}</h3>
         <p className="text-[13px] text-muted-foreground">{t(tile.summary, lang)}</p>
@@ -122,16 +124,21 @@ function TileMedia({
   media,
   lang,
   featured,
+  group,
+  title,
 }: {
   media: NonNullable<LabTile['media']>;
   lang: Locale;
   featured: boolean;
+  group: string;
+  title: string;
 }) {
   const thumbs = media.thumbs ?? [];
   const mainSizes = featured
     ? '(min-width: 1024px) 340px, (min-width: 768px) 45vw, 100vw'
     : '(min-width: 1024px) 340px, (min-width: 768px) 50vw, 100vw';
   const caption = media.caption ? t(media.caption, lang) : null;
+  const zoom = { group, caption: caption ? `${title} · ${caption}` : title };
   // A single thumbnail in a normal tile sits beside the caption (before/after).
   const inline = !featured && thumbs.length === 1;
   const landscapeThumbs = thumbs.length > 0 && thumbs.every(isLandscape);
@@ -145,10 +152,11 @@ function TileMedia({
         ratio={isScreenshot(media.main) ? 'native' : '4/3'}
         radius="lg"
         sizes={mainSizes}
+        zoom={zoom}
       />
       {inline ? (
         <div className="grid grid-cols-[80px_1fr] items-end gap-2.5">
-          <FramedImage name={thumbs[0]!} lang={lang} ratio="3/4" radius="lg" sizes="80px" />
+          <FramedImage name={thumbs[0]!} lang={lang} ratio="3/4" radius="lg" sizes="80px" zoom={zoom} />
           {caption ? <figcaption className="font-mono text-[11.5px] text-muted-foreground">{caption}</figcaption> : null}
         </div>
       ) : (
@@ -163,6 +171,7 @@ function TileMedia({
                   ratio={isLandscape(name) ? '4/3' : '3/4'}
                   radius="lg"
                   sizes="(min-width: 768px) 120px, 33vw"
+                  zoom={zoom}
                 />
               ))}
             </div>

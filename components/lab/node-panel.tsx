@@ -15,7 +15,7 @@ export function NodePanel({ lang }: { lang: Locale }) {
           <li
             key={node.id}
             className={[
-              'border-b p-5 last:border-b-0',
+              'flex flex-col border-b p-5 last:border-b-0',
               // 2 columns: right border on the left column, no bottom border on the last row.
               'sm:[&:nth-child(odd)]:border-r sm:[&:nth-last-child(-n+2)]:border-b-0',
               'lg:border-b-0 lg:border-r lg:last:border-r-0',
@@ -32,15 +32,18 @@ export function NodePanel({ lang }: { lang: Locale }) {
               </span>
             </div>
             <h3 className="text-[15px] font-semibold">{t(node.name, lang)}</h3>
-            <p className="mt-1 text-[13px] text-muted-foreground">{t(node.hardware, lang)}</p>
+            <p className="mt-1 mb-3 text-[13px] text-muted-foreground">{t(node.hardware, lang)}</p>
             {node.image ? (
-              <figure className="mt-3">
+              <figure className="mt-auto">
                 <FramedImage
                   name={node.image.name}
                   lang={lang}
                   ratio="4/3"
                   radius="lg"
+                  focal={node.image.focal}
+                  scale={node.image.scale}
                   sizes="(min-width: 1024px) 240px, (min-width: 640px) 50vw, 100vw"
+                  zoom={{ group: 'lab-nodes', caption: `${t(node.name, lang)} · ${t(node.image.caption, lang)}` }}
                 />
                 <figcaption className="mt-1.5 font-mono text-[11.5px] text-muted-foreground">
                   {t(node.image.caption, lang)}

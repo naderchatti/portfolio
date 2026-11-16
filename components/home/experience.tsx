@@ -1,5 +1,5 @@
 import { ArrowUpRight } from 'lucide-react';
-import { Bullets, Chips, Detail, Section } from '@/components/home/primitives';
+import { Bullets, Chips, Section } from '@/components/home/primitives';
 import { experience } from '@/content/experience';
 import { t } from '@/content/types';
 import { uiHome } from '@/content/ui-home';
@@ -44,14 +44,13 @@ export function Experience({ lang, messages }: ExperienceProps) {
               </h3>
               <p className="mt-1 mb-2.5 max-w-[720px] text-[14.5px] text-pretty">{t(job.summary, lang)}</p>
               <Bullets items={job.bullets.map((bullet) => t(bullet, lang))} />
-              <Chips items={job.stack} />
-              {job.detail ? <Detail text={t(job.detail, lang)} label={messages.project.detail} /> : null}
+              <Chips items={job.stack} note={job.stackNote ? t(job.stackNote, lang) : undefined} />
               {job.link ? (
                 <a
                   href={job.link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 inline-flex min-h-11 items-center gap-1.5 font-mono text-xs font-medium underline underline-offset-[3px] sm:min-h-0"
+                  className="mt-2.5 inline-flex min-h-11 items-center gap-1.5 font-mono text-xs font-medium underline underline-offset-[3px] sm:min-h-0"
                 >
                   {job.link.label}
                   <ArrowUpRight className="size-[13px]" aria-hidden="true" />

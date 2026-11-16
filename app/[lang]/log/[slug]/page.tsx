@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Logo } from '@/components/logo';
 import { Picture } from '@/components/media/picture';
+import { Zoomable } from '@/components/media/zoomable';
 import { minutesLabel } from '@/components/log/post-card';
 import prose from '@/components/log/prose.module.css';
 import { TableOfContents } from '@/components/log/toc';
@@ -127,14 +128,16 @@ export default async function PostPage({ params }: PageProps<'/[lang]/log/[slug]
           <div className={prose.prose}>
             {showCover ? (
               <figure>
-                <Picture
-                  image={cover}
-                  lang={lang}
-                  priority
-                  fit={cover.focal ? 'cover' : 'contain'}
-                  sizes="(min-width: 1080px) 720px, 100vw"
-                  className="aspect-[4/3] rounded-card border bg-secondary"
-                />
+                <Zoomable image={cover} lang={lang} group="post" className="rounded-card">
+                  <Picture
+                    image={cover}
+                    lang={lang}
+                    priority
+                    fit={cover.focal ? 'cover' : 'contain'}
+                    sizes="(min-width: 1080px) 720px, 100vw"
+                    className="aspect-[4/3] rounded-card border bg-secondary"
+                  />
+                </Zoomable>
               </figure>
             ) : null}
 

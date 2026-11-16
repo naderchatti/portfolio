@@ -1,6 +1,8 @@
 import { ArrowUpRight, Lock } from 'lucide-react';
 import { Picture } from '@/components/media/picture';
-import { Bullets, Chips, Detail, Section, format } from '@/components/home/primitives';
+import { Zoomable } from '@/components/media/zoomable';
+import { getImage } from '@/content/media';
+import { Bullets, Chips, CreditLine, Section, format } from '@/components/home/primitives';
 import { projects, type Project, type ProjectStatus } from '@/content/projects';
 import { t } from '@/content/types';
 import { uiHome } from '@/content/ui-home';
@@ -91,7 +93,9 @@ function ProjectRow({ project, lang, messages }: { project: Project; lang: Local
 
           <ProjectMedia project={project} lang={lang} />
 
-          <Detail text={t(project.detail, lang)} label={messages.project.detail} />
+          {project.credit ? (
+            <CreditLine credit={project.credit} lang={lang} newTab={t(uiHome.newTab, lang)} />
+          ) : null}
 
           {project.link ? (
             canVisit ? (
@@ -117,18 +121,32 @@ function ProjectRow({ project, lang, messages }: { project: Project; lang: Local
 function ProjectMedia({ project, lang }: { project: Project; lang: Locale }) {
   const media = project.media;
 
+  const group = `project-${project.slug}`;
+
   if (media.kind === 'landing') {
-    const frame = cn('aspect-[1840/996] rounded-card border', SCREEN_SURFACE);
+    const dark = getImage(media.dark);
+    const frame = cn('rounded-card border', SCREEN_SURFACE);
+    // The frame follows the screenshot's own aspect, so wide composites are never cropped.
+    const style = { aspectRatio: `${dark.width} / ${dark.height}` };
     const sizes = '(min-width: 640px) 520px, calc(100vw - 32px)';
+    const caption = t(media.caption, lang);
+    const zoomed = (name: typeof media.dark, className: string) => {
+      const image = getImage(name);
+      return (
+        <Zoomable image={image} lang={lang} group={group} caption={`${project.name} · ${caption}`} className={cn('rounded-card', className)}>
+          <Picture image={image} lang={lang} fit="contain" sizes={sizes} className={frame} style={style} />
+        </Zoomable>
+      );
+    };
     return (
       <figure className="mt-3.5 mb-1 flex max-w-[520px] flex-col gap-1.5">
         {media.light ? (
           <>
-            <Picture image={media.light} lang={lang} fit="contain" sizes={sizes} className={cn(frame, 'dark:hidden')} />
-            <Picture image={media.dark} lang={lang} fit="contain" sizes={sizes} className={cn(frame, 'hidden dark:block')} />
+            {zoomed(media.light, 'dark:hidden')}
+            {zoomed(media.dark, 'hidden dark:block')}
           </>
         ) : (
-          <Picture image={media.dark} lang={lang} fit="contain" sizes={sizes} className={frame} />
+          zoomed(media.dark, '')
         )}
         <figcaption className="font-mono text-[11.5px] text-muted-foreground">{t(media.caption, lang)}</figcaption>
       </figure>
@@ -142,13 +160,15 @@ function ProjectMedia({ project, lang }: { project: Project; lang: Locale }) {
     >
       {media.items.map((item) => (
         <li key={item}>
-          <Picture
-            image={item}
-            lang={lang}
-            fit="contain"
-            sizes="(min-width: 640px) 140px, 30vw"
-            className={cn('aspect-[9/19.5] rounded-[20px] border', SCREEN_SURFACE)}
-          />
+          <Zoomable image={getImage(item)} lang={lang} group={group} caption={project.name} className="rounded-[20px]">
+            <Picture
+              image={item}
+              lang={lang}
+              fit="contain"
+              sizes="(min-width: 640px) 140px, 30vw"
+              className={cn('aspect-[9/19.5] rounded-[20px] border', SCREEN_SURFACE)}
+            />
+          </Zoomable>
         </li>
       ))}
     </ul>

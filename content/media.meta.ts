@@ -26,27 +26,30 @@ export const mediaMeta = {
   'chtprk-landing-light': {
     alt: { en: 'chtprk.com landing page in light mode', fr: 'Page d’accueil de chtprk.com en thème clair' },
   },
-  'fourma-home': {
+  'fourma-store-home': {
     alt: {
-      en: 'Fourma home screen with today’s plan and weekly activity',
-      fr: 'Écran d’accueil de Fourma avec la séance du jour et l’activité de la semaine',
+      en: 'Fourma App Store screen “Your training, planned”: the home screen with this week’s plan and today’s Upper power workout',
+      fr: 'Écran App Store de Fourma « Your training, planned » : l’accueil avec le programme de la semaine et la séance Upper power du jour',
     },
   },
-  'fourma-live-light': {
+  'fourma-store-live': {
     alt: {
-      en: 'Fourma live workout: a guided set with weight and reps steppers',
-      fr: 'Séance en direct dans Fourma : une série guidée avec réglage du poids et des répétitions',
+      en: 'Fourma App Store screen “Every rep, guided”: a live barbell bench press set with weight and reps steppers',
+      fr: 'Écran App Store de Fourma « Every rep, guided » : une série de développé couché en direct avec réglage du poids et des répétitions',
     },
   },
-  'fourma-editor': {
+  'fourma-store-progress': {
     alt: {
-      en: 'Fourma workout editor listing exercises with their sets and targets',
-      fr: 'Éditeur de séance de Fourma listant les exercices avec leurs séries et objectifs',
+      en: 'Fourma App Store screen “See yourself get stronger”: progress stats, weekly consistency chart and personal records',
+      fr: 'Écran App Store de Fourma « See yourself get stronger » : statistiques de progression, régularité par semaine et records personnels',
     },
   },
-  'egov-1': { alt: { en: 'eGouvernement Android splash screen', fr: 'Écran de démarrage Android d’eGouvernement' } },
-  'egov-2': { alt: { en: 'eGouvernement services list', fr: 'Liste des services d’eGouvernement' } },
-  'egov-3': { alt: { en: 'eGouvernement assistant chat', fr: 'Chat de l’assistant eGouvernement' } },
+  'egov-desktop': {
+    alt: {
+      en: 'eGouvernement on a desktop browser, an Android phone and an iPhone: the assistant home page with suggested questions, the services list and the chat',
+      fr: 'eGouvernement sur un navigateur de bureau, un téléphone Android et un iPhone : l’accueil de l’assistant avec des questions suggérées, la liste des services et le chat',
+    },
+  },
 
   // L'Effiloché
   'kitchen-board': {
@@ -372,5 +375,55 @@ export const mediaMeta = {
       en: 'The finished PC lit up with white and blue RGB and Strimer cables',
       fr: 'Le PC terminé, éclairé en RGB blanc et bleu avec les câbles Strimer',
     },
+  },
+  'pc-gallery-flatlay': {
+    alt: {
+      en: 'All the boxed parts laid out on the desk before the build: ROG motherboard, cooler, PSU, Herculx holder, RAM and Strimer cables',
+      fr: 'Toutes les pièces en boîte posées sur le bureau avant le montage : carte mère ROG, watercooling, alimentation, support Herculx, RAM et câbles Strimer',
+    },
+    focal: '50% 60%',
+  },
+  'pc-gallery-case': {
+    alt: { en: 'The empty ASUS ROG Hyperion case', fr: 'Le boîtier ASUS ROG Hyperion, vide' },
+    focal: '55% 50%',
+  },
+  'pc-gallery-motherboard': {
+    alt: {
+      en: 'Close-up of the ROG Strix Z790-E motherboard around the CPU socket',
+      fr: 'Gros plan de la carte mère ROG Strix Z790-E autour du socket du processeur',
+    },
+    focal: '50% 45%',
+  },
+  'pc-gallery-cpu': {
+    alt: { en: 'The Intel Core i7-13700K box', fr: 'La boîte de l’Intel Core i7-13700K' },
+    focal: '55% 45%',
+  },
+  'pc-gallery-ram': {
+    alt: {
+      en: 'The G.Skill Trident Z5 RGB DDR5 kit in its box',
+      fr: 'Le kit G.Skill Trident Z5 RGB DDR5 dans sa boîte',
+    },
+    focal: '50% 60%',
+  },
+  'pc-gallery-ssd': {
+    alt: {
+      en: 'Two Samsung 990 Pro 2 TB NVMe drives with their boxes',
+      fr: 'Deux SSD NVMe Samsung 990 Pro 2 To avec leurs boîtes',
+    },
+    focal: '50% 50%',
+  },
+  'pc-gallery-gpu': {
+    alt: {
+      en: 'The ROG Strix GeForce RTX 4080 graphics card, backplate up',
+      fr: 'La carte graphique ROG Strix GeForce RTX 4080, backplate visible',
+    },
+    focal: '50% 50%',
+  },
+  'pc-gallery-lights-on': {
+    alt: {
+      en: 'The finished PC in the Hyperion case, lit in white and blue',
+      fr: 'Le PC terminé dans le boîtier Hyperion, éclairé en blanc et bleu',
+    },
+    focal: '45% 55%',
   },
 } as const satisfies Record<GeneratedImageName, MediaMeta>;

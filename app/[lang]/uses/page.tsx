@@ -51,15 +51,16 @@ export default async function UsesPage({ params }: PageProps<'/[lang]/uses'>) {
     <div className="mx-auto max-w-[1120px] px-4 sm:px-8">
       <div className="flex flex-col gap-8 pt-16 pb-14">
         <PageHeader path="uses" title={t(usesIntro.title, lang)} lead={t(usesIntro.lead, lang)} size="lg" />
-        <div className="grid max-w-[880px] grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="mx-auto grid w-full max-w-[320px] grid-cols-1 gap-4 sm:mx-0 sm:max-w-[672px] sm:grid-cols-2">
           {usesIntro.figures.map((figure, index) => (
             <figure key={figure.image} className="flex flex-col gap-2">
               <FramedImage
                 name={figure.image}
                 lang={lang}
-                ratio="3/4"
+                ratio="1/1"
                 priority={index === 0}
-                sizes="(min-width: 960px) 432px, (min-width: 640px) 50vw, 100vw"
+                sizes="(min-width: 640px) 330px, 320px"
+                zoom={{ group: 'uses-cats', caption: t(figure.caption, lang) }}
               />
               <figcaption className="font-mono text-xs text-muted-foreground max-sm:text-center">
                 {t(figure.caption, lang)}
