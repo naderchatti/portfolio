@@ -26,6 +26,7 @@ sources:
   - 'https://pi-hole.net/'
   - 'https://github.com/lovelaze/nebula-sync'
   - 'https://www.quad9.net/'
+  - 'https://erdaltoprak.com/'
 ---
 
 Tout ce que j'auto-héberge doit être joignable d'une manière ou d'une autre : depuis le canapé, et depuis mon téléphone en 4G. Cet article parle de cette couche de bordure : le reverse proxy, le découpage du réseau, la façon dont j'y accède à distance, et comment le DNS tient quand un résolveur tombe.
@@ -33,6 +34,8 @@ Tout ce que j'auto-héberge doit être joignable d'une manière ou d'une autre :
 ## Traefik v3.7
 
 Le point d'entrée unique pour le HTTP(S), c'est **Traefik** (actuellement en v3.7.12), qui tourne dans Docker sur le Raspberry Pi 4. Son tableau de bord affiche en ce moment **36 routeurs HTTP, 54 services et 12 middlewares**, tous au vert.
+
+Je n'y suis pas arrivé seul. J'ai mis au point cette configuration avec [Erdal Toprak](https://erdaltoprak.com/) : nous avons trouvé ensemble le découpage des providers, la mise en place des certificats et les chaînes de middlewares, et testé chaque configuration côte à côte avant sa mise en service.
 
 ![Tableau de bord Traefik](media:traefik)
 
@@ -107,3 +110,5 @@ Chaque Pi-hole a son propre sidecar **cloudflared**, utilisé uniquement comme u
 ## Pour conclure
 
 Aucune de ces briques n'est exotique. Ce qui rend la bordure agréable à vivre, c'est la cohérence : un proxy, un certificat, la même politique d'en-têtes partout, les interfaces d'admin gardées sur le LAN, un seul accès pour moi, et deux résolveurs pour tous les autres. Le point qui me gêne encore, c'est le `insecureSkipVerify` global, et il est écrit noir sur blanc ci-dessus plutôt que caché.
+
+Merci à [Erdal Toprak](https://erdaltoprak.com/) d'avoir cherché et testé la configuration de Traefik avec moi.

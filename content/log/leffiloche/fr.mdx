@@ -1,0 +1,80 @@
+---
+title: "L'Effiloché : tout le restaurant sur une seule plateforme"
+slug: leffiloche
+summary: >-
+  La commande, la cuisine, la livraison et les écrans en boutique que j'ai
+  construits pour L'Effiloché, un street-food et coffee shop : une seule
+  plateforme, du téléphone du client à la tablette de la cuisine et au camion de
+  livraison, aujourd'hui en phase de tests finaux.
+excerpt: >-
+  Commande, tableau de la cuisine, suivi en direct, tournées de livraison et
+  écrans en boutique pour un street-food.
+category: saas
+inside:
+  - Commande
+  - Tableau de la cuisine
+  - Suivi en direct
+  - Tournées de livraison
+  - Écrans en boutique
+  - Sous le capot
+cover: kitchen-board
+date: null
+draft: false
+sources: []
+---
+
+L'Effiloché est un street-food et coffee shop dont je pilote toute l'informatique. Une boutique comme celle-ci tourne en général sur un patchwork : une tablette par application de livraison, une imprimante en cuisine, un tableur pour le camion, une clé USB dans la télé. Je voulais une seule plateforme où une commande passée sur un téléphone apparaît en cuisine, sur la page de suivi du client et, pour une livraison, dans la tournée du livreur, sans que personne ne la ressaisisse.
+
+Elle n'est pas encore en service. La plateforme est en phase de tests finaux avec l'équipe avant la mise en service : ce qui suit décrit le système tel qu'il tourne pendant ces tests.
+
+## Commande
+
+Les clients commandent sur le site, depuis un ordinateur ou leur téléphone. La carte affiche ce qui est réellement disponible à l'instant : la cuisine peut marquer un plat comme épuisé, et tout le service peut être ouvert, mis en pause 15 ou 30 minutes, prolongé ou fermé depuis la cuisine, pour que le site ne prenne jamais une commande que l'équipe ne peut pas assurer. Une petite pastille indique au client si la boutique est ouverte et quel est le prochain créneau de retrait.
+
+![Menu web client](media:customer-web-menu)
+
+On peut commander de trois façons : en click-and-collect avec un créneau de retrait, sur place, ou en livraison. Les plats se personnalisent, et le prix de chaque option est calculé par une seule règle partagée : la carte, le panier et le ticket de cuisine sont toujours d'accord.
+
+![Menu mobile client](media:customer-mobile-menu)
+
+## Tableau de la cuisine
+
+En cuisine, les commandes arrivent sur un tableau en colonnes, de « à faire » à « prêt », les plus anciennes en premier. Les allergies sont toujours visibles sur la carte. Passer une commande à la colonne suivante se fait d'un seul geste, et la carte bouge tout de suite ; si le serveur refuse le changement (quelqu'un l'a déjà déplacée, par exemple), elle revient à sa place avec un message visible.
+
+![Tableau de la cuisine](media:kitchen-board)
+
+Le tableau tourne dans le navigateur et dans une application Android sur la tablette de la cuisine. L'application garde l'écran allumé et désactive les actions quand la tablette perd le réseau, pour que personne ne tape dans le vide en plein service.
+
+Une nouvelle commande déclenche une alarme qui se répète jusqu'à ce que quelqu'un appuie sur « Vu ». L'acquittement est partagé : le premier appui, sur n'importe quel écran de la cuisine, les fait tous taire. Comme une tablette de cuisine n'est pas toujours au premier plan, l'application Android utilise une notification sonore forte et répétée, qui fonctionne même écran éteint.
+
+![Alerte de nouvelle commande sur l'écran de la cuisine](media:kitchen-new-order-alert)
+
+## Suivi en direct
+
+Après sa commande, le client reçoit une page de suivi qui se met à jour toute seule : reçue, en préparation, prête, ou, pour une livraison, en attente, en route et arrivée. Pendant que le camion roule, elle peut afficher une position approximative et une fenêtre d'arrivée. Elle ne montre volontairement rien du livreur, de l'itinéraire ou des arrêts des autres clients, et elle masque la position dès que les données sont trop anciennes.
+
+![Suivi de commande client](media:customer-tracking)
+
+Au comptoir, la commande est remise contre un code de retrait, pour que le bon sac parte avec la bonne personne.
+
+## Tournées de livraison
+
+La livraison ne fonctionne pas comme la boutique. Un camion part avec une sélection fixe de produits et un stock limité, et les clients de la zone desservie commandent uniquement dans ce stock. Chaque produit du camion suit ce qui a été chargé, réservé, livré et rapporté, et une commande ne peut jamais prendre plus que ce qui reste. Si deux clients veulent la dernière portion au même moment, l'un l'obtient et l'autre reçoit un message clair, « plus disponible », au lieu d'un camion survendu.
+
+Chaque nouvelle commande en livraison s'ajoute comme un arrêt à la tournée du livreur. Le livreur travaille depuis son téléphone avec la liste des arrêts et marque chacun comme livré ; sa position en direct alimente les estimations d'arrivée des clients.
+
+En fin de tournée, un administrateur compte ce qui revient et le répartit entre rapporté, abîmé, perdu ou manquant. Une fois confirmée, la tournée est verrouillée avec son récapitulatif.
+
+![Récapitulatif de tournée livreur](media:driver-tour-summary)
+
+## Écrans en boutique
+
+Les menus affichés dans la boutique sont des télés, pilotées par une application séparée, plus petite. L'équipe envoie des images et des vidéos, les organise en playlists avec une durée par élément, et attribue une playlist à chaque écran. Trois des télés sont côte à côte et peuvent former un seul mur vidéo : une image ou une vidéo synchronisée s'étend sur les trois, ou chaque télé affiche son propre emplacement. Changer les menus ne veut plus dire faire le tour avec une clé USB.
+
+## Sous le capot
+
+Le plus difficile, c'est de garder chacun de ces écrans à jour, une seule fois, sans laisser fuiter de données vers le mauvais. Je ne voulais pas d'un broker de messages pour un seul restaurant, donc tout passe par Postgres. Tout changement qui intéresse d'autres écrans écrit un événement dans une table outbox, dans la même transaction que le changement lui-même : si la commande est commitée, l'événement l'est avec elle ; si elle est annulée, rien n'a été annoncé. Les événements disent seulement « cette commande a changé », jamais ce qu'elle contient, et chacun est adressé à une audience (la cuisine, les administrateurs, un livreur, une commande). Un petit processus relais numérote les événements publiés dans un ordre strict et réveille les serveurs de l'application avec `pg_notify` : chaque écran se met à jour exactement une fois par changement.
+
+Les navigateurs reçoivent ces réveils en server-sent events, puis relisent uniquement ce qu'ils ont le droit de voir. Chaque message porte son numéro de séquence : un navigateur qui se reconnecte reprend exactement là où il s'était arrêté, et un curseur sorti de l'historique déclenche un seul rafraîchissement propre. Par sécurité, chaque page visible interroge aussi le serveur à intervalle lent et se rafraîchit quand elle revient au premier plan.
+
+Rien de tout cela ne demande plus que Postgres, un petit relais et de simples flux HTTP, ce qui convient bien à une entreprise de cette taille.

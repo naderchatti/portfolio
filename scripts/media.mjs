@@ -52,7 +52,11 @@ const RENAME = {
   'effiloche/kitchen-alert': 'kitchen-new-order-alert',
 };
 
-const VIDEOS = [{ name: 'pc-rgb-loop', file: 'uses/pc-rgb-loop.mp4', poster: 'uses/pc-rgb-loop-poster.jpg' }];
+const VIDEOS = [
+  { name: 'pc-rgb-loop', file: 'uses/pc-rgb-loop.mp4', poster: 'uses/pc-rgb-loop-poster.jpg' },
+  { name: 'ugckit-demo', file: 'ugckit/ugckit-demo.mp4', poster: 'ugckit/ugckit-demo-poster.jpg' },
+  { name: 'ugckit-sample', file: 'ugckit/ugckit-sample.mp4', poster: 'ugckit/ugckit-sample-poster.jpg' },
+];
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });

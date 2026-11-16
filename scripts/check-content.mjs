@@ -54,7 +54,9 @@ for (const slug of slugs) {
     if (typeof data.cover === 'string') refImage(data.cover, `${where} cover`);
     for (const ref of extractRefs(content)) {
       if (ref.kind === 'media') refImage(ref.name, where);
-      else if (!DIAGRAMS.has(ref.name)) errors.push(`${where}: unknown diagram "${ref.name}"`);
+      else if (ref.kind === 'video') {
+        if (!Object.hasOwn(generatedVideos, ref.name)) errors.push(`${where}: unknown video "${ref.name}"`);
+      } else if (!DIAGRAMS.has(ref.name)) errors.push(`${where}: unknown diagram "${ref.name}"`);
     }
     if (!data.draft) {
       // Editorial placeholders must never ship (frontmatter such as `date: null` is not checked here).

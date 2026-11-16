@@ -25,6 +25,7 @@ sources:
   - 'https://pi-hole.net/'
   - 'https://github.com/lovelaze/nebula-sync'
   - 'https://www.quad9.net/'
+  - 'https://erdaltoprak.com/'
 ---
 
 Everything I self-host has to be reachable somehow: from the couch, and from my phone on 4G. This post is about that edge layer: the reverse proxy, how the network is split, how I get in remotely, and how DNS stays up when one resolver goes down.
@@ -32,6 +33,8 @@ Everything I self-host has to be reachable somehow: from the couch, and from my 
 ## Traefik v3.7
 
 The single entry point for HTTP(S) is **Traefik** (currently v3.7.12), running in Docker on the Raspberry Pi 4. Right now its dashboard shows **36 HTTP routers, 54 services and 12 middlewares**, all green.
+
+I didn't get here alone. I worked out this setup with [Erdal Toprak](https://erdaltoprak.com/): we figured out the provider split, the certificate setup and the middleware chains together, and tested each configuration side by side before it went live.
 
 ![Traefik dashboard](media:traefik)
 
@@ -106,3 +109,5 @@ Each Pi-hole has its own **cloudflared** sidecar used purely as a DNS-over-HTTPS
 ## Wrapping up
 
 None of these pieces is exotic. What makes the edge pleasant to live with is consistency: one proxy, one certificate, the same header policy everywhere, admin UIs kept on the LAN, one way in for me, and two resolvers for everyone else. The item still bothering me is the blanket `insecureSkipVerify`, and it's written down above rather than hidden.
+
+Thanks to [Erdal Toprak](https://erdaltoprak.com/) for working through and testing the Traefik setup with me.

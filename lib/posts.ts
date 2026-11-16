@@ -65,8 +65,8 @@ export const UNDATED_ORDER = [
   'edge-and-network',
   'observability',
   'media-and-multiroom-audio',
-  'credits-that-never-drift',
-  'realtime-kitchen-screens',
+  'ugckit',
+  'leffiloche',
 ] as const;
 
 const WORDS_PER_MINUTE = 220;

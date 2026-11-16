@@ -1,0 +1,85 @@
+---
+title: 'UGCKit: from one brief to a published video'
+slug: ugckit
+summary: >-
+  A tour of UGCKit, the short-form video studio we are about to launch at
+  CHTPRK: one project brief, then product shots, AI avatars, hooks, a video
+  editor and publishing to TikTok, Instagram and YouTube.
+excerpt: >-
+  One brief in, a published short video out: a walkthrough of UGCKit before
+  launch.
+category: saas
+inside:
+  - The project brief
+  - Canvas
+  - Avatars and hooks
+  - Video editor
+  - Publishing
+  - Plans and credits
+  - Under the hood
+cover: ugckit-landing
+date: null
+draft: false
+sources:
+  - 'https://erdaltoprak.com/'
+---
+
+UGCKit is a studio for short-form "user-generated content" videos: the vertical clips where someone holds a product up to the camera, says one punchy line and shows what it does. Brands need hundreds of them, and the work is always the same: product shots, a face, a hook, a cut, an upload. UGCKit puts that whole chain in one place.
+
+It's built at CHTPRK, together with [Erdal Toprak](https://erdaltoprak.com/). It isn't public yet: UGCKit is launching soon, and everything below is the product as it runs today, ahead of launch.
+
+Here is the whole flow in 49 seconds, on a made-up skincare brand:
+
+![UGCKit walkthrough: open a project, generate product shots, create an AI avatar, put the product in her hands, turn it into a video, write hooks, edit, export and publish to TikTok](video:ugckit-demo)
+
+## Who it's for
+
+UGCKit is for people who need a steady stream of short product videos and don't have a studio behind them: e-commerce founders, small brands, social media managers and agencies running several accounts. If you can describe your product in a paragraph, you can get to a published clip. The app is available in English and French.
+
+## The project brief
+
+Everything starts with a **project**. After signing in with Google, onboarding walks you through three steps: create a project, connect your social accounts, pick a plan. The project holds a name, a few links and a description of 10 to 500 words: what the product is, who it's for, the tone you want. That brief becomes the context for everything generated later, and everything you make (uploads, images, videos, avatars, hooks, edits) belongs to that project. The project dashboard (0:00 in the video) shows its inventory, running jobs and recent publishes.
+
+Your own media goes in **Uploads**: images, video clips and audio, with one shared library per project. An uploaded product photo or an existing clip can be reused as a Canvas reference or dropped straight into the video editor.
+
+## Canvas
+
+**Canvas** is where the generation happens. You pick a tool, a model and an output format, add references if you want, and type a prompt. It covers image generation and editing, video from text, from images or from references, background removal, and speech. Every run shows its price before you confirm, and results land in a gallery you can reuse anywhere in the project.
+
+In the demo, the first run generates clean product shots of the serum (0:03). Later, the product and the avatar go back in as references to get a photo of her holding it (0:12), and that still is turned into a short video with image-to-video (0:18). The result looks like this:
+
+![A clip generated in Canvas: latte art being poured, four seconds, portrait](video:ugckit-sample)
+
+## Avatars and hooks
+
+An **avatar** is a recurring face for your content. You give it a name and a description, UGCKit generates its identity image (0:06), and from then on Canvas can use that avatar as a reference, so the same person shows up across photos and videos. Each new image or clip made from the avatar appears among its variants.
+
+**Hooks** are the first line of a video, the part that has to stop the scroll. From the project brief plus an optional extra prompt, UGCKit writes a batch of ten (0:27). You keep the good ones, edit them, and regenerate a fresh batch when none of them land.
+
+## Video editor
+
+The **video editor** (0:30) is where the pieces become a video. You start from an empty timeline, pull in uploads, generated clips and stills, add text (a hook, for example), and adjust timing, framing, chroma key and audio. Preview and export are built to agree, so what you see in the editor is what comes out.
+
+Export renders a vertical 720p or 1080p video at 30 fps, up to three minutes long (0:39). Rendering happens in the background, so you can keep editing or leave the page.
+
+## Publishing
+
+TikTok, Instagram and YouTube accounts are linked once for the whole account. From an exported video you choose an account and publish (0:45). UGCKit uploads it, follows the platform until it confirms the post, and keeps the post URL. If a platform never answers, the run stops with a clear "check the platform before posting again" rather than posting a second time. Scheduling posts for later is next on the list.
+
+![UGCKit landing page](media:ugckit-landing)
+
+## Plans and credits
+
+There are three plans, Basic, Plus and Pro. They all get the same tools, models and output quality. What changes is the monthly allowance: AI credits for Canvas and avatars, video exports, hook batches, stored uploads and linked social accounts. Allowances renew every month, with no rollover.
+
+Credits follow one rule that customers feel directly: **you only pay for what you get**. Before a run starts, its maximum price is set aside. When the result is saved, you're charged the actual cost, capped at that maximum, and the rest is released. If a generation fails, the credits come back.
+
+![UGCKit landing page in light mode](media:ugckit-landing-light)
+
+## Under the hood
+
+That credit rule is the most interesting part to build. Postgres is the only place where a balance can change. Before any paid AI call, a single transaction checks the window's balance, freezes the quote, reserves the maximum and writes the work to dispatch. Only after that commit does a worker pick it up. When the provider returns, the charge is computed from its verified billable units and the latest stored price, never from an estimate, and a missing number is treated as unknown, never as zero. Amounts are stored as exact decimals and handled as integers in code, so nothing is rounded twice or drifts across thousands of runs.
+
+The background work runs on Temporal, split into separate workers for AI generation, media (uploads and exports), social publishing and maintenance. Every effect has a stable identity, so a retry after a timeout or a crash replays the same request instead of paying for a second one. That's also why the publish flow above never reposts when an outcome is unknown.
+
+What I take from it: users don't see any of this, but they notice right away when credits or posts go missing.

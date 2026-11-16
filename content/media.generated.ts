@@ -2471,5 +2471,19 @@ export const generatedVideos = {
     "poster": "/media/pc-rgb-loop-poster.jpg",
     "width": 540,
     "height": 960
+  },
+  "ugckit-demo": {
+    "name": "ugckit-demo",
+    "src": "/media/ugckit-demo.mp4",
+    "poster": "/media/ugckit-demo-poster.jpg",
+    "width": 1600,
+    "height": 840
+  },
+  "ugckit-sample": {
+    "name": "ugckit-sample",
+    "src": "/media/ugckit-sample.mp4",
+    "poster": "/media/ugckit-sample-poster.jpg",
+    "width": 432,
+    "height": 774
   }
 } as const satisfies Record<string, GeneratedVideo>;

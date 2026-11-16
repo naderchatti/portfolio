@@ -2,14 +2,16 @@ import type { Image, Paragraph, Root } from 'mdast';
 import type { MdxJsxAttribute, MdxJsxFlowElement } from 'mdast-util-mdx-jsx';
 import { visit, SKIP } from 'unist-util-visit';
 
-const REF = /^(media|diagram):([a-z0-9-]+)$/;
+const REF = /^(media|diagram|video):([a-z0-9-]+)$/;
 
-export type MediaRef = { kind: 'media' | 'diagram'; name: string; alt: string };
+const COMPONENT = { media: 'Figure', diagram: 'WiringDiagram', video: 'PostVideo' } as const;
 
-/** Every `![alt](media:x)` / `![alt](diagram:x)` ref in a Markdown body. */
+export type MediaRef = { kind: keyof typeof COMPONENT; name: string; alt: string };
+
+/** Every `![alt](media:x)` / `![alt](diagram:x)` / `![alt](video:x)` ref in a Markdown body. */
 export function extractRefs(source: string): MediaRef[] {
   const refs: MediaRef[] = [];
-  for (const match of source.matchAll(/!\[([^\]]*)\]\((media|diagram):([a-z0-9-]+)\)/g)) {
+  for (const match of source.matchAll(/!\[([^\]]*)\]\((media|diagram|video):([a-z0-9-]+)\)/g)) {
     refs.push({ alt: match[1] ?? '', kind: match[2] as MediaRef['kind'], name: match[3] ?? '' });
   }
   return refs;
@@ -27,7 +29,8 @@ function onlyImage(paragraph: Paragraph): Image | undefined {
 
 /**
  * Turns block-level image refs into components:
- * `![alt](media:name)` → `<Figure name alt />`, `![alt](diagram:slug)` → `<WiringDiagram slug alt />`.
+ * `![alt](media:name)` → `<Figure name alt />`, `![alt](diagram:slug)` → `<WiringDiagram slug alt />`,
+ * `![alt](video:name)` → `<PostVideo name alt />`.
  * Unknown names are left for `pnpm check:content` to report; the components render a fallback.
  */
 export function remarkMediaRefs() {
@@ -37,11 +40,12 @@ export function remarkMediaRefs() {
       const image = onlyImage(node);
       const match = image ? REF.exec(image.url) : null;
       if (!image || !match) return;
-      const [, kind, name = ''] = match;
+      const kind = match[1] as MediaRef['kind'];
+      const name = match[2] ?? '';
       const element: MdxJsxFlowElement = {
         type: 'mdxJsxFlowElement',
-        name: kind === 'media' ? 'Figure' : 'WiringDiagram',
-        attributes: [attr(kind === 'media' ? 'name' : 'slug', name), attr('alt', image.alt ?? '')],
+        name: COMPONENT[kind],
+        attributes: [attr(kind === 'diagram' ? 'slug' : 'name', name), attr('alt', image.alt ?? '')],
         children: [],
       };
       parent.children.splice(index, 1, element);

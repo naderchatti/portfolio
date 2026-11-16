@@ -2,12 +2,12 @@
 title: 'Home Assistant : le hub qui relie tout'
 slug: home-assistant-hub
 summary: >-
-  Comment une seule instance Home Assistant sur un Raspberry Pi 4 coordonne 104
-  appareils, l'éclairage Zigbee, les caméras Frigate et les automatisations qui
-  rendent l'appartement un peu moins manuel.
+  Comment une seule instance Home Assistant sur un Raspberry Pi 4 coordonne 14
+  appareils Zigbee, les caméras Frigate, les lecteurs multimédias et les
+  automatisations qui rendent l'appartement un peu moins manuel.
 excerpt: >-
-  104 appareils, 27 automatisations et les tableaux de bord qui font tourner
-  l'appartement.
+  14 appareils Zigbee, 27 automatisations, 20 scripts et les tableaux de bord
+  qui font tourner l'appartement.
 category: homelab
 inside:
   - Zigbee (ZHA)
@@ -29,7 +29,7 @@ sources:
 
 Toutes les autres briques de mon homelab existent pour servir quelque chose, et la plupart du temps, ce quelque chose, c'est Home Assistant. Il tourne dans un conteneur Docker sur un Raspberry Pi 4, à côté du reverse proxy et du résolveur DNS principal, et c'est l'endroit où se rejoignent les lumières, les caméras, les lecteurs multimédias, la télé, le bureau et mon téléphone.
 
-Au moment où j'écris, l'instance connaît **104 appareils** et **1 942 entités** (dont environ 800 volontairement désactivées, surtout des capteurs de diagnostic que je ne regarde jamais), réparties sur **65 entrées d'intégration** couvrant 42 types d'intégrations. Par-dessus, on trouve **27 automatisations**, **20 scripts** et **12 scènes**. Ces chiffres viennent directement des registres de Home Assistant, pas de ma mémoire.
+Au moment où j'écris, l'instance fait tourner **14 appareils Zigbee**, **27 automatisations**, **20 scripts** et **12 scènes**. Le registre de Home Assistant compte 104 appareils, mais il inclut des appareils virtuels comme des conteneurs et des téléphones : le maillage Zigbee donne une image plus honnête du matériel de l'appartement.
 
 ![Tableau de bord principal de Home Assistant](media:ha)
 
