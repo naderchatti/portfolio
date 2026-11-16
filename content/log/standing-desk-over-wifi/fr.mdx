@@ -1,0 +1,156 @@
+---
+title: Un bureau assis-debout en Wi-Fi
+slug: standing-desk-over-wifi
+summary: >-
+  Intégrer un Maidesite T2 Pro Plus à Home Assistant avec un ESP32-S3 et
+  ESPHome, en suivant le guide de la communauté.
+excerpt: >-
+  Un Maidesite T2 Pro Plus piloté depuis Home Assistant grâce à un ESP32-S3
+  soudé.
+category: homelab
+inside:
+  - Pourquoi
+  - Ce qu'il faut
+  - Câblage
+  - Le protocole
+  - Flash et configuration
+  - Home Assistant
+  - Limites et suite
+  - Crédits et sources
+cover: desk-esp32-installed
+date: null
+draft: false
+sources:
+  - >-
+    https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293
+  - >-
+    https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293/22
+  - 'https://github.com/shades66/Maidesite-standing-desk'
+---
+
+## Pourquoi
+
+La télécommande du bureau fonctionne, mais elle vit dans son coin : pas de positions mémorisées depuis mon téléphone, aucun moyen de relier le bureau au reste de la maison. Le contrôleur parle déjà à la télécommande via une liaison série, et la communauté Home Assistant avait déjà décortiqué son protocole. Le plan était donc simple : suivre leur guide, brancher un ESP32-S3 sous ESPHome sur cette liaison, et laisser Home Assistant parler la même langue.
+
+![Le contrôleur terminé : l'ESP32 noyé dans la colle chaude à l'intérieur d'un petit boîtier noir, branché sur le port RJ12 du bureau](media:desk-esp32-installed)
+
+## Ce qu'il faut
+
+| Élément | Détails |
+| --- | --- |
+| Bureau | Maidesite T2 Pro Plus |
+| Câble | Câble RJ12 (6P6C, 6 fils), droit, mâle |
+| Carte | ESP32-S3-Zero |
+| Câblage | Fils Dupont |
+| Outils | Fer à souder, étain, gaine thermorétractable pour les jonctions |
+| Boîtier | Colle chaude et un petit boîtier noir |
+| Coût / temps | Moins de 15 € · environ 45 à 60 min (≈ 15 min de flash, ≈ 30 min de câblage) |
+
+## Câblage
+
+L'ESP32 se branche sur la ligne de la télécommande du bureau : le port RJ12 qui accueille normalement le clavier de commande. Voici les étapes du guide de la communauté, telles que je les ai suivies :
+
+1. Couper les fils Dupont et le câble RJ12.
+2. Séparer et dénuder les six conducteurs.
+3. Enfiler un petit morceau de gaine thermorétractable sur chaque fil, et un grand sur l'ensemble du faisceau.
+4. Torsader et souder les six paires.
+5. Si les couleurs de vos câbles diffèrent, noter la correspondance.
+6. Rétracter la gaine. Un sèche-cheveux est assez doux pour une isolation fine.
+7. Relier le tout à l'ESP32 et le brancher sur le port de la télécommande du bureau.
+8. Noyer la carte dans la colle chaude et la mettre dans un petit boîtier noir.
+
+| De | Vers · signal |
+| --- | --- |
+| RJ12 broche 2 · GND | ESP GND |
+| RJ12 broche 3 · handset TX | ESP RX (GPIO44) · UART, bureau → ESP |
+| ESP TX (GPIO43) | RJ12 broche 5 · handset RX · UART, ESP → bureau |
+| RJ12 broche 4 · 5V | ESP 5V · alimenté par le bureau |
+| RJ12 broches 1, 6 | non utilisées |
+
+UART à 9600 bauds. L'ESP est alimenté par la broche 4 du bureau, donc un seul câble relie le port RJ12 à la carte. Shades66 recommande un pont diviseur 1,5k/3k sur la ligne RX de l'ESP, ce qui est l'option la plus sûre. Sur le S3-Zero, ça a fonctionné sans, comme dans le post #22, mais c'est un retour d'expérience, pas une garantie.
+
+![Schéma de câblage](diagram:standing-desk)
+
+![Vue de dessus de l'ESP32-S3-Zero avec des fils de couleur soudés à un câble RJ12 coupé](media:desk-esp32-board)
+
+![Le dos de la carte, avec le câble RJ12 plat et son connecteur](media:desk-esp32-rj45)
+
+![La carte noyée dans la colle chaude sur son câble RJ12](media:desk-esp32-sealed)
+
+**Attention au métal.** Gardez l'ESP à distance du châssis et du cache métalliques du bureau, sinon le signal Wi-Fi en pâtit. Prévoyez la longueur de câble en conséquence.
+
+## Le protocole
+
+La télécommande et le contrôleur communiquent via un UART à 9600 bauds. Les trames envoyées au bureau commencent par `F1 F1`, les réponses du bureau par `F2 F2`. Chaque trame porte un checksum et se termine par un octet `0x7E`, ce qui rend le flux facile à découper en trames.
+
+| Partie | Vers le bureau / depuis le bureau |
+| --- | --- |
+| En-tête | `F1 F1` / `F2 F2` |
+| Commande + données | Bouton, position mémorisée ou hauteur cible ; les réponses contiennent la hauteur et les emplacements mémoire |
+| Checksum | Valide la trame |
+| Terminateur | `7E` |
+
+## Flash et configuration
+
+Toujours en suivant le guide :
+
+1. Flasher l'ESP32 avec ESPHome Builder dans Home Assistant.
+2. Appliquer le YAML.
+3. Ajouter `desk.h` dans `esphome/include/` : le composant UART personnalisé du dépôt de Shades66.
+
+Le firmware et sa gestion du protocole viennent du travail de la communauté. Le parsing se fait dans le callback de debug de l'UART, donc les trames sont traitées à leur arrivée plutôt que par polling, et l'ESP demande au bureau ses valeurs initiales au démarrage.
+
+Un `desk.yaml` simplifié :
+
+```yaml
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+uart:
+  id: desk_bus
+  baud_rate: 9600
+  tx_pin: GPIO43
+  rx_pin: GPIO44
+
+number:
+  - platform: template
+    id: deskSlider
+    name: "Desk height"
+    min_value: 620
+    max_value: 1263
+    step: 1
+    unit_of_measurement: mm
+```
+
+Le fil de discussion de la communauté propose aussi un capteur de hauteur actuelle en centimètres, ainsi qu'une icône mdi par contrôle. J'ai gardé les deux :
+
+```yaml
+- platform: template
+  name: "Desk Current Height"
+  id: desk_current_height
+  icon: "mdi:format-vertical-align-center"
+  lambda: |-
+    return id(deskSlider).state / 10.0;
+```
+
+## Home Assistant
+
+Dans Home Assistant, le bureau apparaît comme un appareil normal : hauteur actuelle, les hauteurs des quatre emplacements mémoire, Monter et Descendre, des boutons de positions M1 à M4, et un curseur de hauteur de 620 à 1263 mm qui envoie une commande « aller à la hauteur ».
+
+![Page de l'appareil dans Home Assistant avec les boutons monter et descendre, le curseur de hauteur, les positions M1 à M4 et les capteurs de hauteur mémorisée](media:desk-ha-controls)
+
+## Limites et suite
+
+Le bouton de verrouillage physique de la télécommande ne passe pas par le bus UART : le bureau ne remonte pas son état et l'ESP ne peut pas l'actionner, donc le verrouillage reste un appui manuel.
+
+Prochaine idée : l'actionner mécaniquement, par exemple avec un pousse-bouton façon SwitchBot déclenché depuis Home Assistant. Je n'ai pas encore tranché.
+
+## Crédits et sources
+
+- [Maidesite standing desk with ESPHome](https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293), fil de discussion de la communauté Home Assistant : liste du matériel, étapes de câblage, YAML de base, capteur « Desk Current Height ».
+- [lukas-berger, post #22](https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293/22) : le câblage ESP32-S3-Zero + T2 Pro Plus que j'ai suivi.
+- [shades66/Maidesite-standing-desk](https://github.com/shades66/Maidesite-standing-desk) : le dépôt de Shades66, `desk.h` et le travail sur le protocole.
+
+Ma part : j'ai suivi le travail de la communauté sur le câblage et le protocole, puis j'ai personnalisé `desk.h` et ma config ESPHome avec mes propres positions mémorisées et boutons, et j'ai assemblé et scellé le tout pour mon T2 Pro Plus.

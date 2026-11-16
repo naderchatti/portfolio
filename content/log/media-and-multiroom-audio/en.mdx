@@ -1,0 +1,90 @@
+---
+title: 'Media and multiroom audio: Jellyfin, Music Assistant and Snapcast'
+slug: media-and-multiroom-audio
+summary: >-
+  Jellyfin in its own LXC with libraries on the ZFS pool and library tiles
+  redesigned to match the TV launcher, plus Music Assistant and Snapcast for
+  synchronized audio across the flat, with a small Expo app to put it on my
+  phone.
+excerpt: A self-hosted media server and synchronised audio across 23 players.
+category: homelab
+inside:
+  - Jellyfin
+  - Music Assistant
+  - Snapcast
+cover: jellyfin-libraries
+date: null
+draft: false
+sources:
+  - 'https://jellyfin.org/'
+  - 'https://www.music-assistant.io/'
+  - 'https://github.com/badaix/snapcast'
+  - 'https://github.com/jaedb/snapserver'
+  - 'https://www.home-assistant.io/integrations/music_assistant/'
+  - 'https://expo.dev/'
+  - 'https://github.com/react-native-webview/react-native-webview'
+---
+
+The media side of my homelab has two jobs: play films and series on the TV, and play music anywhere in the flat, ideally in sync. Both run on the Proxmox host, both read their libraries from the TrueNAS pool, and both are wired into Home Assistant.
+
+## Jellyfin
+
+**Jellyfin** (10.11 at the time of writing) runs in Docker, on the normal Docker network, inside its own LXC on Proxmox. The container is small: 4 vCPUs and 4 GB of RAM, which is enough for a single household.
+
+The libraries don't live in the container. TrueNAS exports a media share over SMB, the Proxmox host mounts it, and the LXC receives it as a bind mount. Inside, Jellyfin sees three read paths, one per library: **Movies**, **TV Shows** and **Music**. Config and transcode cache stay on the container's local disk, so a slow network share never blocks the UI.
+
+```yaml
+# Sanitized: the Jellyfin container's volume layout
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - /mnt/mediaserver/Movies:/Movies
+      - /mnt/mediaserver/TVShows:/TVShows
+      - /mnt/mediaserver/Music:/Music
+```
+
+Because the media sits on a RAIDZ1 pool of four IronWolf drives, it benefits from the same redundancy and scrubbing as everything else, and the Jellyfin LXC itself stays tiny and easy to back up: the weekly Proxmox backup captures metadata and settings without dragging terabytes of video along.
+
+### Library tiles that match the TV launcher
+
+Jellyfin's default library tiles are auto-generated collages of posters. They work, but on the TV they looked out of place next to the launcher I use, which has its own clean, flat tile style. So alongside the launcher design, I generated custom artwork for each library — Movies, TV Shows and Music — to match the launcher's look, and set them as the libraries' images in Jellyfin.
+
+![Custom Jellyfin library tiles](media:jellyfin-libraries)
+
+It's a small thing, but it makes the TV feel like one system rather than a launcher with a web app bolted on.
+
+## Music Assistant
+
+For music I use **Music Assistant** (server 2.10), running in Docker in a separate LXC alongside Home Assistant's voice add-ons and the Snapcast server. It uses host networking, because discovering speakers over mDNS, SSDP and Cast is much less painful without Docker NAT in the way. The music library comes from the same TrueNAS pool, bind-mounted into the container, and Music Assistant also has a YouTube Music provider and radio sources.
+
+![Music Assistant now-playing view](media:music-assistant)
+
+What makes Music Assistant the centre of audio is its player providers. In my setup it has providers enabled for:
+
+- **Snapcast** (see below), for synchronized whole-home playback;
+- **AirPlay**, **Google Cast** and **DLNA/UPnP**, for the speakers and TVs that already exist in the flat;
+- **Sendspin**, Music Assistant's own streaming protocol, for browsers and lightweight clients;
+- **Home Assistant media players**, so anything HA can play to is also a target.
+
+That adds up to 23 player entries in the configuration, most of them Sendspin clients from browsers and devices that have connected over time.
+
+Music Assistant is also exposed to **Home Assistant** through its integration, so automations and dashboards can start playlists or radio on any player.
+
+### A pocket client with Expo
+
+Music Assistant's web UI is good on a phone, but I wanted it as a proper app icon, without a browser bar, and following the system's light/dark theme. So I wrote a tiny **Expo** (SDK 54, React Native 0.81) app that is essentially a full-screen `react-native-webview` pointed at my Music Assistant instance. It adapts the status bar and background to the system colour scheme, keeps DOM storage so the session survives restarts, and is set up for builds with EAS. It is a wrapper, not a native client, and that's intentional: every Music Assistant update shows up in the app with zero work on my side.
+
+## Snapcast
+
+**Snapcast** is the part that makes multiroom audio actually sound like one room. A Snapcast server receives a single audio stream and distributes it to clients with timestamps; each client buffers and plays at precisely the right moment, so speakers in different rooms stay audibly in sync.
+
+I run the server (Snapcast 0.34, packaged by jaedb) as its own container with host networking, next to Music Assistant, and configured Music Assistant to use this **external Snapcast server** rather than its built-in one. The server has a single pipe source that Music Assistant writes into. Keeping it separate means I can restart or upgrade Music Assistant without the Snapcast server and its clients disappearing.
+
+On the client side, anything that can run `snapclient` becomes a synchronized speaker. Today the main one is the main Raspberry Pi: it runs snapclient through PulseAudio and pushes the audio over Bluetooth to a paired speaker. A small reconnect service keeps that Bluetooth link up, so the speaker comes back after a drop or a reboot without me pairing it again. That speaker is my own build, an ESP32 and a PCM5102 DAC driving a pair of wired speakers; see the speakers build, *Wired speakers, Bluetooth brain*.
+
+## What I'd improve
+
+The audio stack grew organically, and the player list shows it: there are more configured players than physical speakers. A cleanup pass, clearer names per room, and a couple of dedicated snapclient boxes would make the setup as tidy as it sounds.

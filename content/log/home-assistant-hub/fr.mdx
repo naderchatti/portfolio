@@ -1,0 +1,103 @@
+---
+title: 'Home Assistant : le hub qui relie tout'
+slug: home-assistant-hub
+summary: >-
+  Comment une seule instance Home Assistant sur un Raspberry Pi 4 coordonne 104
+  appareils, l'éclairage Zigbee, les caméras Frigate et les automatisations qui
+  rendent l'appartement un peu moins manuel.
+excerpt: >-
+  104 appareils, 27 automatisations et les tableaux de bord qui font tourner
+  l'appartement.
+category: homelab
+inside:
+  - Zigbee (ZHA)
+  - Automatisations
+  - Tableaux de bord
+  - Caméras (Frigate)
+cover: ha
+date: null
+draft: false
+sources:
+  - 'https://www.home-assistant.io/'
+  - 'https://www.home-assistant.io/integrations/zha/'
+  - 'https://phoscon.de/en/conbee2'
+  - 'https://frigate.video/'
+  - 'https://kno.wled.ge/'
+  - 'https://esphome.io/'
+  - 'https://hacs.xyz/'
+---
+
+Toutes les autres briques de mon homelab existent pour servir quelque chose, et la plupart du temps, ce quelque chose, c'est Home Assistant. Il tourne dans un conteneur Docker sur un Raspberry Pi 4, à côté du reverse proxy et du résolveur DNS principal, et c'est l'endroit où se rejoignent les lumières, les caméras, les lecteurs multimédias, la télé, le bureau et mon téléphone.
+
+Au moment où j'écris, l'instance connaît **104 appareils** et **1 942 entités** (dont environ 800 volontairement désactivées, surtout des capteurs de diagnostic que je ne regarde jamais), réparties sur **65 entrées d'intégration** couvrant 42 types d'intégrations. Par-dessus, on trouve **27 automatisations**, **20 scripts** et **12 scènes**. Ces chiffres viennent directement des registres de Home Assistant, pas de ma mémoire.
+
+![Tableau de bord principal de Home Assistant](media:ha)
+
+## Zigbee (ZHA)
+
+Le Zigbee est la colonne vertébrale de tout ce qui doit être fiable et local. Le maillage est modeste : 14 appareils Zigbee, dont deux modules encastrés SONOFF ZBMINIL2 qui rendent connectés les interrupteurs muraux ordinaires du salon et du bureau, quatre ampoules au plafond du salon plus une dans le bureau, un capteur de présence mmWave qui remonte aussi la luminosité, des capteurs de température et d'humidité dans chaque pièce, une prise connectée et un bouton sans fil sur mon bureau. J'utilise l'intégration **ZHA** native avec une clé USB **ConBee II** branchée sur le Pi. Pas de passerelle Zigbee séparée, pas de conteneur supplémentaire : ZHA parle directement à la clé, et les appareils apparaissent comme des entités Home Assistant normales.
+
+Pour un petit appartement, ce choix me convient. Le maillage est assez petit pour que je n'aie pas besoin des réglages supplémentaires d'une passerelle autonome, et garder la radio dans Home Assistant, c'est un service de moins à mettre à jour et à surveiller.
+
+Les appareils Wi-Fi comblent les trous : **WLED** pour le ruban LED derrière la télé, **ESPHome** pour les cartes maison (dont un ESP32-S3 qui bascule mon KVM entre les machines), et une poignée d'intégrations locales pour la télé, les appareils Cast et les renderers DLNA.
+
+## Automatisations
+
+J'essaie de garder des automatisations ennuyeuses et explicables. Quelques thèmes en couvrent l'essentiel.
+
+**Éclairage de présence.** Quand je rentre après le coucher du soleil et que le salon est sombre, les lumières s'allument à 75 %. Le déclencheur est l'entrée de mon téléphone dans la zone maison, mais l'automatisation attend aussi brièvement que le téléphone rejoigne vraiment le Wi-Fi de la maison, ce qui filtre les sauts de GPS près de l'immeuble.
+
+**Éclairage à luminosité cible.** Un capteur de présence dans le salon remonte la luminosité ambiante, et une automatisation essaie de maintenir la pièce autour de 1 000 lx tant que les lumières sont allumées : sous 900 lx, elle augmente la luminosité de 10 % ; au-dessus de 1 100 lx, elle la baisse de 10 %. C'est un régulateur rudimentaire, mais en pratique il lisse la transition entre la lumière du jour et la soirée sans que je touche à rien.
+
+```yaml
+# Simplified excerpt: keep the living room near 1000 lx
+triggers:
+  - trigger: numeric_state
+    entity_id: sensor.presence_lr_illuminance
+    below: 900
+  - trigger: numeric_state
+    entity_id: sensor.presence_lr_illuminance
+    above: 1100
+conditions:
+  - condition: state
+    entity_id: switch.light_switch_lr
+    state: "on"
+actions:
+  - action: light.turn_on
+    target:
+      entity_id: light.lr_light
+    data:
+      brightness_pct: >
+        {% set lx = states('sensor.presence_lr_illuminance') | float(0) %}
+        {% set pct = (state_attr('light.lr_light', 'brightness') or 0) / 255 * 100 %}
+        {{ [pct + 10, 100] | min if lx < 900 else [pct - 10, 0] | max }}
+```
+
+**WLED suit la télé.** Quand la télé quitte l'état `off`, le ruban WLED s'allume ; quand la télé s'éteint, le ruban suit.
+
+**Profils du KVM.** Le KVM à base d'ESP32 expose son profil actif à Home Assistant. De petites automatisations le recopient dans un helper, pour que les tableaux de bord et les autres automatisations sachent quelle machine a actuellement le clavier et l'écran.
+
+**Routine du coucher.** C'est le scénario le plus « produit ». À 22 h, si je suis à la maison et que le capteur de confiance de sommeil de mon téléphone indique que je suis encore éveillé, Home Assistant envoie une notification actionnable : *Démarrer*, *Reporter d'1 h* ou *Ignorer*. Accepter lance des scripts par étapes qui baissent les lumières et le ruban de la télé à 50 %, puis à 25 %, avec des transitions lentes, et éteignent enfin tout à minuit. Une automatisation séparée coupe les lumières et la télé si le téléphone signale une forte confiance de sommeil pendant cinq minutes alors que ma montre n'est pas sur son chargeur. « Ignorer ce soir » est un simple booléen qui se réinitialise le lendemain.
+
+Vingt scripts portent les parties réutilisables : préréglages de luminosité, pas de luminosité relatifs, montée et descente du bureau, et les étapes de la routine du coucher. Les scènes couvrent des ambiances comme *Work*, *Meeting*, *Gaming* et *Film Living Room*.
+
+## Tableaux de bord
+
+Il y a **9 tableaux de bord**, dont une vue d'ensemble, une carte, un panneau plein écran et une disposition dédiée **tablette**. Il n'y a pas encore de tablette murale : au quotidien, j'utilise Home Assistant depuis mon téléphone et ma montre connectée. La vue tablette prépare un futur panneau mural, soit un Pi avec un écran tactile, soit une tablette Android sous Fully Kiosk. Certains tableaux de bord sont honnêtement des brouillons (`test`, `backup`, `new`) : c'est là que je prototype des mises en page avant de les promouvoir.
+
+Les cartes personnalisées et quelques intégrations communautaires viennent de **HACS**. Je garde volontairement cette liste courte, parce que chaque composant personnalisé est un truc qui peut casser lors d'une mise à jour de Home Assistant.
+
+## Caméras (Frigate)
+
+Les caméras sont gérées par **Frigate**, qui tourne dans son propre LXC sur l'hôte Proxmox avec un broker MQTT Mosquitto. Frigate gère actuellement deux caméras IP (ONVIF), et les enregistrements atterrissent sur le pool TrueNAS via un partage SMB. Home Assistant lui parle via l'intégration Frigate de HACS.
+
+Personne au foyer ne veut être filmé à la maison, donc c'est Home Assistant lui-même qui démarre et arrête l'enregistrement de Frigate selon la présence du foyer. Chacun de nous a l'application Home Assistant Companion sur son téléphone, qui alimente une entité personne dans Home Assistant :
+
+- quand personne n'est à la maison, Home Assistant active l'enregistrement des deux caméras ;
+- dès que quelqu'un du foyer est à la maison, il le coupe, après un délai de grâce de 30 secondes à l'arrivée.
+
+J'ai ainsi des images utiles quand l'appartement est vide et rien du tout quand l'un de nous y est, ce qui est exactement le compromis que je voulais.
+
+## Ce que je changerais ensuite
+
+Les registres sont un peu encombrés après des années d'expériences, et quelques tableaux de bord devraient être supprimés plutôt que gardés « au cas où ». La prochaine étape, c'est l'élagage : moins d'entités, moins de tableaux de bord, et des automatisations qui tiennent chacune sur un écran.

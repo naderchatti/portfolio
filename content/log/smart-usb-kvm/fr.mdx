@@ -1,0 +1,110 @@
+---
+title: Un KVM USB connecté
+slug: smart-usb-kvm
+summary: >-
+  J'ai câblé un ESP32-S3 dans un switch USB UGREEN bon marché pour que Home
+  Assistant puisse appuyer sur son bouton, lire ses LED d'état et basculer
+  clavier, souris et périphériques entre mon PC fixe et mon portable.
+excerpt: >-
+  Un ESP32 câblé dans un switch USB pour que Home Assistant sache quel PC est
+  actif, et en change.
+category: homelab
+inside:
+  - La modification
+  - ESPHome
+  - Automatisations
+cover: kvm-pcb-mod
+date: null
+draft: false
+sources:
+  - 'https://esphome.io'
+  - 'https://www.home-assistant.io'
+---
+
+Sur mon bureau, il y a deux ordinateurs : un PC fixe et un portable. Le clavier, la souris et quelques périphériques USB passent par un UGREEN 30768, un switch KVM USB 3.0 pour deux ordinateurs avec quatre sorties USB, le genre de boîtier avec un seul bouton sur le dessus et deux LED qui indiquent quel ordinateur a la main sur les ports USB. Il fait bien son travail, mais il est complètement idiot. On appuie sur le bouton, il bascule, et rien d'autre dans la maison n'est au courant.
+
+Je voulais que ce switch fasse partie de Home Assistant : quelque chose que je peux déclencher depuis un tableau de bord ou une automatisation, et qui me dit quel ordinateur est actif. Alors je l'ai ouvert.
+
+![Le switch modifié, fixé sous le bureau](media:kvm-under-desk)
+
+## La modification
+
+La logique du switch est simple. Le bouton en façade tire une ligne à l'état bas quand on appuie dessus, et chacune des deux LED d'état s'allume quand son port est actif. Ça me donne deux points d'accès : un signal pour simuler un appui, et deux signaux pour lire l'état courant.
+
+![ESP32-S3 soudé sur les pads du bouton et des LED du switch](media:kvm-pcb-mod)
+
+J'ai soudé une petite carte ESP32-S3-Zero directement sur le PCB :
+
+- une GPIO reliée au pad du bouton, pour que l'ESP32 puisse le tirer à l'état bas comme le ferait un doigt ;
+- deux GPIO compatibles ADC reliées aux pads des deux LED d'état, pour mesurer la tension aux bornes de chaque LED et savoir laquelle est allumée ;
+- une masse commune avec le switch.
+
+| ESP32-S3-Zero | Switch UGREEN |
+| --- | --- |
+| GPIO4 | pad du bouton de sélection (sortie tirée à LOW pendant 100 ms, puis repassée en entrée pour rester flottante au repos) |
+| GPIO1 (ADC) | pad de la LED du profil 1 |
+| GPIO2 (ADC) | pad de la LED du profil 2 |
+| 5V | 5 V USB du switch |
+| GND | GND (commune) |
+
+Un profil est considéré actif au-dessus de 0,7 V ; l'autre LED doit être sous 0,3 V.
+
+![Schéma de câblage](diagram:smart-usb-kvm)
+
+L'ESP32 est alimenté par le rail 5 V USB du switch lui-même : pas d'alimentation supplémentaire à brancher, et il est toujours allumé et prêt dès que le switch l'est.
+
+Je lis les LED avec l'ADC plutôt qu'en entrées numériques classiques, parce que rien ne garantit que la tension sur un pad de LED corresponde à un niveau logique propre. La mesurer en volts et appliquer des seuils est plus tolérant que d'espérer qu'une broche numérique la lise correctement.
+
+Le bouton physique fonctionne exactement comme avant. L'ESP32 ajoute simplement une deuxième façon d'appuyer dessus.
+
+## ESPHome
+
+La carte tourne sous ESPHome, avec le framework Arduino et la définition de carte `esp32-s3-devkitc-1`. La première version de la config ciblait une carte `esp32dev` générique et ne gérait que le bouton. La version actuelle ajoute la lecture des LED.
+
+Le bouton est un template button dans ESPHome. Quand on l'actionne, il passe la GPIO en sortie, la force à l'état bas pendant 100 ms, puis la relâche en la repassant en entrée. Relâcher en haute impédance plutôt que forcer la broche à l'état haut évite que l'ESP32 entre en conflit avec le pull-up du switch. Il se comporte comme un doigt qui appuie puis relâche.
+
+```yaml
+button:
+  - platform: template
+    name: "KVM Toggle"
+    on_press:
+      - lambda: |-
+          gpio_set_direction((gpio_num_t)BUTTON_PIN, GPIO_MODE_OUTPUT);
+          gpio_set_level((gpio_num_t)BUTTON_PIN, 0);   // "press"
+          delay(100);
+          gpio_set_level((gpio_num_t)BUTTON_PIN, 1);
+          gpio_set_direction((gpio_num_t)BUTTON_PIN, GPIO_MODE_INPUT);  // let go
+```
+
+Chaque LED est un capteur `adc` interrogé toutes les secondes. Un text sensor et un binary sensor de type template transforment ces deux mesures en état. Un profil n'est considéré actif que si sa LED dépasse 0,7 V et que l'autre est sous 0,3 V. Tout ce qui se situe entre les deux, par exemple les deux LED à moitié allumées pendant une transition, est remonté comme inconnu au lieu d'être deviné :
+
+```yaml
+text_sensor:
+  - platform: template
+    name: "Current KVM Profile"
+    update_interval: 1s
+    lambda: |-
+      if (id(led_1).state > 0.7 && id(led_2).state < 0.3) return {"Profile 1"};
+      if (id(led_2).state > 0.7 && id(led_1).state < 0.3) return {"Profile 2"};
+      return {"Unknown"};
+```
+
+Home Assistant récupère ainsi quatre entités : le bouton de bascule, les deux tensions brutes des LED (pratiques pour vérifier les seuils), et le « profil courant » déduit, à la fois en text sensor et en binary sensor.
+
+Il n'y a pas de filtre anti-rebond explicite dans la config ESPHome. Deux choses s'en chargent : l'intervalle d'interrogation d'une seconde et la règle « les deux conditions doivent être vraies ». Une mesure prise en pleine transition s'affiche juste comme « Unknown » pendant un instant.
+
+## Automatisations
+
+Le switch n'a qu'une bascule, pas de « aller sur le port 1 » ou « aller sur le port 2 ». L'opération utile, c'est « s'assurer que cet ordinateur est actif » : les automatisations doivent donc comparer l'état demandé à l'état mesuré, et n'appuyer sur le bouton que s'ils diffèrent.
+
+Pour ça, j'utilise une entrée texte (helper) dans Home Assistant qui contient le profil souhaité, et trois automatisations autour :
+
+1. **Passer sur le profil 1 (PC fixe).** Quand le helper passe à « Profile 1 », vérifier que le switch indique actuellement « Profile 2 ». Seulement dans ce cas, appuyer sur la bascule.
+2. **Passer sur le profil 2 (portable).** L'inverse : quand le helper passe à « Profile 2 » et que le switch indique « Profile 1 », appuyer sur la bascule.
+3. **Synchroniser le helper.** Quand le profil actif mesuré change, par exemple parce que quelqu'un a appuyé sur le bouton physique, attendre une seconde puis recopier le profil mesuré dans le helper.
+
+La troisième automatisation garde le helper fidèle à la réalité. Si j'appuie sur le vrai bouton, le helper suit le matériel au lieu de se désynchroniser. Le délai d'une seconde laisse les mesures des LED se stabiliser avant la copie. Comme les deux premières automatisations vérifient l'état mesuré avant d'appuyer, cette synchronisation ne déclenche jamais d'appui en trop : quand le helper est mis à jour pour coller à la réalité, la condition « est-ce qu'on y est déjà ? » est déjà remplie.
+
+En pratique, changer d'ordinateur se résume maintenant à un bouton sur un tableau de bord, ou à une étape dans une automatisation plus large. Et comme l'état vient des LED, Home Assistant affiche toujours quelle machine a le clavier, quelle que soit la façon dont on a basculé.
+
+C'est une petite modification. Quelques soudures, une courte config ESPHome et trois automatisations ont suffi à transformer un gadget isolé en quelque chose que le reste de mon installation peut piloter.

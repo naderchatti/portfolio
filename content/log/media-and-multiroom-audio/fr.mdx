@@ -1,0 +1,90 @@
+---
+title: 'Médias et audio multiroom : Jellyfin, Music Assistant et Snapcast'
+slug: media-and-multiroom-audio
+summary: >-
+  Jellyfin dans son propre LXC avec ses bibliothèques sur le pool ZFS et des
+  tuiles de bibliothèque redessinées pour s'accorder au launcher de la télé,
+  plus Music Assistant et Snapcast pour un audio synchronisé dans tout
+  l'appartement, avec une petite appli Expo pour l'avoir sur mon téléphone.
+excerpt: Un serveur multimédia auto-hébergé et un son synchronisé sur 23 lecteurs.
+category: homelab
+inside:
+  - Jellyfin
+  - Music Assistant
+  - Snapcast
+cover: jellyfin-libraries
+date: null
+draft: false
+sources:
+  - 'https://jellyfin.org/'
+  - 'https://www.music-assistant.io/'
+  - 'https://github.com/badaix/snapcast'
+  - 'https://github.com/jaedb/snapserver'
+  - 'https://www.home-assistant.io/integrations/music_assistant/'
+  - 'https://expo.dev/'
+  - 'https://github.com/react-native-webview/react-native-webview'
+---
+
+Côté médias, mon homelab a deux missions : lire des films et des séries sur la télé, et diffuser de la musique partout dans l'appartement, idéalement de façon synchronisée. Les deux tournent sur l'hôte Proxmox, lisent leurs bibliothèques depuis le pool TrueNAS et sont reliés à Home Assistant.
+
+## Jellyfin
+
+**Jellyfin** (10.11 au moment où j'écris) tourne dans Docker, sur le réseau Docker classique, dans son propre LXC sur Proxmox. Le conteneur est modeste : 4 vCPU et 4 Go de RAM, ce qui suffit pour un seul foyer.
+
+Les bibliothèques ne vivent pas dans le conteneur. TrueNAS exporte un partage média en SMB, l'hôte Proxmox le monte, et le LXC le reçoit sous forme de bind mount. À l'intérieur, Jellyfin voit trois chemins de lecture, un par bibliothèque : **Movies**, **TV Shows** et **Music**. La config et le cache de transcodage restent sur le disque local du conteneur, pour qu'un partage réseau lent ne bloque jamais l'interface.
+
+```yaml
+# Sanitized: the Jellyfin container's volume layout
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - /mnt/mediaserver/Movies:/Movies
+      - /mnt/mediaserver/TVShows:/TVShows
+      - /mnt/mediaserver/Music:/Music
+```
+
+Comme les médias sont sur un pool RAIDZ1 de quatre disques IronWolf, ils profitent de la même redondance et des mêmes scrubs que tout le reste, et le LXC Jellyfin reste minuscule et facile à sauvegarder : la sauvegarde hebdomadaire de Proxmox capture les métadonnées et les réglages sans embarquer des téraoctets de vidéo.
+
+### Des tuiles de bibliothèque assorties au launcher
+
+Les tuiles de bibliothèque par défaut de Jellyfin sont des collages d'affiches générés automatiquement. Elles fonctionnent, mais sur la télé elles détonnaient à côté du launcher que j'utilise, qui a son propre style de tuiles plates et épurées. En même temps que le design du launcher, j'ai donc généré des visuels pour chaque bibliothèque — Movies, TV Shows et Music — assortis à son style, et je les ai définis comme images des bibliothèques dans Jellyfin.
+
+![Tuiles de bibliothèque Jellyfin personnalisées](media:jellyfin-libraries)
+
+C'est un détail, mais ça donne l'impression que la télé forme un seul système, plutôt qu'un launcher avec une appli web greffée dessus.
+
+## Music Assistant
+
+Pour la musique, j'utilise **Music Assistant** (serveur 2.10), dans Docker, dans un LXC séparé aux côtés des add-ons vocaux de Home Assistant et du serveur Snapcast. Il utilise le réseau de l'hôte, parce que découvrir des enceintes en mDNS, SSDP et Cast est beaucoup moins pénible sans le NAT de Docker au milieu. La bibliothèque musicale vient du même pool TrueNAS, montée en bind mount dans le conteneur, et Music Assistant a aussi un provider YouTube Music et des sources radio.
+
+![Vue « en cours de lecture » de Music Assistant](media:music-assistant)
+
+Ce qui fait de Music Assistant le centre de l'audio, ce sont ses player providers. Dans mon installation, il en a d'activés pour :
+
+- **Snapcast** (voir plus bas), pour la lecture synchronisée dans toute la maison ;
+- **AirPlay**, **Google Cast** et **DLNA/UPnP**, pour les enceintes et télés déjà présentes dans l'appartement ;
+- **Sendspin**, le protocole de streaming propre à Music Assistant, pour les navigateurs et les clients légers ;
+- **les lecteurs multimédias de Home Assistant**, pour que tout ce sur quoi HA peut jouer soit aussi une cible.
+
+Au total, ça fait 23 lecteurs dans la configuration, pour la plupart des clients Sendspin venant de navigateurs et d'appareils qui se sont connectés au fil du temps.
+
+Music Assistant est aussi exposé à **Home Assistant** via son intégration, pour que les automatisations et les tableaux de bord puissent lancer des playlists ou la radio sur n'importe quel lecteur.
+
+### Un client de poche avec Expo
+
+L'interface web de Music Assistant est bien sur téléphone, mais je la voulais sous forme d'une vraie icône d'appli, sans barre de navigateur, et qui suive le thème clair/sombre du système. J'ai donc écrit une toute petite appli **Expo** (SDK 54, React Native 0.81) qui n'est en gros qu'un `react-native-webview` plein écran pointé sur mon instance Music Assistant. Elle adapte la barre d'état et le fond au thème du système, conserve le stockage DOM pour que la session survive aux redémarrages, et est configurée pour des builds avec EAS. C'est un wrapper, pas un client natif, et c'est voulu : chaque mise à jour de Music Assistant arrive dans l'appli sans aucun travail de ma part.
+
+## Snapcast
+
+**Snapcast** est la brique qui fait vraiment sonner l'audio multiroom comme une seule pièce. Un serveur Snapcast reçoit un unique flux audio et le distribue aux clients avec des horodatages ; chaque client met en tampon et joue au moment précis, pour que des enceintes dans des pièces différentes restent synchronisées à l'oreille.
+
+Je fais tourner le serveur (Snapcast 0.34, packagé par jaedb) dans son propre conteneur, en réseau hôte, à côté de Music Assistant, et j'ai configuré Music Assistant pour utiliser ce **serveur Snapcast externe** plutôt que son serveur intégré. Le serveur a une seule source de type pipe dans laquelle Music Assistant écrit. Le garder séparé me permet de redémarrer ou de mettre à jour Music Assistant sans que le serveur Snapcast et ses clients disparaissent.
+
+Côté clients, tout ce qui peut faire tourner `snapclient` devient une enceinte synchronisée. Aujourd'hui, le principal est le Raspberry Pi principal : il fait tourner snapclient via PulseAudio et envoie l'audio en Bluetooth à une enceinte appairée. Un petit service de reconnexion maintient ce lien Bluetooth, pour que l'enceinte revienne après une coupure ou un redémarrage sans que j'aie à la réappairer. Cette enceinte est une fabrication maison, un ESP32 et un DAC PCM5102 qui alimentent une paire d'enceintes filaires ; voir l'article sur les enceintes, *Enceintes filaires, cerveau Bluetooth*.
+
+## Ce que j'améliorerais
+
+La pile audio a grandi de façon organique, et la liste des lecteurs le montre : il y a plus de lecteurs configurés que d'enceintes physiques. Un passage de nettoyage, des noms plus clairs par pièce et quelques boîtiers snapclient dédiés rendraient l'installation aussi propre qu'elle sonne.

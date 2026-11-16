@@ -1,0 +1,98 @@
+---
+title: Un launcher Google TV sur mesure
+slug: custom-google-tv-launcher
+summary: >-
+  Un écran d'accueil minimaliste pour ma Google TV TCL, écrit en Kotlin et
+  Jetpack Compose : un fond de rubans animé, des applis épinglées, une tuile
+  HDMI, le contrôle des lumières et un panneau rapide ouvert par le bouton
+  Paramètres de la télécommande.
+excerpt: Remplacer l'écran d'accueil TCL d'origine par mon propre launcher Compose.
+category: homelab
+inside:
+  - Pourquoi le remplacer
+  - Le fond de rubans
+  - Applis épinglées et tuile HDMI
+  - Intercepter la touche Paramètres de TCL
+  - Le panneau des lumières
+cover: tv-launcher
+date: null
+draft: false
+sources:
+  - 'https://developer.android.com/compose'
+  - 'https://github.com/hyperion-project/hyperion.ng'
+  - 'https://github.com/wled/WLED'
+---
+
+Après avoir allégé la télé du salon et ajouté un Ambilight, l'écran d'accueil d'origine de Google TV était la dernière pièce qui ne collait pas. J'ai donc écrit mon propre launcher. C'est une petite appli Kotlin + Jetpack Compose pour un seul appareil : une Google TV TCL sous Android 11, en 1080p. Contrairement aux briques Hyperion et Jellyfin, celle-ci est entièrement mon code. Elle n'a pas de nom. Je l'ai conçue avec Claude, en itérant sur le rendu sous forme d'artifacts, puis je l'ai développée ; les tuiles de la bibliothèque Jellyfin ont été générées ensuite pour s'y accorder.
+
+![L'écran d'accueil du launcher](media:tv-launcher)
+
+## Pourquoi le remplacer
+
+L'écran d'accueil de Google TV est construit autour des recommandations : des rangées de contenus venant de services que je n'utilise pas. Moi, j'ouvre toujours la même poignée d'applis et l'entrée HDMI du PC. Je voulais aussi que l'écran d'accueil connaisse les lumières, pour voir si l'Ambilight tourne et changer de mode sans attraper mon téléphone.
+
+Le launcher est volontairement réduit : une horloge et la date, une pastille lumières, un bouton Paramètres, une rangée d'applis épinglées et une grille « Toutes les applis ».
+
+Google TV ignore les activités HOME tierces tant que son propre launcher est activé. Pour que le mien devienne celui par défaut, il faut désactiver le launcher d'origine via ADB (ainsi qu'un composant de configuration dont l'activité de récupération reprendrait sinon la main sur Home). Un simple `pm enable` suffit à les faire revenir.
+
+## Le fond de rubans
+
+Le fond est une bande de fines sinusoïdes qui traverse l'écran avec une légère inclinaison, devant trois couches d'étoiles qui dérivent lentement et scintillent de temps en temps. Les lignes viennent d'une maquette : chacune est stockée sous forme de quelques coefficients de Fourier pour deux images clés, et le ruban se transforme de l'une à l'autre comme des ondes stationnaires, ondulant sur place sans défiler latéralement ni se répéter visiblement.
+
+Les GPU de télé sont faibles, donc la vue évite totalement le flou et limite le travail par image :
+
+- tout est dessiné dans un espace de conception fixe de 1920×1080, puis mis à l'échelle de la vue ;
+- chaque image demande environ cinq appels de dessin : un dégradé de fond avec l'assombrissement haut/bas intégré, tout le champ d'étoiles en un seul maillage `drawVertices`, un voile, un maillage fusionné pour la lueur et le reflet, et un maillage pour toutes les lignes ;
+- rien n'est alloué par image, et la vue n'a pas de hardware layer : elle change à chaque image, et un layer n'ajouterait qu'une copie plein écran ;
+- les images sont cadencées par `Choreographer` et plafonnées à 60 fps (une option permet 30), et le temps avance selon les horodatages vsync pour que le mouvement reste régulier même quand une image est en retard.
+
+L'animation s'arrête dans `onPause` et reprend dans `onResume`, et elle se met aussi en pause quand la grille de toutes les applis recouvre l'écran. Quand le launcher n'est pas au premier plan, il ne coûte rien. Il y a aussi un interrupteur pour une image entièrement statique. La luminosité du ruban a sa propre constante, réglée pour que les LED de bord de l'Ambilight captent les vagues.
+
+## Applis épinglées et tuile HDMI
+
+La rangée d'accueil est une simple liste Kotlin. Chaque entrée d'appli a un libellé et une liste ordonnée de noms de paquets candidats, pour que la même épingle fonctionne avec mon build Jellyfin patché, un build de debug ou l'appli officielle. Le premier installé l'emporte, et les épingles sans appli installée sont masquées :
+
+```kotlin
+val PINNED: List<Pin> = listOf(
+    Pin.App("Jellyfin", listOf("<my-jellyfin-build>", "org.jellyfin.androidtv")),
+    Pin.App("SmartTube", listOf("org.smarttube.stable")),
+    Pin.App("Netflix", listOf("com.netflix.ninja")),
+    Pin.Hdmi,
+    Pin.AllApps,
+)
+```
+
+La logique de résolution est une fonction pure, elle a donc ses tests unitaires JVM, tout comme l'analyse de l'état et le dimensionnement de la rangée.
+
+La tuile **PC (HDMI)** ouvre directement une entrée HDMI passthrough via `TvContract.buildChannelUriForPassthroughInput`, sans passer par le sélecteur d'entrées de la télé. Un appui long sur OK ouvre un choix entre HDMI 1, 2 ou 3, et la sélection est enregistrée dans les préférences. Les entrées sont découvertes via `TvInputManager`, avec une liste de secours codée en dur des entrées passthrough de la TCL au cas où la découverte ne renverrait rien.
+
+## Intercepter la touche Paramètres de TCL
+
+La télécommande a un bouton Paramètres. Je voulais qu'il ouvre plutôt mon panneau rapide, depuis n'importe où : l'écran d'accueil, l'intérieur d'autres applis ou l'entrée HDMI. Les applis tierces ne peuvent pas recevoir l'intent système du panneau de paramètres, j'ai donc utilisé un petit service d'accessibilité qui se contente de filtrer les événements de touches.
+
+Le bouton de TCL n'est pas le `KEYCODE_SETTINGS` standard. C'est un keycode constructeur, `KEYCODE_TCL_SET`, donc le service le résout par son nom à l'exécution et se replie proprement sur les builds qui ne l'ont pas :
+
+```kotlin
+override fun onServiceConnected() {
+    super.onServiceConnected()
+    // TCL's vendor keycode for the Settings button; 0 (KEYCODE_UNKNOWN) if absent.
+    tclSettingsKey = KeyEvent.keyCodeFromString("KEYCODE_TCL_SET")
+}
+
+override fun onKeyEvent(event: KeyEvent): Boolean =
+    when (QuickPanelKeys.decide(event.keyCode, event.action, event.repeatCount, open, tclSettingsKey)) {
+        Decision.Pass -> false               // every other key goes through untouched
+        Decision.Toggle -> { if (open) close() else show(); true }
+        // ...
+    }
+```
+
+La décision de gestion des touches est de la logique pure, elle aussi testée unitairement. Paramètres ouvre ou ferme le panneau au premier appui, Retour le ferme, et Home le ferme tout en laissant passer la touche. Le service ne lit aucun contenu de l'écran et n'écoute aucun événement d'accessibilité. Le panneau est une vue Compose dans une fenêtre `TYPE_ACCESSIBILITY_OVERLAY`, avec un lifecycle owner minimal pour que Compose puisse tourner hors d'une Activity. Il contient les contrôles des lumières et des tuiles de raccourci pour Image, Son, Entrées, Réseau, Minuterie de mise en veille, Bluetooth et Tous les paramètres. Si le service n'est pas activé, le bouton garde son comportement d'origine.
+
+## Le panneau des lumières
+
+La pastille lumières de l'écran d'accueil, et les mêmes contrôles dans le panneau rapide, basculent entre trois modes : **Ambilight**, un **preset WLED** (listé en direct à partir des presets du contrôleur) ou **Éteint**, avec une luminosité par paliers de 10 %.
+
+Le composant maître `ALL` de Hyperion sert aussi de drapeau de contrôle manuel, partagé avec le démon auto-réparateur derrière l'Ambilight. Le mode Ambilight active `ALL`. Choisir un preset ou Éteint désactive d'abord `ALL`, puis envoie la commande WLED, et le démon laisse WLED tranquille tant que `ALL` est désactivé. Les changements de mode sont planifiés comme des requêtes HTTP ordonnées par des fonctions pures, puis envoyés avec des timeouts courts.
+
+Le launcher a aussi un petit watchdog. Tant qu'il est au premier plan et que le mode Ambilight est actif, il vérifie que Hyperion affiche bien une priorité active venant du grabber Android. Si Hyperion répond mais que le grabber manque, il lance l'activité de démarrage du grabber, avec une limite de fréquence et un backoff après des échecs répétés. Après un redémarrage, l'Ambilight revient de façon fiable sans aucune action de ma part.

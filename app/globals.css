@@ -133,3 +133,28 @@
     }
   }
 }
+
+/* Code blocks from rehype-pretty-code (dual theme: min-light / min-dark, switched by `.dark`). */
+@layer components {
+  [data-rehype-pretty-code-figure] pre {
+    @apply overflow-x-auto rounded-card border bg-card py-4 font-mono text-[13px] leading-relaxed;
+  }
+
+  [data-rehype-pretty-code-figure] code {
+    @apply grid min-w-full;
+  }
+
+  [data-rehype-pretty-code-figure] [data-line] {
+    @apply px-4;
+  }
+
+  [data-rehype-pretty-code-figure] span,
+  [data-rehype-pretty-code-figure] code {
+    color: var(--shiki-light);
+  }
+
+  .dark [data-rehype-pretty-code-figure] span,
+  .dark [data-rehype-pretty-code-figure] code {
+    color: var(--shiki-dark);
+  }
+}

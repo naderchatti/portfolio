@@ -1,0 +1,97 @@
+---
+title: A custom Google TV launcher
+slug: custom-google-tv-launcher
+summary: >-
+  A minimal home screen for my TCL Google TV, written in Kotlin and Jetpack
+  Compose: an animated ribbon background, pinned apps, an HDMI tile, light
+  controls, and a quick panel opened by the remote's Settings button.
+excerpt: Replacing the stock TCL home screen with my own Compose launcher.
+category: homelab
+inside:
+  - Why replace it
+  - Ribbon background
+  - Pinned apps & HDMI tile
+  - Catching TCL's Settings key
+  - Lights panel
+cover: tv-launcher
+date: null
+draft: false
+sources:
+  - 'https://developer.android.com/compose'
+  - 'https://github.com/hyperion-project/hyperion.ng'
+  - 'https://github.com/wled/WLED'
+---
+
+After debloating the living-room TV and adding an Ambilight, the stock Google TV home screen was the last piece that didn't fit. So I wrote my own launcher. It's a small Kotlin + Jetpack Compose app for one device: a TCL Google TV on Android 11, at 1080p. Unlike the Hyperion and Jellyfin pieces, this one is entirely my code. It doesn't have a name. I designed it with Claude, iterating on the look as artifacts, and then built it; the Jellyfin library tiles were generated afterwards to match it.
+
+![The launcher's home screen](media:tv-launcher)
+
+## Why replace it
+
+The Google TV home screen is built around recommendations: rows of content from services I don't use. I only open the same handful of apps and the PC's HDMI input. I also wanted the home screen to know about the lights, so it could show whether Ambilight is running and let me switch modes without picking up my phone.
+
+The launcher is deliberately small: a clock and date, a lights chip, a Settings button, one row of pinned apps, and an "All apps" grid.
+
+Google TV ignores third-party HOME activities while its own launcher is enabled. Making mine the default means disabling the stock launcher over ADB (and one setup component whose recovery activity otherwise takes Home back). Both are a single `pm enable` away from coming back.
+
+## Ribbon background
+
+The background is a band of fine sine lines running across the screen with a slight tilt, in front of three layers of slowly drifting stars that occasionally flare. The lines came from a design mockup: each one is stored as a few Fourier coefficients for two keyframes, and the ribbon morphs between them as standing waves, undulating in place without scrolling sideways or visibly repeating.
+
+TV GPUs are weak, so the view avoids blur entirely and keeps per-frame work small:
+
+- everything is drawn in a fixed 1920×1080 design space and scaled to the view;
+- each frame takes about five draw calls: a ground gradient with the top/bottom darkening baked in, the whole star field as one `drawVertices` mesh, a veil, a merged glow-and-sheen mesh, and one mesh for all the lines;
+- nothing is allocated per frame, and the view has no hardware layer, since it changes every frame and a layer would only add a full-screen copy;
+- frames are driven by `Choreographer` and capped at 60 fps (a config knob allows 30), and time advances by vsync timestamps so motion stays even when a frame is late.
+
+Animation stops in `onPause` and resumes in `onResume`, and it also pauses while the all-apps overlay covers the screen. When the launcher isn't in front, it costs nothing. There's also a switch for a fully static frame. Ribbon brightness has its own constant, tuned so the Ambilight's edge LEDs pick up the waves.
+
+## Pinned apps & HDMI tile
+
+The home row is a plain Kotlin list. Each app entry has a label and an ordered list of candidate package names, so the same pin works for my patched Jellyfin build, a debug build, or the official app. Whichever is installed first wins, and pins with nothing installed are hidden:
+
+```kotlin
+val PINNED: List<Pin> = listOf(
+    Pin.App("Jellyfin", listOf("<my-jellyfin-build>", "org.jellyfin.androidtv")),
+    Pin.App("SmartTube", listOf("org.smarttube.stable")),
+    Pin.App("Netflix", listOf("com.netflix.ninja")),
+    Pin.Hdmi,
+    Pin.AllApps,
+)
+```
+
+The resolution logic is a pure function, so it has JVM unit tests, as do the status parsing and the row sizing.
+
+The **PC (HDMI)** tile opens an HDMI passthrough input directly through `TvContract.buildChannelUriForPassthroughInput`, without going through the TV's input picker. Holding OK on the tile opens a chooser for HDMI 1, 2 or 3, and the choice is saved in preferences. Inputs are discovered through `TvInputManager`, with a hard-coded fallback list of the TCL's passthrough inputs in case discovery returns nothing.
+
+## Catching TCL's Settings key
+
+The remote has a Settings button. I wanted it to open my quick panel instead, from anywhere: the home screen, inside other apps, or on HDMI. Third-party apps can't receive the system's settings-panel intent, so I used a small accessibility service that only filters key events.
+
+TCL's button isn't the standard `KEYCODE_SETTINGS`. It's a vendor keycode, `KEYCODE_TCL_SET`, so the service resolves it by name at runtime and falls back gracefully on builds without it:
+
+```kotlin
+override fun onServiceConnected() {
+    super.onServiceConnected()
+    // TCL's vendor keycode for the Settings button; 0 (KEYCODE_UNKNOWN) if absent.
+    tclSettingsKey = KeyEvent.keyCodeFromString("KEYCODE_TCL_SET")
+}
+
+override fun onKeyEvent(event: KeyEvent): Boolean =
+    when (QuickPanelKeys.decide(event.keyCode, event.action, event.repeatCount, open, tclSettingsKey)) {
+        Decision.Pass -> false               // every other key goes through untouched
+        Decision.Toggle -> { if (open) close() else show(); true }
+        // ...
+    }
+```
+
+The key-handling decision is pure logic, also unit-tested. Settings toggles the panel on the first key-down, Back closes it, and Home closes it but still goes through. The service reads no screen content and listens to no accessibility events. The panel is a Compose view inside a `TYPE_ACCESSIBILITY_OVERLAY` window, with a minimal lifecycle owner so Compose can run outside an Activity. It has the light controls plus shortcut tiles for Picture, Sound, Inputs, Network, Sleep timer, Bluetooth and All settings. If the service isn't enabled, the button keeps its stock behaviour.
+
+## Lights panel
+
+The lights chip on the home screen, and the same controls in the quick panel, switch between three modes: **Ambilight**, a **WLED preset** (listed live from the controller's presets), or **Off**, with brightness in 10% steps.
+
+Hyperion's master `ALL` component doubles as a manual-override flag shared with the self-healing daemon behind the Ambilight. Ambilight mode enables `ALL`. Choosing a preset or Off disables `ALL` first, then sends the WLED command, and the daemon leaves WLED alone while `ALL` is off. Mode changes are planned as ordered HTTP requests by pure functions, then sent with short timeouts.
+
+The launcher also has a small watchdog. While it's in front and Ambilight mode is on, it checks whether Hyperion shows an active priority from the Android grabber. If Hyperion is reachable but the grabber is missing, it starts the grabber's boot activity, rate-limited and with backoff after repeated failures. After a reboot, the Ambilight reliably comes back without any action from me.

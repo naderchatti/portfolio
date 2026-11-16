@@ -1,0 +1,120 @@
+---
+title: 'The homelab: one LXC per service'
+slug: homelab-one-lxc-per-service
+summary: >-
+  A rack cut from old furniture, a recycled laptop running Proxmox, a TrueNAS
+  box with four IronWolf drives, and the rule that keeps it manageable: one
+  unprivileged LXC per service.
+excerpt: >-
+  A painted cabinet rack, a recycled laptop running Proxmox and storage on
+  TrueNAS.
+category: homelab
+inside:
+  - The rack build
+  - Proxmox layout
+  - Storage on TrueNAS
+  - Backups
+cover: rack-night
+date: null
+draft: false
+sources:
+  - 'https://www.proxmox.com/en/proxmox-virtual-environment/overview'
+  - 'https://linuxcontainers.org/lxc/introduction/'
+  - 'https://www.truenas.com/truenas-scale/'
+  - 'https://www.portainer.io/'
+  - 'https://pve.proxmox.com/pve-docs/vzdump.1.html'
+---
+
+My homelab is not big, and it is not new. That's part of the point. It is a handful of machines I already owned or bought second-hand, organised around one simple rule: **every service gets its own LXC container**. This post covers the physical build, how Proxmox is laid out, where the data lives and how it gets backed up.
+
+![The rack at night](media:rack-night)
+
+## The rack build
+
+I didn't buy a rack. I took an old piece of furniture, cut it down and reassembled it myself to fit the hardware, then spray-painted it black so it would sit in the flat without looking like server furniture.
+
+![Spray-painting the rack](media:rack-paint)
+
+Inside it live:
+
+- a **TerraMaster 4-bay enclosure** with four 4 TB Seagate IronWolf drives, connected over USB to a **Lenovo IdeaCentre H530** (i7-4790, 8 GB, 480 GB SSD) that runs TrueNAS;
+- the **Proxmox host**, an ASUS VivoBook S14 (more below);
+- a **dev server** on an old ASUS X556UV laptop (i5-6198DU, 8 GB, 240 GB SSD) that runs my development and work runtimes;
+- two **Raspberry Pi 4B**: the 8 GB one is the edge box (Home Assistant, the reverse proxy and the primary DNS), the 4 GB one handles lighter jobs;
+- a **TP-Link 8-port switch** tying it all together.
+
+![The storage bay](media:storage-bay)
+
+## Proxmox layout
+
+The hypervisor is **Proxmox VE 8.2** running on a recycled laptop: an ASUS VivoBook S14 with an Intel Core i7-8550U, 16 GB of RAM and a 256 GB SSD. A laptop is a surprisingly good homelab host: it is quiet and it sips power at idle. I removed the batteries from the laptops in the rack, so they run purely on mains power.
+
+On top of it run **14 LXC containers** and no VMs. Each one is unprivileged, has `nesting=1` enabled so it can run Docker, and is sized for its job, from 512 MB for small utilities to 6 GB for the audio stack. Some examples:
+
+- **nextcloud**: Nextcloud and its MariaDB database
+- **mediaserver**: Jellyfin
+- **ha-addons**: Music Assistant, a Snapcast server, and local speech-to-text/text-to-speech (Whisper and Piper) for Home Assistant's voice pipeline
+- **esphome**: the ESPHome dashboard and compiler
+- **cams**: Frigate and a Mosquitto MQTT broker
+- **monitoring**: Prometheus, Grafana and exporters
+- **pihole-secondary**: the second DNS resolver
+- small single-purpose boxes such as Vaultwarden, IT-Tools, BentoPDF (a PDF toolkit) and Hyperion
+
+![Proxmox with one container per service](media:proxmox)
+
+### Why LXC instead of VMs
+
+On a laptop CPU with 16 GB of RAM, full VMs would eat most of the memory in guest kernels and duplicated OS overhead. LXC containers share the host kernel, start in seconds and use only what their processes actually need. For services that are all Linux and all fairly light, that trade-off is easy.
+
+The "one LXC per service" rule gives me most of what I'd want from VMs anyway:
+
+- **Isolation of blast radius.** Upgrading Nextcloud can't break DNS, and a runaway Frigate process can't starve Vaultwarden, because CPU and memory limits are set per container.
+- **Per-service backup and restore.** Each container is a separate backup archive, so rolling back one service doesn't touch the others.
+- **Readable inventory.** The Proxmox sidebar *is* the service list.
+
+The cost is that unprivileged containers need a bit more care around device passthrough and mounts, which I handle at the host level (see storage below).
+
+### Docker inside LXC, managed by Portainer
+
+Most services ship as Docker images, so inside each LXC I run Docker with a Compose file. To avoid SSH-ing into a dozen containers, most LXCs also run a **Portainer agent**, and a single Portainer instance on the Pi connects to them. From one UI I can see containers, logs and images across the whole lab.
+
+![Portainer managing the Docker environments](media:portainer)
+
+## Storage on TrueNAS
+
+Data lives on a separate machine running **TrueNAS SCALE 25.10**. The main pool is a single **RAIDZ1 vdev of four 4 TB Seagate IronWolf** drives, which TrueNAS reports as 14.5 TB of raw capacity. ZFS scrubs keep an eye on silent corruption; the last one at the time of writing finished in under nine hours with zero errors.
+
+The integration pattern with Proxmox is deliberately simple:
+
+1. TrueNAS exports a few **SMB shares** (backups, cloud data, media, camera recordings).
+2. The Proxmox **host** mounts them with CIFS.
+3. Each LXC gets only the share it needs as a **bind mount**.
+
+```text
+# Proxmox host: SMB shares mounted once, then bind-mounted per container
+/mnt/lxc_shares/nas_rwx     -> mediaserver:/mnt/mediaserver
+/mnt/lxc_shares/nas_rwx/Music -> ha-addons:/mnt/music
+/mnt/lxc_shares/cloud_rwx   -> nextcloud:/mnt/cloud
+/mnt/lxc_shares/cams_rwx    -> cams:/mnt/cams
+```
+
+Mounting on the host avoids giving unprivileged containers the capabilities they'd need to mount network filesystems themselves, and it means a container only ever sees its own slice of the pool.
+
+## Backups
+
+Proxmox backs up all 14 LXCs with a single scheduled **vzdump** job:
+
+- runs **every Monday at 04:00**;
+- covers **all** guests;
+- uses **snapshot mode**, so containers keep running during the backup;
+- compresses with **zstd**;
+- writes to a storage target backed by the TrueNAS backup share;
+- keeps the **last 2** backups per guest and prunes older ones automatically.
+
+A second weekly job archives the Proxmox host configuration and keeps the last 12. On the TrueNAS side, there's a weekly config backup, a weekly scrub, and scheduled short and long SMART tests on the drives.
+
+Because the backup target is on the ZFS pool, the archives inherit RAIDZ redundancy and scrubbing. There is no off-site copy yet, so everything still lives under one roof. Replicating the backup dataset off-site is next on my list, along with bringing Home Assistant's own backups into the same routine.
+
+## What I learned
+
+A laptop, a reworked piece of furniture and four NAS drives go a long way when the software layout is disciplined. One LXC per service keeps the lab legible, mounting storage at the host keeps permissions sane, and a boring weekly backup job is worth more than any clever setup I never test. Speaking of which: I should schedule a restore test, not just backups.

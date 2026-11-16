@@ -1,0 +1,110 @@
+---
+title: A smart USB KVM
+slug: smart-usb-kvm
+summary: >-
+  I wired an ESP32-S3 into a cheap UGREEN USB switch so Home Assistant can press
+  its button, read its status LEDs, and move my keyboard, mouse and peripherals
+  between my desktop and my laptop.
+excerpt: >-
+  An ESP32 wired to a USB switch so Home Assistant knows and switches the active
+  PC.
+category: homelab
+inside:
+  - The mod
+  - ESPHome
+  - Automations
+cover: kvm-pcb-mod
+date: null
+draft: false
+sources:
+  - 'https://esphome.io'
+  - 'https://www.home-assistant.io'
+---
+
+My desk has two computers on it: a desktop PC and a laptop. The keyboard, mouse and a few USB peripherals sit behind a UGREEN 30768, a USB 3.0 KVM switch for two computers with four USB outputs, the kind with one push button on top and two LEDs that show which computer currently owns the USB ports. It works well, but it is completely dumb. You press the button, it flips, and nothing else in the house knows that it happened.
+
+I wanted the switch to be part of Home Assistant: something I can trigger from a dashboard or an automation, and something that reports which computer is active. So I opened it up.
+
+![The modded switch mounted under the desk](media:kvm-under-desk)
+
+## The mod
+
+The switch's logic is simple. The front button pulls a line low when pressed, and each of the two status LEDs is lit when its port is active. That gives me two things to tap into: one signal to fake a button press, and two signals to read the current state.
+
+![ESP32-S3 soldered to the switch's button and LED pads](media:kvm-pcb-mod)
+
+I soldered a small ESP32-S3-Zero board directly onto the PCB:
+
+- one GPIO wired to the button pad, so the ESP32 can pull it low the same way a finger would;
+- two ADC-capable GPIOs wired to the two status-LED pads, so it can measure the voltage across each LED and tell which one is on;
+- a shared ground with the switch.
+
+| ESP32-S3-Zero | UGREEN switch |
+| --- | --- |
+| GPIO4 | select-button pad (output pulled LOW for 100 ms, then back to input so it floats when idle) |
+| GPIO1 (ADC) | profile-1 LED pad |
+| GPIO2 (ADC) | profile-2 LED pad |
+| 5V | switch's USB 5 V |
+| GND | GND (common) |
+
+A profile reads as active above 0.7 V; the other LED must read below 0.3 V.
+
+![Wiring diagram](diagram:smart-usb-kvm)
+
+The ESP32 is powered from the switch's own USB 5 V rail, so there is no extra supply to plug in, and it is always on and ready whenever the switch is.
+
+I read the LEDs with the ADC rather than as plain digital inputs because the voltage at an LED pad isn't guaranteed to be a clean logic level. Measuring it in volts and applying thresholds is more tolerant than hoping a digital pin reads it correctly.
+
+The physical button still works exactly as before. The ESP32 only adds a second way to press it.
+
+## ESPHome
+
+The board runs ESPHome, with the Arduino framework and the `esp32-s3-devkitc-1` board definition. The first version of the config targeted a generic `esp32dev` board and only had the button. The current one adds the LED sensing.
+
+The button is a template button in ESPHome. When pressed, it switches the GPIO to an output, drives it low for 100 ms, then releases it by setting the pin back to an input. Releasing to high impedance, rather than driving the pin high, means the ESP32 never fights the switch's own pull-up. It behaves like a finger that presses and lets go.
+
+```yaml
+button:
+  - platform: template
+    name: "KVM Toggle"
+    on_press:
+      - lambda: |-
+          gpio_set_direction((gpio_num_t)BUTTON_PIN, GPIO_MODE_OUTPUT);
+          gpio_set_level((gpio_num_t)BUTTON_PIN, 0);   // "press"
+          delay(100);
+          gpio_set_level((gpio_num_t)BUTTON_PIN, 1);
+          gpio_set_direction((gpio_num_t)BUTTON_PIN, GPIO_MODE_INPUT);  // let go
+```
+
+Each LED is an `adc` sensor polled every second. A template text sensor and a template binary sensor turn those two readings into a state. A profile counts as active only when its LED reads above 0.7 V and the other LED reads below 0.3 V. Anything in between, such as both LEDs half-lit during a transition, is reported as unknown instead of being guessed:
+
+```yaml
+text_sensor:
+  - platform: template
+    name: "Current KVM Profile"
+    update_interval: 1s
+    lambda: |-
+      if (id(led_1).state > 0.7 && id(led_2).state < 0.3) return {"Profile 1"};
+      if (id(led_2).state > 0.7 && id(led_1).state < 0.3) return {"Profile 2"};
+      return {"Unknown"};
+```
+
+That gives Home Assistant four entities: the toggle button, the two raw LED voltages (useful for checking the thresholds), and the derived "current profile" as both a text sensor and a binary sensor.
+
+There is no explicit debounce filter in the ESPHome config. Two things do that job: the 1-second polling interval and the "both conditions must hold" rule. A reading mid-transition just shows up as "Unknown" for a moment.
+
+## Automations
+
+The switch only has a toggle, not "go to port 1" or "go to port 2". The useful operation is "make sure this computer is active", so the automations have to compare the requested state with the measured one and press the button only when they differ.
+
+I did this with a text helper in Home Assistant that holds the desired profile, and three automations around it:
+
+1. **Set Profile 1 (desktop).** When the helper changes to "Profile 1", check that the switch currently reports "Profile 2". Only then, press the toggle.
+2. **Set Profile 2 (laptop).** The mirror image: when the helper changes to "Profile 2" and the switch reports "Profile 1", press the toggle.
+3. **Sync the helper.** When the measured active profile changes, for example because someone pressed the physical button, wait one second and copy the measured profile into the helper.
+
+The third automation keeps the helper honest. If I press the real button, the helper follows the hardware instead of drifting out of sync. The one-second delay lets the LED readings settle before the value is copied. Because the first two automations check the measured state before pressing, this sync never triggers an extra press. When the helper is updated to match reality, the "is it already there?" condition is already satisfied.
+
+In practice, switching computers is now a dashboard button, or one step inside a larger automation. Since the state comes from the LEDs, Home Assistant always shows which machine owns the keyboard, whichever way it was switched.
+
+It's a small mod. It needed a few solder joints, one short ESPHome config and three automations, and it turned a standalone gadget into something the rest of my setup can control.

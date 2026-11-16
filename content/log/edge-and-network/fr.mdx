@@ -1,0 +1,109 @@
+---
+title: 'La bordure : Traefik, Tailscale et DNS redondant'
+slug: edge-and-network
+summary: >-
+  Comment les requêtes atteignent mon homelab : un reverse proxy Traefik v3.7
+  avec un certificat wildcard obtenu par challenge DNS Cloudflare, des
+  interfaces d'admin limitées au LAN, Tailscale pour l'accès à distance, et deux
+  Pi-hole synchronisés.
+excerpt: >-
+  Traefik avec TLS wildcard et en-têtes de sécurité, deux Pi-hole synchronisés
+  et Tailscale pour l'accès distant. Les interfaces d'admin restent sur le LAN.
+category: homelab
+inside:
+  - Traefik v3.7
+  - Découpage réseau
+  - Accès à distance
+  - DNS redondant
+cover: traefik
+date: null
+draft: false
+sources:
+  - 'https://doc.traefik.io/traefik/'
+  - 'https://letsencrypt.org/'
+  - 'https://github.com/cloudflare/cloudflared'
+  - 'https://tailscale.com/'
+  - 'https://pi-hole.net/'
+  - 'https://github.com/lovelaze/nebula-sync'
+  - 'https://www.quad9.net/'
+---
+
+Tout ce que j'auto-héberge doit être joignable d'une manière ou d'une autre : depuis le canapé, et depuis mon téléphone en 4G. Cet article parle de cette couche de bordure : le reverse proxy, le découpage du réseau, la façon dont j'y accède à distance, et comment le DNS tient quand un résolveur tombe.
+
+## Traefik v3.7
+
+Le point d'entrée unique pour le HTTP(S), c'est **Traefik** (actuellement en v3.7.12), qui tourne dans Docker sur le Raspberry Pi 4. Son tableau de bord affiche en ce moment **36 routeurs HTTP, 54 services et 12 middlewares**, tous au vert.
+
+![Tableau de bord Traefik](media:traefik)
+
+### Deux providers
+
+Traefik lit son routage à deux endroits :
+
+- le **provider Docker**, pour les conteneurs du Pi lui-même. `exposedByDefault` est désactivé, donc un conteneur n'est routé que s'il porte des labels `traefik.enable` explicites ;
+- le **provider fichier**, un unique `config.yml` qui décrit tout ce qui vit ailleurs : les services dans des LXC Proxmox, le NAS, l'interface de l'hyperviseur, etc. Ce fichier contient actuellement 27 routeurs.
+
+Ce découpage garde les conteneurs locaux autodescriptifs, tandis que le fichier sert d'index lisible de « tout ce qui vit sur une autre machine ».
+
+### Certificats
+
+Le TLS vient de **Let's Encrypt**, via le résolveur ACME de Traefik et le **challenge DNS Cloudflare**. Comme le challenge passe par le DNS, rien n'a besoin d'être joignable sur le port 80 pour la validation, et ça me permet de demander un **certificat wildcard**. Le tableau de bord n'affiche qu'un seul certificat, réutilisé par tous les routeurs. Le token d'API Cloudflare est passé par l'environnement et ne se trouve jamais dans le fichier de config.
+
+### Middlewares
+
+Les 27 routeurs du provider fichier n'écoutent que sur le point d'entrée HTTPS (le HTTP simple est redirigé globalement) et passent par un middleware d'**en-têtes de sécurité** :
+
+```yaml
+# Sanitized excerpt from the file provider
+http:
+  middlewares:
+    default-headers:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000   # 180 days
+        customFrameOptionsValue: SAMEORIGIN
+    default-whitelist:
+      ipWhiteList:   # v2-era name, still accepted; newer routes use ipAllowList
+        sourceRange:
+          - "<LAN_CIDR>"
+```
+
+Les routes d'administration privées reçoivent en plus une **liste blanche d'IP**, pour ne répondre que depuis le réseau local, et le tableau de bord Traefik lui-même est protégé par une authentification basique. Aujourd'hui, un seul routeur du provider fichier porte réellement la liste blanche ; les autres s'appuient sur la connexion propre à chaque appli. Les interfaces d'admin (Proxmox, TrueNAS et consorts) restent de toute façon limitées au LAN : le DNS local de Pi-hole résout mon domaine vers Traefik à l'intérieur du réseau, et depuis l'extérieur j'y accède via Tailscale. Il existe aussi une chaîne `secured` toute prête (liste blanche + en-têtes) que je peux attacher à n'importe quel nouveau routeur en une ligne.
+
+### Un compromis assumé : `insecureSkipVerify`
+
+Beaucoup de backends (l'interface Proxmox, le NAS, quelques appliances) servent du HTTPS avec des certificats auto-signés. Plutôt que de distribuer une CA interne, j'ai activé `serversTransport.insecureSkipVerify: true` globalement, ce qui veut dire que **Traefik ne vérifie pas les certificats de mes backends**. Sur un LAN domestique, c'est un compromis conscient : les clients reçoivent toujours un certificat public valide, et le saut non vérifié va du Pi au LXC, à l'intérieur de mon propre réseau. Cela signifie quand même que quelqu'un déjà présent sur le LAN pourrait usurper un backend ; la correction propre — un `serversTransport` par backend avec la bonne CA, ou du HTTP simple quand le backend le permet — est sur ma liste de choses à faire.
+
+## Découpage réseau
+
+Le réseau de la maison est coupé en deux. Le **réseau principal**, c'est uniquement moi : mes machines, le homelab et les interfaces d'admin. Tous les autres, famille comme invités, passent sur un **réseau invité** séparé. Ça garde le côté admin petit et prévisible, et personne n'a à s'en soucier.
+
+Cloudflare gère le DNS de mon domaine, y compris le challenge de certificat. Je n'utilise pas de Cloudflare Tunnel pour le homelab aujourd'hui. Le seul tunnel en service est temporaire : il sert des écrans de menu en boutique pour un projet client, en attendant que celui-ci passe sur sa version déployée.
+
+## Accès à distance
+
+Pour les cas « j'ai besoin de tout le LAN, pas juste d'une page web », j'utilise **Tailscale**, qui tourne comme service système sur le Pi. Il annonce une route de sous-réseau vers le réseau de la maison et est proposé comme exit node, ce qui est pratique sur le Wi-Fi d'un hôtel. Je faisais aussi tourner WireGuard avant, mais je suis passé entièrement à Tailscale : rien à rediriger sur le routeur, et ça passe sur des réseaux qui bloquent WireGuard tout court.
+
+Avec Tailscale actif, les mêmes noms d'hôte et les mêmes routes Traefik fonctionnent de partout, et les interfaces d'admin n'ont jamais besoin de route publique.
+
+## DNS redondant
+
+Le DNS est le seul service dont toute la maison remarque la panne immédiatement, donc il tourne en double :
+
+- le **Pi-hole principal** dans Docker sur le Raspberry Pi ;
+- un **Pi-hole secondaire** dans son propre LXC sur Proxmox.
+
+![Tableau de bord Pi-hole](media:pihole)
+
+Le secondaire est tenu à jour par **nebula-sync**, qui tourne toutes les heures et copie ce qui doit être identique : listes de blocage, listes d'autorisation et de refus, groupes et affectations de clients, plus les enregistrements DNS locaux (hôtes et CNAME). Les réglages qui doivent rester propres à chaque instance, comme le DHCP ou la configuration du résolveur, ne sont pas touchés.
+
+Chaque Pi-hole a son propre sidecar **cloudflared**, utilisé uniquement comme upstream DNS-over-HTTPS, pour que les requêtes quittent la maison chiffrées. Le proxy du principal est configuré avec les endpoints de Cloudflare et de Quad9, donc un fournisseur dans un mauvais jour ne suffit pas à casser la résolution ; le secondaire utilise l'upstream Cloudflare par défaut de cloudflared.
+
+## Pour conclure
+
+Aucune de ces briques n'est exotique. Ce qui rend la bordure agréable à vivre, c'est la cohérence : un proxy, un certificat, la même politique d'en-têtes partout, les interfaces d'admin gardées sur le LAN, un seul accès pour moi, et deux résolveurs pour tous les autres. Le point qui me gêne encore, c'est le `insecureSkipVerify` global, et il est écrit noir sur blanc ci-dessus plutôt que caché.

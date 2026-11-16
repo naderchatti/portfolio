@@ -1,0 +1,141 @@
+---
+title: Un assistant vocal bilingue
+slug: bilingual-voice-assistant
+summary: >-
+  Reconnaissance et synthèse vocales locales via Wyoming, deux pipelines Assist
+  dans Home Assistant (français et anglais), un agent de conversation LLM, et un
+  satellite ESP32-S3 fait maison qui se réveille sur « hey jarvis ».
+excerpt: >-
+  Des pipelines Assist locaux en français et en anglais, avec un satellite
+  ESP32-S3 fait maison.
+category: homelab
+inside:
+  - Pipeline FR/EN
+  - Satellite ESP32-S3
+  - Mot d'activation
+cover: voice-satellite-build
+date: null
+draft: false
+sources:
+  - 'https://www.home-assistant.io/voice_control/'
+  - 'https://github.com/rhasspy/wyoming-faster-whisper'
+  - 'https://github.com/rhasspy/piper'
+  - 'https://github.com/linuxserver/docker-faster-whisper'
+  - 'https://github.com/linuxserver/docker-piper'
+  - 'https://github.com/kahrendt/microWakeWord'
+  - 'https://esphome.io/components/voice_assistant.html'
+  - >-
+    https://smarthomecircle.com/How-to-setup-on-device-wake-word-for-voice-assistant-home-assistant
+---
+
+Je travaille en français et en anglais, mais à la maison le français passe en premier : ma famille ne parle pas anglais. Je voulais un assistant vocal capable de gérer les deux langues, qui garde le traitement de la parole sur mon propre matériel et qui ne dépende pas d'une enceinte connectée du commerce. Il repose sur les pipelines Assist de Home Assistant, deux services Wyoming dans un conteneur Proxmox, un LLM pour l'étape de conversation, et un petit satellite que j'ai construit autour d'un ESP32-S3.
+
+![Le satellite vocal terminé](media:voice-satellite-build)
+
+## Pipeline FR/EN
+
+Assist découpe une requête vocale en étapes : mot d'activation, transcription (STT), conversation et synthèse vocale (TTS). Chaque étape peut avoir un fournisseur différent. Le STT et le TTS tournent en local sur le protocole Wyoming, avec les images linuxserver.io de faster-whisper et de Piper, toutes deux dans Docker à l'intérieur d'un LXC dédié sur mon hôte Proxmox.
+
+Les services français ressemblent à ceci (anonymisé) :
+
+```yaml
+services:
+  faster-whisper-fr:
+    image: lscr.io/linuxserver/faster-whisper:latest
+    environment:
+      - WHISPER_MODEL=small-int8
+      - WHISPER_BEAM=1
+      - WHISPER_LANG=fr
+    ports: ["10301:10300"]
+
+  piper-fr:
+    image: lscr.io/linuxserver/piper:latest
+    environment:
+      - PIPER_VOICE=fr_FR-mls-medium
+      - PIPER_PROCS=2
+    ports: ["10201:10200"]
+```
+
+Pour le français, j'utilise Whisper `small-int8` avec un beam size de 1, ce qui sacrifie un peu de précision pour une latence plus faible sur CPU. La voix par défaut du conteneur Piper est `fr_FR-mls-medium`, mais le pipeline sélectionne `fr_FR-siwis-medium`, l'une des voix françaises téléchargées dans le dossier de données de Piper.
+
+Home Assistant a deux pipelines Assist :
+
+- **Français** : langue `fr`, STT via le service faster-whisper français, TTS via le service Piper français avec la voix `fr_FR-siwis-medium`.
+- **Anglais** : langue `en`, STT via un service faster-whisper anglais, TTS via un service Piper anglais avec la voix `en_US-hfc_female-medium`.
+
+Pour être honnête sur l'état actuel : le pipeline anglais est désactivé le temps que je le retravaille. Ses services Whisper et Piper sont coupés pour l'instant, et c'est le pipeline français qui assure le quotidien.
+
+Les deux pipelines utilisent le même agent de conversation, un modèle OpenAI branché via l'intégration OpenAI Conversation de Home Assistant. Il a accès à l'API Assist, donc il peut piloter les entités exposées, et sa langue de conversation est réglée sur « toutes ». L'option « Prefer local intents » est désactivée, donc chaque requête passe par le LLM. J'ai aussi configuré OpenRouter comme agent de conversation alternatif pour essayer d'autres modèles.
+
+Le LLM est la seule étape qui sort de la maison. L'audio est transcrit en local, et seul le texte part à l'extérieur.
+
+## Satellite ESP32-S3
+
+Le satellite est une carte de développement ESP32-S3 (avec PSRAM) sous ESPHome, sur le framework ESP-IDF, avec deux modules I²S :
+
+- un micro MEMS **INMP441** en entrée ;
+- un ampli classe D I²S **MAX98357A** qui alimente un petit haut-parleur en sortie.
+
+Pour le matériel et la mise en place de microWakeWord, j'ai suivi le guide d'Amrut Prabhu sur Smart Home Circle (crédité plus bas). Ma config ESPHome reprend le même câblage :
+
+| ESP32-S3 (N8R2) | INMP441 (micro) |
+| --- | --- |
+| 3V3 | VDD |
+| GND | GND et L/R |
+| GPIO2 | SCK |
+| GPIO3 | WS |
+| GPIO4 | SD (entrée ; canal gauche, 32 bits) |
+
+| ESP32-S3 (N8R2) | MAX98357A (ampli) |
+| --- | --- |
+| 5V | VIN |
+| GND | GND |
+| GPIO7 | BCLK |
+| GPIO6 | LRC |
+| GPIO8 | DIN (mono) |
+
+La LED d'état intégrée est sur GPIO48.
+
+![Schéma de câblage](diagram:voice-satellite)
+
+![Câblage du micro INMP441](media:voice-satellite-mic)
+
+Ils utilisent deux bus I²S séparés, un pour le micro et un pour le haut-parleur, pour que la capture et la lecture aient chacune leurs propres broches d'horloge. La LED WS2812 intégrée affiche l'état : une pulsation bleue au démarrage, éteinte une fois Home Assistant connecté, une pulsation bleu-violet douce pendant l'écoute, rouge en mode muet, et une brève pulsation verte quand on réactive le micro.
+
+![Câblage de l'ampli MAX98357A](media:voice-satellite-amp)
+
+Le composant ESPHome `voice_assistant` envoie l'audio du micro à Home Assistant et lit la réponse TTS. J'ai réglé la réduction de bruit au niveau 2 et le multiplicateur de volume du micro à 4. Un interrupteur template « mute » arrête à la fois le moteur de détection du mot d'activation et toute requête en cours, et passe la LED au rouge pour qu'on voie clairement que l'appareil n'écoute pas.
+
+Côté Home Assistant, le satellite est associé au pipeline français, et sa détection de « fin de parole » est réglée sur agressive pour qu'il arrête vite d'écouter après une commande courte. Je choisis moi-même la langue du pipeline plutôt que de la détecter, et je le laisse surtout en français, parce que ma famille ne parle pas anglais et que l'assistant doit marcher pour tout le monde dans l'appartement.
+
+## Mot d'activation
+
+La détection du mot d'activation tourne sur l'appareil, avec le composant ESPHome `micro_wake_word` et le modèle `hey_jarvis`. Rien n'est envoyé à Home Assistant tant que le mot d'activation n'a pas été détecté en local, donc le micro ne diffuse pas d'audio toute la journée.
+
+Le cycle de vie est câblé à la main dans le YAML :
+
+```yaml
+micro_wake_word:
+  models:
+    - model: hey_jarvis
+  on_wake_word_detected:
+    - voice_assistant.start:
+        wake_word: !lambda return wake_word;
+
+voice_assistant:
+  on_end:
+    - wait_until:
+        not:
+          voice_assistant.is_running:
+    - micro_wake_word.start:
+  on_error:
+    - micro_wake_word.start:
+```
+
+La détection démarre quand le client API de Home Assistant se connecte, pas au boot, pour que le satellite n'écoute jamais sans avoir où envoyer l'audio. Elle se met en pause pendant une requête et redémarre une fois la requête terminée ou en échec. Si la connexion API tombe, toute requête en cours est arrêtée.
+
+Le résultat : un petit boîtier qui répond à « hey jarvis » (en français aujourd'hui, l'anglais reviendra une fois la refonte terminée), qui pilote la maison via Assist et qui garde le traitement audio sur mes propres machines.
+
+## Crédits
+
+- Amrut Prabhu, [How To Setup On-Device Wake Word Detection For Voice Assistant using Micro Wake Word](https://smarthomecircle.com/How-to-setup-on-device-wake-word-for-voice-assistant-home-assistant) (Smart Home Circle, 2024). J'ai suivi son guide pour le matériel du satellite et la mise en place de microWakeWord.

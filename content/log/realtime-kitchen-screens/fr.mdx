@@ -1,0 +1,99 @@
+---
+title: Des écrans de cuisine en temps réel avec une outbox Postgres
+slug: realtime-kitchen-screens
+summary: >-
+  Comment chaque écran de L'Effiloché, du tableau de la cuisine au suivi client,
+  reste à jour grâce à une seule outbox Postgres, un relais et des server-sent
+  events.
+excerpt: >-
+  Un changement, tous les écrans : cuisine, comptoir, client et livreur
+  synchronisés, une seule fois chacun.
+category: saas
+inside:
+  - Outbox
+  - Relais
+  - Tableau de la cuisine
+  - Alarme de nouvelle commande
+  - Suivi client
+  - Tournées des livreurs
+cover: kitchen-board
+date: null
+draft: false
+sources: []
+---
+
+![Tableau de la cuisine](media:kitchen-board)
+
+L'Effiloché est un street-food et coffee shop dont je pilote toute l'informatique. Le logiciel est un monorepo pnpm : une appli web client, une appli d'administration qui sert aussi les écrans de la cuisine et des livreurs, une appli Expo pour l'équipe, et des paquets partagés.
+
+Pendant le service, une nouvelle commande doit atteindre le tableau de la cuisine, le tableau de bord d'administration, la page de suivi du client et parfois le téléphone d'un livreur en quelques secondes, une seule fois, sans laisser fuiter de données vers le mauvais écran. Je ne voulais pas d'un broker de messages pour un seul restaurant, donc tout passe par Postgres. Le système n'est pas encore en production : il est en phase de tests finaux avec l'équipe avant la mise en service.
+
+## Outbox
+
+Toute écriture métier qui intéresse d'autres écrans ajoute une ligne à `realtime_outbox_events` dans la même transaction. Si la commande est commitée, l'événement l'est avec elle. Si elle est annulée, rien n'a été annoncé.
+
+Les événements servent uniquement à l'invalidation : `changed` ou `deleted`, plus le type et l'ID de l'agrégat, jamais le contenu des commandes, les adresses ou les prix. Chacun a un topic (`kitchen.orders`, `order.tracking`, `driver.tour`, `admin.operations`, `public.catalogue`) et une audience qui doit correspondre à ce topic : la cuisine, les administrateurs, un livreur, ou une commande précise. Les autres combinaisons sont rejetées.
+
+Les ajouts passent par une fonction SQL. Elle prend un advisory lock à l'échelle de la transaction et attribue à chaque agrégat son numéro de version suivant. Elle impose aussi une `dedupeKey` unique : rejouer la même clé avec la même empreinte d'intention renvoie la ligne existante, et réutiliser une clé pour une intention différente lève une erreur. Un checkout relancé produit un seul événement, pas deux.
+
+## Relais
+
+Un petit processus de relais tourne dans son propre conteneur. En boucle, il appelle `publish_realtime_outbox_events` :
+
+```sql
+-- simplified
+IF NOT pg_try_advisory_xact_lock(outbox_lock) THEN RETURN; END IF;
+FOR e IN SELECT id FROM realtime_outbox_events
+         WHERE publication_sequence IS NULL
+         ORDER BY created_at, id LIMIT batch_size FOR UPDATE LOOP
+  seq := nextval('realtime_outbox_publication_sequence');
+  UPDATE realtime_outbox_events SET publication_sequence = seq, published_at = now() WHERE id = e.id;
+  PERFORM pg_notify('realtime_outbox_published', seq::text);
+END LOOP;
+```
+
+Les écrivains gardent le même advisory lock jusqu'au commit de leur transaction, et le relais ne fait qu'essayer de le prendre. Il ne numérote donc jamais un lot pendant qu'un ajout est encore en cours. Un commit plus tardif ne peut ainsi jamais se retrouver avec une séquence plus basse qu'un commit antérieur, et le curseur d'un consommateur ne peut pas sauter par-dessus un événement pas encore publié. Quand il n'y a rien à publier, le relais dort 250 ms par défaut. Les lignes publiées sont conservées 72 heures par défaut, et un watermark de rétention indique aux consommateurs quand leur curseur est sorti de l'historique.
+
+La livraison aux navigateurs passe par des server-sent events. Chaque processus d'administration tient une unique connexion `LISTEN` dédiée, hors du pool Prisma, et diffuse les réveils à tous les flux ouverts. Une notification n'est qu'un réveil ; chaque flux lit ensuite sa propre destination autorisée à partir de son curseur durable. Après une reconnexion de l'écouteur, tous les flux sont réveillés pour combler l'écart.
+
+Côté client :
+
+- **Curseur de rendu.** Une page lit le high watermark de l'outbox *avant* de charger ses données, et se connecte à partir de là. Un événement commité entre le rendu et la connexion est quand même livré, et l'historique plus ancien n'est pas rejoué.
+- **Reprise.** Chaque trame porte sa séquence comme `id` SSE, donc une reconnexion du navigateur reprend via `Last-Event-ID`. Si le curseur est inconnu ou a été purgé, le serveur envoie un seul `reset` et la page se rafraîchit une fois.
+- **Ignorer son propre écho.** L'onglet qui a effectué une action a déjà le rendu à jour, il ignore donc son propre écho une fois, dans un délai de 10 secondes.
+- **Polling de sécurité.** Tout onglet visible se rafraîchit quand même toutes les 30 secondes, ainsi que lorsqu'il redevient visible ou se reconnecte.
+
+Les flux envoient un heartbeat toutes les 15 secondes et revérifient les autorisations toutes les minutes.
+
+## Tableau de la cuisine
+
+La cuisine ne s'abonne qu'aux événements `customer-order`. Les commandes avancent de colonne en colonne, de « en attente de paiement » à « prête », les plus anciennes en premier, avec les allergies toujours visibles. Les changements d'état sont optimistes : la carte bouge immédiatement et revient en arrière avec un message visible si le serveur refuse la transition. L'appli tablette Expo garde l'écran allumé et désactive les actions hors ligne.
+
+## Alarme de nouvelle commande
+
+![Alerte de nouvelle commande sur l'écran de la cuisine](media:kitchen-new-order-alert)
+
+Une nouvelle commande restaurant (click-and-collect ou sur place) déclenche une alarme qui se répète jusqu'à ce que quelqu'un appuie sur « Vu ». L'acquittement est partagé entre les appareils. C'est un simple `UPDATE … WHERE kitchenAlertAckedAt IS NULL` : le premier appui l'emporte, un second ne fait rien, et chaque commande acquittée émet exactement une invalidation cuisine, ce qui fait taire tous les autres écrans de la cuisine.
+
+Les navigateurs exigent un geste avant de jouer du son, donc le tableau arme l'audio au premier appui. Pour les écrans qui ne sont pas au premier plan, la transaction de commande écrit aussi une intention Web Push et appelle `pg_notify`, pour qu'un dispatcher puisse l'envoyer juste après le commit ; ces notifications push arriveront avec la mise en service. Les push expirent au bout de 10 minutes et ne contiennent que le numéro cuisine et le mode de commande. La tablette Android utilise un canal de notification avec un son fort et répété qui fonctionne écran éteint.
+
+## Suivi client
+
+![Menu web client](media:customer-web-menu)
+![Menu mobile client](media:customer-mobile-menu)
+
+La page de suivi du client a son propre flux, limité à cette seule commande. Elle recharge une projection publique stricte à chaque invalidation, et ne fait du polling que lorsque le flux est fermé. La projection affiche une étape grossière (en file, en route, arrivée, échec) et rien sur les autres arrêts, le livreur ou l'itinéraire. Pour une livraison en cours, elle peut ajouter une position approximative arrondie (vieille de 90 secondes au plus) et une fourchette d'heure d'arrivée, mais seulement tant que l'arrêt est en route et que le livreur assigné est toujours actif. Dès qu'une donnée est périmée, rien n'est affiché (fail closed).
+
+![Suivi de commande client](media:customer-tracking)
+
+## Tournées des livreurs
+
+La livraison ne vend pas toute la carte. Elle vend des produits fixes, à partir du stock limité chargé dans un camion. Chaque ligne de stock suit les quantités chargées, réservées, livrées, retirées et rapportées invendues ; les allocations ne dépassent jamais ce qui a été chargé, et la disponibilité est calculée, jamais stockée.
+
+Le checkout rejoue d'abord un `clientRequestId` déjà commité. Si la requête est nouvelle, il verrouille la tournée et ses lignes de stock dans un ordre déterministe, à l'intérieur d'une transaction sérialisable, et revalide l'état de la tournée, la zone couverte, l'adresse, l'instantané des SKU et la disponibilité. En un seul commit, il écrit ensuite la commande, les réservations de stock, les mouvements d'inventaire, un incrément de version d'inventaire et un nouvel arrêt ajouté à l'itinéraire. Le moindre conflit annule toute la requête, et le client reçoit une réponse explicite de conflit de stock au lieu d'un camion survendu.
+
+En fin de tournée, un administrateur répartit chaque quantité restante entre rapportée, abîmée, perdue ou manquante, et confirme le tout en une transaction contre la version d'inventaire attendue. Le résultat s'affiche sous forme de récapitulatif verrouillé.
+
+![Récapitulatif de tournée livreur](media:driver-tour-summary)
+
+Rien de tout cela ne demande plus que Postgres, un petit relais et de simples flux HTTP, ce qui convient bien à une entreprise de cette taille.

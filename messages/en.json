@@ -47,7 +47,9 @@
   "home": {
     "role": "Fullstack engineer — I build SaaS products and run my own infrastructure.",
     "intro": "Freelance & SaaS founder, based in France. Next.js and TypeScript on the front, Python and Postgres behind it, and a homelab where most of it gets tested first.",
-    "soon": "Coming soon."
+    "soon": "Coming soon.",
+    "viewWork": "View work",
+    "readLog": "Read the log"
   },
   "footer": {
     "copyright": "© {year} Nader Chatti",
@@ -61,5 +63,98 @@
     "description": "This path doesn't exist — or it moved.",
     "home": "Back home",
     "shell": "cd: no such file or directory"
+  },
+  "sections": {
+    "activity": {
+      "title": "Activity",
+      "total": "{count} contributions in the last 12 months",
+      "note": "mostly private repos",
+      "less": "Less",
+      "more": "More",
+      "languages": "Languages",
+      "heatmapLabel": "Contribution heatmap, {from} to {to}",
+      "day": "{count} contributions on {date}"
+    },
+    "built": {
+      "title": "Products I build and run",
+      "tag": "personal"
+    },
+    "experience": {
+      "title": "Experience",
+      "tag": "professional"
+    },
+    "lab": {
+      "title": "The lab",
+      "featured": "Featured builds",
+      "explore": "Explore the lab →",
+      "allEntries": "All log entries →",
+      "infrastructure": "Infrastructure",
+      "builds": "Builds",
+      "services": "Self-hosted services",
+      "screens": "Screens",
+      "homeAssistant": "Home Assistant"
+    },
+    "education": {
+      "title": "Education"
+    },
+    "stack": {
+      "title": "Stack, from shipped code"
+    },
+    "contact": {
+      "title": "Have a project in mind?",
+      "emailMe": "Email me"
+    },
+    "uses": {
+      "title": "Uses",
+      "buildLog": "Build log"
+    }
+  },
+  "project": {
+    "status": {
+      "launching-soon": "Launching soon",
+      "live": "Live",
+      "in-development": "In development",
+      "archived": "Archived"
+    },
+    "private": "Private",
+    "visit": "Visit {label}",
+    "screens": "Screens",
+    "detail": "Engineering detail"
+  },
+  "experience": {
+    "now": "now",
+    "current": "Current"
+  },
+  "log": {
+    "title": "The log",
+    "lead": "Notes from building SaaS products, running the homelab and soldering the odd ESP32. What I set up, why, and what broke along the way.",
+    "filterLabel": "Filter by tag",
+    "filters": {
+      "all": "All",
+      "homelab": "Homelab",
+      "saas": "SaaS"
+    },
+    "searchLabel": "Search the log",
+    "searchPlaceholder": "Search entries",
+    "count": {
+      "one": "{count} entry",
+      "other": "{count} entries"
+    },
+    "empty": "No entries match this filter.",
+    "inside": "Inside",
+    "read": "Read",
+    "readInLog": "Read in the log →",
+    "readMore": "Read →",
+    "minutes": "{count} min read",
+    "undated": "Undated",
+    "draft": "Draft",
+    "sources": "Sources",
+    "onThisPage": "On this page",
+    "backToLog": "← All entries",
+    "diagramPending": "Wiring diagram"
+  },
+  "media": {
+    "playVideo": "Play video",
+    "pauseVideo": "Pause video"
   }
 }

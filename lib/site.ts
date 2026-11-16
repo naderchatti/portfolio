@@ -1,9 +1,12 @@
+import { profile } from '@/content/site';
 import type { Locale, Messages } from '@/lib/i18n';
 
+export { socials, type Social, type SocialKey } from '@/content/site';
+
 export const site = {
-  name: 'Nader Chatti',
-  url: 'https://naderchatti.com',
-  email: 'contact@naderchatti.com',
+  name: profile.name,
+  url: profile.url,
+  email: profile.email,
 } as const;
 
 export type NavKey = 'built' | 'experience' | 'lab' | 'log' | 'uses';
@@ -20,20 +23,6 @@ export const navItems: { key: NavKey; index: string }[] = [
 export function navHref(locale: Locale, key: NavKey): string {
   return `/${locale}/#${key}`;
 }
-
-export type SocialKey = 'github' | 'linkedin' | 'x' | 'twitch' | 'email';
-
-export const socials: { key: SocialKey; label: string; href: string }[] = [
-  { key: 'github', label: 'GitHub', href: 'https://github.com/naderchatti' },
-  {
-    key: 'linkedin',
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/naderchatti',
-  },
-  { key: 'x', label: 'X', href: 'https://x.com/naderchatti' },
-  { key: 'twitch', label: 'Twitch', href: 'https://www.twitch.tv/naderolli' },
-  { key: 'email', label: 'Email', href: `mailto:${site.email}` },
-];
 
 export function navLabel(messages: Messages, key: NavKey): string {
   return messages.nav[key];

@@ -1,0 +1,98 @@
+---
+title: Realtime kitchen screens with a Postgres outbox
+slug: realtime-kitchen-screens
+summary: >-
+  How every screen at L'Effiloché, from the kitchen board to customer tracking,
+  stays current through one Postgres outbox, a relay and server-sent events.
+excerpt: >-
+  One change, every screen: kitchen, counter, customer and driver apps kept in
+  sync exactly once.
+category: saas
+inside:
+  - Outbox
+  - Relay
+  - Kitchen board
+  - New-order alarm
+  - Customer tracking
+  - Driver tours
+cover: kitchen-board
+date: null
+draft: false
+sources: []
+---
+
+![Kitchen board](media:kitchen-board)
+
+L'Effiloché is a street-food and coffee shop where I lead all of the IT. The software is a pnpm monorepo: a customer web app, an admin app that also serves the kitchen and driver screens, an Expo staff app, and shared packages.
+
+During service, one new order must reach the kitchen board, the admin dashboard, the customer's tracking page and sometimes a driver's phone within seconds, once, without leaking data to the wrong screen. I didn't want a message broker for one restaurant, so everything goes through Postgres. The system isn't in production yet: it's in final testing with the team before go-live.
+
+## Outbox
+
+Any domain write that other screens care about appends a row to `realtime_outbox_events` in the same transaction. If the order commits, the event commits with it. If it rolls back, nothing was announced.
+
+Events are invalidation-only: `changed` or `deleted` plus the aggregate type and ID, never order contents, addresses or prices. Each has a topic (`kitchen.orders`, `order.tracking`, `driver.tour`, `admin.operations`, `public.catalogue`) and an audience that must match that topic: the kitchen, admins, one driver, or one specific order. Other combinations are rejected.
+
+Appends go through a SQL function. It takes a transaction-scoped advisory lock and gives each aggregate its next version number. It also enforces a unique `dedupeKey`: replaying the same key with the same intent fingerprint returns the existing row, and reusing a key for a different intent raises an error. A retried checkout produces one event, not two.
+
+## Relay
+
+A small relay process runs as its own container. In a loop, it calls `publish_realtime_outbox_events`:
+
+```sql
+-- simplified
+IF NOT pg_try_advisory_xact_lock(outbox_lock) THEN RETURN; END IF;
+FOR e IN SELECT id FROM realtime_outbox_events
+         WHERE publication_sequence IS NULL
+         ORDER BY created_at, id LIMIT batch_size FOR UPDATE LOOP
+  seq := nextval('realtime_outbox_publication_sequence');
+  UPDATE realtime_outbox_events SET publication_sequence = seq, published_at = now() WHERE id = e.id;
+  PERFORM pg_notify('realtime_outbox_published', seq::text);
+END LOOP;
+```
+
+Appenders hold the same advisory lock until their transaction commits, and the relay only tries to take it. So the relay never numbers a batch while an append is still in flight. A later commit therefore never ends up with a lower sequence than an earlier one, and a consumer's cursor can't jump past an event that hasn't been published yet. When there is nothing to publish, the relay sleeps for 250 ms by default. Published rows are kept for 72 hours by default, and a retention watermark tells consumers when their cursor has fallen out of history.
+
+Delivery to browsers uses server-sent events. Each admin process holds a single dedicated `LISTEN` connection, outside the Prisma pool, and fans the wakeups out to every open stream. A notification is only a wakeup; each stream then reads its own authorized destination from its durable cursor. After a listener reconnect, every stream is woken to close the gap.
+
+On the client side:
+
+- **Render cursor.** A page reads the outbox high watermark *before* loading its data and connects from there. An event committed between render and connect is still delivered, and older history isn't replayed.
+- **Resume.** Every frame carries its sequence as the SSE `id`, so a browser reconnect resumes through `Last-Event-ID`. If the cursor is unknown or has been pruned, the server sends one `reset` and the page refreshes once.
+- **Self-echo skip.** The tab that performed an action already has the fresh render, so it skips its own echo once, within 10 seconds.
+- **Safety poll.** Any visible tab still refreshes every 30 seconds, and again when it becomes visible or reconnects.
+
+Streams send a heartbeat every 15 seconds and re-check authorization every minute.
+
+## Kitchen board
+
+The kitchen subscribes only to `customer-order` events. Orders move through columns, from awaiting payment to ready, oldest first, with allergies always visible. Status changes are optimistic. The card moves at once and rolls back with a visible message if the server rejects the transition. The Expo tablet app keeps the screen awake and disables actions while offline.
+
+## New-order alarm
+
+![New-order alert on the kitchen screen](media:kitchen-new-order-alert)
+
+A new restaurant order (click-and-collect or dine-in) raises an alarm that repeats until someone taps « Vu ». The acknowledgement is shared across devices. It's a single `UPDATE … WHERE kitchenAlertAckedAt IS NULL`, so the first tap wins, a second tap is a no-op, and each acknowledged order emits exactly one kitchen invalidation, which silences every other kitchen screen.
+
+Browsers need a gesture before playing audio, so the board arms sound on the first tap. For screens that aren't in the foreground, the order transaction also writes a Web Push intent and calls `pg_notify`, so a dispatcher can send it right after commit; those push notifications come with go-live. Pushes expire after 10 minutes and contain only the kitchen number and order mode. The Android tablet uses a notification channel with a loud repeating sound that works with the screen off.
+
+## Customer tracking
+
+![Customer web menu](media:customer-web-menu)
+![Customer mobile menu](media:customer-mobile-menu)
+
+The customer's tracking page has its own stream, scoped to that single order. It refetches a strict public projection on each invalidation, and it polls only while the stream is closed. The projection shows a coarse stage (queued, en route, arrived, failed) and nothing about other stops, the driver or the route. For a delivery in progress, it can add a rounded approximate position (at most 90 seconds old) and an ETA band, but only while the stop is en route and the assigned driver is still enabled. Anything stale fails closed.
+
+![Customer order tracking](media:customer-tracking)
+
+## Driver tours
+
+Delivery doesn't sell from the full menu. It sells fixed products from the finite stock loaded into one truck. Each stock row tracks loaded, reserved, delivered, removed and returned-unsold quantities; allocations never exceed what was loaded, and availability is derived, never stored.
+
+Checkout first replays a committed `clientRequestId`. If the request is new, it locks the tour and its stock rows in a deterministic order inside a serializable transaction and revalidates tour state, coverage, address, SKU snapshot and availability. In one commit, it then writes the order, the stock reservations, the inventory movements, one inventory-version bump, and a new stop appended to the route. Any conflict rolls back the whole request, and the customer gets an explicit stock-conflict response instead of an oversold truck.
+
+At the end of a tour, an administrator splits each remaining quantity into returned, damaged, wasted or missing, and confirms it all in one transaction against the expected inventory version. The result is shown as a locked summary.
+
+![Driver tour summary](media:driver-tour-summary)
+
+None of this needs more than Postgres, one small relay and plain HTTP streams, which suits a business of this size.

@@ -1,0 +1,99 @@
+---
+title: Credits that never drift — money handling in UGCKit
+slug: credits-that-never-drift
+summary: >-
+  How UGCKit reserves credits before paid AI work, settles them only against
+  verified provider bills, and keeps every amount exact.
+excerpt: >-
+  Money handling in UGCKit: reserve, then settle against verified provider
+  results.
+category: saas
+inside:
+  - Reservations
+  - Settlement
+  - Idempotency
+  - Exact decimals
+cover: ugckit-landing
+date: null
+draft: false
+sources: []
+---
+
+![UGCKit landing page](media:ugckit-landing)
+
+UGCKit isn't in production yet; it's launching soon, and this post describes the money handling as built ahead of launch. In UGCKit, most useful actions are paid AI calls, mostly through fal.ai. Customers pay a Stripe subscription and get a monthly credit allowance. Two things must hold: nobody is charged for work that didn't arrive, and nobody gets work that wasn't paid for.
+
+The core rule: Postgres is the only place where balances change. Stripe and providers are external facts to reconcile against, Temporal runs and retries work, and OpenTelemetry and ClickHouse are secondary views. None of them can grant, charge or release a credit.
+
+## Reservations
+
+Credits are granted per monthly window, and only after a payment has been verified server-side. A `FinancialPayment` row exists only when the Stripe adapter has verified the invoice, and a unique key on provider plus invoice ID means a duplicate or out-of-order webhook cannot fund a window twice.
+
+Before any provider call, the action goes through admission inside one transaction:
+
+1. Lock the user, then the project, then the financial account (`SELECT … FOR UPDATE`). The row is first inserted with `skipDuplicates`, so concurrent first requests converge on one row.
+2. Resolve the current window and check `granted − held − charged` against the requested credits.
+3. Run the account-level exposure review: projected cost against the revenue allocated to that window.
+4. Freeze the quote (model, settings, estimate, credit maximum, conversion and pricing versions) and store its hash.
+5. In the same commit, write the reservation, increment `creditsHeld`, add a `hold` ledger entry, create the first cost record with the estimate, write a `WorkDispatch` row and append to the financial outbox.
+
+Temporal only enters after that commit. A maintenance worker reads pending dispatch rows and starts workflows with a deterministic workflow ID. A rolled-back admission has nothing to dispatch; a failed start stays pending and is retried. Batches follow the same path, but every quote and the combined total are validated first, so a refused batch leaves no partial reservations.
+
+Insufficient credits reject the action before anything is sent to a provider. Balances never go negative.
+
+## Settlement
+
+A reservation is not revenue and not a charge. It is the accepted maximum. The charge comes later, and only when two things are true: a usable output has been saved, and the actual provider cost is confirmed.
+
+For fal.ai, the worker multiplies the `x-fal-billable-units` result header by the endpoint's latest price snapshot, which a periodic sweep stores in Postgres. Settlement then requires a durable "output delivered" marker in the outbox, a confirmed cost with no billing conflict, and a reservation still in `held`. The charge is:
+
+```text
+calculated = 10 * ceil(30 * eligible_provider_usd)
+charged    = min(reserved, calculated)
+released   = reserved - charged
+```
+
+Settlement appends `charge` and `release` ledger entries and moves the window counters from held to charged. When the actual cost is above the accepted maximum, the customer pays the maximum and the business absorbs the rest. The overrun is recorded.
+
+The failure cases matter more than the happy path:
+
+- **Confirmed failure.** Credits are released even if the provider billed us; that cost stays visible as business spending.
+- **Uncertain outcome.** After a timeout or crash, the reservation stays held while recovery checks the same provider request. A timeout is not a failure.
+- **Cost not derivable.** With no units header or no price snapshot, the reservation stays held and a dedicated code is logged. A missing number is never zero.
+- **Late bills.** Corrections update business cost, never a finalized customer charge.
+- **Monthly reset.** Accepted work keeps its original window; released credits keep their original expiry and cannot refill the new month.
+
+## Idempotency
+
+Every write has a stable identity, so a replay has no second effect:
+
+- A reservation is unique on `(userId, actionKey)`. Replaying the same key with the same quote hash returns the existing row. The same key with a different quote raises a conflict.
+- Ledger entries and outbox events use IDs derived from a hash of the reservation ID and the entry kind. The outbox is also unique on subject, kind and version.
+- Cost evidence is unique on `(source, sourceEventId)`. For fal.ai, the event ID is a hash of provider, endpoint and request ID, so the first evidence for a physical request wins and a re-fetch is skipped. The same event replayed with different content raises a conflict.
+- Finalization only acts on a `held` reservation. A second call returns the settled row unchanged.
+
+Expected refusals come back as results, not exceptions, so a newly recorded review hold still commits.
+
+## Exact decimals
+
+No amount in this system goes through a JavaScript `number`. USD is stored as `Decimal(24,12)` in Postgres and handled in code as `bigint` atoms of 10⁻¹² dollars. Credits are whole integers. Reading a database decimal asks for full fixed-point notation before converting it, so nothing is silently rounded on the way in.
+
+The credit conversion is integer arithmetic with an explicit ceiling:
+
+```ts
+const USD_SCALE = 1_000_000_000_000n; // 12 decimal places
+
+function creditsFor(atoms: bigint, c = { mult: 3n, perUsd: 100n, step: 10n }) {
+  const num = atoms * c.mult * c.perUsd;
+  const den = USD_SCALE * c.step;
+  return Number(((num + den - 1n) / den) * c.step); // round up to the next step
+}
+```
+
+Floats fail quietly here: tiny per-unit prices times large unit counts, and the errors don't cancel across thousands of rows. Early cent rounding is just as bad. The rule is applied once, to the selected pricing unit, never to subcomponents and then again to the total. Annual payments are split across windows by elapsed time in exact atoms, with the remainder on the last window.
+
+## Where it stands
+
+The foundation (schema, transaction API, Stripe verification, fal.ai cost recording, delivery-bound settlement) is implemented and tested against real Postgres. The design docs note that some older provider paths are not automatically on the new ledger yet.
+
+What I take from it: decide which system owns the truth, give every effect an identity, and treat a missing number as unknown, never as zero.

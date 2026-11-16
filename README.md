@@ -19,9 +19,19 @@ Personal site of Nader Chatti — bilingual (EN/FR), statically exported and hos
 | `pnpm preview`   | Serve `out/` with `wrangler pages dev` (runs `functions/` too) |
 | `pnpm lint`      | ESLint 9 flat config (`eslint.config.mjs`)                     |
 | `pnpm typecheck` | Route type generation + `tsc` for the app and Pages Functions  |
+| `pnpm media`     | Rebuild `public/media` (AVIF/WebP) + `content/media.generated.ts` from `MEDIA_SRC` |
+| `pnpm data:activity` | Refresh `content/activity.generated.json` from GitHub (`GITHUB_TOKEN` or `gh`) |
+| `pnpm check:content` | Post counts, translations, `media:`/`diagram:` refs, MDX compile, manifest files |
 
 Icons (`app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icon-*.png`) are generated from
 `lib/cat-paths.ts` with `node scripts/generate-icons.mjs` (requires ImageMagick).
+
+## Content
+
+- `content/*.ts` — typed bilingual data (`{ en, fr }` strings, read with `t(value, lang)`).
+- `content/log/<slug>/{en,fr}.mdx` — posts, compiled at build time by `lib/posts.ts` (`@mdx-js/mdx`, GFM,
+  rehype-pretty-code). `![alt](media:name)` renders a `<Figure>`, `![alt](diagram:slug)` a `<WiringDiagram>`.
+- Media and the GitHub activity snapshot are generated locally and committed; the build never hits the network.
 
 ## Deploy (Cloudflare Pages)
 

@@ -47,7 +47,9 @@
   "home": {
     "role": "Ingénieur fullstack — je construis des produits SaaS et j'opère ma propre infrastructure.",
     "intro": "Freelance et fondateur SaaS, basé en France. Next.js et TypeScript côté front, Python et Postgres derrière, et un homelab où presque tout est testé en premier.",
-    "soon": "Bientôt."
+    "soon": "Bientôt.",
+    "viewWork": "Voir les projets",
+    "readLog": "Lire le journal"
   },
   "footer": {
     "copyright": "© {year} Nader Chatti",
@@ -61,5 +63,98 @@
     "description": "Ce chemin n'existe pas — ou il a été déplacé.",
     "home": "Retour à l'accueil",
     "shell": "cd: aucun fichier ou dossier de ce type"
+  },
+  "sections": {
+    "activity": {
+      "title": "Activité",
+      "total": "{count} contributions sur les 12 derniers mois",
+      "note": "surtout des dépôts privés",
+      "less": "Moins",
+      "more": "Plus",
+      "languages": "Langages",
+      "heatmapLabel": "Carte des contributions, de {from} à {to}",
+      "day": "{count} contributions le {date}"
+    },
+    "built": {
+      "title": "Les produits que je construis et fais tourner",
+      "tag": "perso"
+    },
+    "experience": {
+      "title": "Expérience",
+      "tag": "pro"
+    },
+    "lab": {
+      "title": "Le lab",
+      "featured": "Montages à la une",
+      "explore": "Explorer le lab →",
+      "allEntries": "Tout le journal →",
+      "infrastructure": "Infrastructure",
+      "builds": "Montages",
+      "services": "Services auto-hébergés",
+      "screens": "Écrans",
+      "homeAssistant": "Home Assistant"
+    },
+    "education": {
+      "title": "Formation"
+    },
+    "stack": {
+      "title": "La stack, tirée du code livré"
+    },
+    "contact": {
+      "title": "Un projet en tête ?",
+      "emailMe": "M'écrire"
+    },
+    "uses": {
+      "title": "Outils",
+      "buildLog": "Journal de montage"
+    }
+  },
+  "project": {
+    "status": {
+      "launching-soon": "Lancement imminent",
+      "live": "En ligne",
+      "in-development": "En développement",
+      "archived": "Archivé"
+    },
+    "private": "Privé",
+    "visit": "Visiter {label}",
+    "screens": "Écrans",
+    "detail": "Détail technique"
+  },
+  "experience": {
+    "now": "auj.",
+    "current": "En cours"
+  },
+  "log": {
+    "title": "Le journal",
+    "lead": "Des notes sur la construction de produits SaaS, la gestion du homelab et quelques ESP32 soudés. Ce que j'ai mis en place, pourquoi, et ce qui a cassé en route.",
+    "filterLabel": "Filtrer par tag",
+    "filters": {
+      "all": "Tout",
+      "homelab": "Homelab",
+      "saas": "SaaS"
+    },
+    "searchLabel": "Chercher dans le journal",
+    "searchPlaceholder": "Chercher un article",
+    "count": {
+      "one": "{count} article",
+      "other": "{count} articles"
+    },
+    "empty": "Aucun article ne correspond à ce filtre.",
+    "inside": "Au sommaire",
+    "read": "Lire",
+    "readInLog": "Lire dans le journal →",
+    "readMore": "Lire →",
+    "minutes": "{count} min de lecture",
+    "undated": "Non daté",
+    "draft": "Brouillon",
+    "sources": "Sources",
+    "onThisPage": "Sur cette page",
+    "backToLog": "← Tous les articles",
+    "diagramPending": "Schéma de câblage"
+  },
+  "media": {
+    "playVideo": "Lire la vidéo",
+    "pauseVideo": "Mettre la vidéo en pause"
   }
 }
