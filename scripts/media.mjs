@@ -29,6 +29,7 @@ const WEBP = { quality: 74, effort: 5 };
  * Contact sheets, previews and verification crops are working files; the video poster is copied
  * with its video. driver-stop shows a street address, so it stays unpublished. The old Fourma screens and
  * eGouvernement phone strip were replaced by the App Store renders and the multi-device composite.
+ * The last group are shots no page references any more; they stay in the source folder only.
  */
 const SKIP = [
   /^sheet\.jpg$/,
@@ -38,6 +39,8 @@ const SKIP = [
   /^driver-stop\.jpg$/,
   /^fourma-(home|editor|live-light)\.jpg$/,
   /^egov-\d\.jpg$/,
+  /^(cat-on-pc-sleeping|counter-handoff|desk-esp32-mounted-glue|esp32-s3-zero|kvm-esp32|laptop-closed)\.jpg$/,
+  /^(pc-build|pc-case|pc-gpu|pc-parts|pc-rgb-side|speakers-cr3-close|speakers-esp32|storage-cabinet)\.jpg$/,
 ];
 
 /** Source basename → published name, where post/content refs use a different name. */

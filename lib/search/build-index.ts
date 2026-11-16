@@ -55,7 +55,7 @@ function lineText(line: string): string {
 type Section = { depth: 2 | 3; title: string; id: string; text: string[] };
 
 /** Splits an MDX body into its intro text and `##`/`###` sections with the same ids as `remarkHeadingIds`. */
-export function splitSections(body: string): { intro: string; sections: Section[] } {
+function splitSections(body: string): { intro: string; sections: Section[] } {
   const seen = new Map<string, number>(RESERVED_IDS.map((id) => [id, 1]));
   const intro: string[] = [];
   const sections: Section[] = [];

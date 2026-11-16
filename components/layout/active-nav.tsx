@@ -46,7 +46,7 @@ function useSectionInView(enabled: boolean): NavKey | null {
 export type ActiveNav = { key: NavKey | null; kind: 'page' | 'location' | null };
 
 /** The nav item matching the current route, or on the home page the section in view. */
-export function useActiveNav(locale: Locale): ActiveNav {
+function useActiveNav(locale: Locale): ActiveNav {
   const pathname = stripSlash(usePathname() ?? '');
   const home = pathname === `/${locale}`;
   const section = useSectionInView(home);

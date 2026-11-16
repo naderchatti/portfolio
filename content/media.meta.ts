@@ -65,12 +65,6 @@ export const mediaMeta = {
   'customer-mobile-menu': { alt: { en: 'Customer mobile menu', fr: 'Menu mobile client' } },
   'customer-tracking': { alt: { en: 'Customer order tracking', fr: 'Suivi de commande client' } },
   'driver-tour-summary': { alt: { en: 'Driver tour summary', fr: 'Récapitulatif de tournée livreur' } },
-  'counter-handoff': {
-    alt: {
-      en: 'Counter hand-off screen: the customer’s pickup code is checked before the order is handed over',
-      fr: 'Écran de remise au comptoir : le code de retrait du client est vérifié avant de remettre la commande',
-    },
-  },
 
   // Lab screenshots
   grafana: {
@@ -154,20 +148,11 @@ export const mediaMeta = {
       fr: 'Le dos de la carte, avec le câble RJ12 plat et son connecteur',
     },
   },
-  'desk-esp32-mounted-glue': {
-    alt: {
-      en: 'The sealed board plugged in beside the desk’s motor cables',
-      fr: 'La carte scellée branchée à côté des câbles moteur du bureau',
-    },
-  },
   'desk-ha-controls': {
     alt: {
       en: 'Home Assistant device page with desk up and down, height slider and M1 to M4 presets',
       fr: 'Page de l’appareil dans Home Assistant avec monter et descendre, curseur de hauteur et positions M1 à M4',
     },
-  },
-  'esp32-s3-zero': {
-    alt: { en: 'A bare ESP32-S3-Zero board', fr: 'Une carte ESP32-S3-Zero nue' },
   },
 
   // Smart USB KVM
@@ -184,12 +169,6 @@ export const mediaMeta = {
       fr: 'Le switch USB modifié fixé sous le bureau, avec l’ESP32 et les câbles bien rangés',
     },
     focal: '50% 55%',
-  },
-  'kvm-esp32': {
-    alt: {
-      en: 'The ESP32 wired to the USB switch next to its cables',
-      fr: 'L’ESP32 câblé au switch USB, à côté de ses câbles',
-    },
   },
 
   // Rack and storage
@@ -219,12 +198,6 @@ export const mediaMeta = {
       fr: 'Baie de stockage à quatre emplacements avec quatre disques Seagate IronWolf de 4 To',
     },
     focal: '50% 55%',
-  },
-  'storage-cabinet': {
-    alt: {
-      en: 'The NAS enclosure and laptops on a shelf of the rack',
-      fr: 'La baie NAS et les portables sur une étagère du rack',
-    },
   },
 
   // Living-room TV
@@ -281,21 +254,12 @@ export const mediaMeta = {
       fr: 'Boîtier noir ventilé fermé, avec une LED rouge allumée',
     },
   },
-  'speakers-esp32': {
-    alt: {
-      en: 'The ESP32 running on top of its project box, red LED lit',
-      fr: 'L’ESP32 en marche sur son boîtier, LED rouge allumée',
-    },
-  },
   'speakers-cr3-front': {
     alt: {
       en: 'Mackie CR3 Limited Edition powered speakers, front',
       fr: 'Enceintes actives Mackie CR3 Limited Edition, de face',
     },
     focal: '50% 40%',
-  },
-  'speakers-cr3-close': {
-    alt: { en: 'Close-up of a Mackie CR3 speaker', fr: 'Gros plan d’une enceinte Mackie CR3' },
   },
   'speakers-cr3-back': {
     alt: {
@@ -326,12 +290,6 @@ export const mediaMeta = {
     },
     focal: '55% 40%',
   },
-  'cat-on-pc-sleeping': {
-    alt: {
-      en: 'A black cat asleep on top of the PC case',
-      fr: 'Un chat noir endormi sur le boîtier du PC',
-    },
-  },
   'laptop-open': {
     alt: {
       en: 'ASUS ROG Zephyrus G14 open on the desk, three-quarter view',
@@ -343,37 +301,13 @@ export const mediaMeta = {
     alt: { en: 'Laptop lid with the AniMe Matrix dot pattern', fr: 'Le capot du portable et son motif à points AniMe Matrix' },
     focal: '50% 50%',
   },
-  'laptop-closed': {
-    alt: { en: 'The Zephyrus G14 closed on the desk', fr: 'Le Zephyrus G14 fermé sur le bureau' },
-  },
   keyboard: {
     alt: { en: 'Close-up of the Logitech G915 TKL keyboard', fr: 'Gros plan du clavier Logitech G915 TKL' },
-  },
-  'pc-parts': {
-    alt: { en: 'The Intel Core i7-13700K box before the build', fr: 'La boîte de l’Intel Core i7-13700K avant le montage' },
-  },
-  'pc-build': {
-    alt: {
-      en: 'Motherboard installed in the case during the build',
-      fr: 'La carte mère installée dans le boîtier pendant le montage',
-    },
-  },
-  'pc-case': {
-    alt: { en: 'The ROG Hyperion case, empty', fr: 'Le boîtier ROG Hyperion, vide' },
-  },
-  'pc-gpu': {
-    alt: { en: 'The ROG Strix RTX 4080 graphics card', fr: 'La carte graphique ROG Strix RTX 4080' },
   },
   'pc-rgb': {
     alt: {
       en: 'The finished PC with white and blue RGB lighting',
       fr: 'Le PC terminé, éclairé en RGB blanc et bleu',
-    },
-  },
-  'pc-rgb-side': {
-    alt: {
-      en: 'The finished PC lit up with white and blue RGB and Strimer cables',
-      fr: 'Le PC terminé, éclairé en RGB blanc et bleu avec les câbles Strimer',
     },
   },
   'pc-gallery-flatlay': {

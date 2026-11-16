@@ -4,7 +4,7 @@ import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type R
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export const CATEGORIES = ['all', 'homelab', 'saas'] as const;
+const CATEGORIES = ['all', 'homelab', 'saas'] as const;
 export type CategoryFilter = (typeof CATEGORIES)[number];
 
 export type LogIndexItem = {

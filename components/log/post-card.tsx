@@ -11,7 +11,7 @@ export function minutesLabel(messages: Messages, minutes: number): string {
 }
 
 /** Thumbnail: photos crop to 4:3 around their focal point, screenshots are letterboxed. */
-export function PostThumb({ post, lang, className }: { post: PostMeta; lang: Locale; className?: string }) {
+function PostThumb({ post, lang, className }: { post: PostMeta; lang: Locale; className?: string }) {
   const image = post.cover ? findImage(post.cover) : undefined;
   if (!image) return null;
   const screenshot = !image.focal;

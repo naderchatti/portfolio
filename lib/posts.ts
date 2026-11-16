@@ -16,7 +16,7 @@ export type { TocEntry } from '@/lib/mdx/remark-heading-ids';
 
 export const LOG_DIR = path.join(process.cwd(), 'content/log');
 
-export type PostCategory = 'homelab' | 'saas';
+type PostCategory = 'homelab' | 'saas';
 
 export type PostMeta = {
   slug: string;
@@ -107,7 +107,7 @@ function parseDate(value: unknown, file: string): string | null {
   fail(file, 'frontmatter "date" must be YYYY-MM-DD or null');
 }
 
-export function readingMinutes(body: string): number {
+function readingMinutes(body: string): number {
   const words = body
     .replace(/```[\s\S]*?```/g, (code) => code.split('\n').slice(0, 20).join(' ')) // code counts, but less
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
@@ -153,7 +153,7 @@ export const getPostSlugs = cache(async (): Promise<string[]> => {
   return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
 });
 
-export function comparePosts(a: PostMeta, b: PostMeta): number {
+function comparePosts(a: PostMeta, b: PostMeta): number {
   if (a.date && b.date) return b.date.localeCompare(a.date);
   if (a.date) return -1;
   if (b.date) return 1;

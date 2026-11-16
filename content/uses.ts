@@ -2,7 +2,7 @@ import type { MediaName, VideoName } from './media';
 import type { Localized, Text } from './types';
 
 /** `href` starting with `/` is locale-relative: prefix it with `/${lang}`. */
-export type UsesLink = { label: Localized; href: string; external?: boolean };
+type UsesLink = { label: Localized; href: string; external?: boolean };
 
 export type UsesItem = { label: Localized; value: Text; link?: UsesLink };
 

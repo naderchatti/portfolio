@@ -17,7 +17,7 @@ export function ScrollBox({ label, children, className }: { label: string; child
   );
 }
 
-export function ConnectionTable({ lang, rows, caption }: { lang: Locale; rows: Connection[]; caption: string }) {
+function ConnectionTable({ lang, rows, caption }: { lang: Locale; rows: Connection[]; caption: string }) {
   const ui = getLogStrings(lang).diagram;
   return (
     <ScrollBox label={caption}>

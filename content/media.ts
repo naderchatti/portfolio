@@ -2,7 +2,7 @@ import { generatedImages, generatedVideos } from './media.generated';
 import { mediaMeta, type MediaMeta } from './media.meta';
 import type { GeneratedImage, GeneratedVideo } from './media.types';
 
-export type { GeneratedImage, GeneratedVideo, ImageSource } from './media.types';
+export type { GeneratedVideo, ImageSource } from './media.types';
 
 export type GeneratedImageName = keyof typeof generatedImages;
 /** Name of a published image, as used in `media:<name>` refs and content files. */
@@ -11,7 +11,7 @@ export type VideoName = keyof typeof generatedVideos;
 
 export type MediaImage = GeneratedImage & MediaMeta;
 
-export function isMediaName(name: string): name is MediaName {
+function isMediaName(name: string): name is MediaName {
   return Object.hasOwn(generatedImages, name);
 }
 

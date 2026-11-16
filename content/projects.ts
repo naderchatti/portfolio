@@ -3,7 +3,7 @@ import type { Localized, Text } from './types';
 
 export type ProjectStatus = 'launching-soon' | 'live' | 'in-development' | 'archived';
 
-export type ProjectMedia =
+type ProjectMedia =
   /** One wide screenshot, with an optional light-theme variant shown in light mode. */
   | { kind: 'landing'; dark: MediaName; light?: MediaName; caption: Text }
   /** A row of phone screenshots. */

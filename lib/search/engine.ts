@@ -31,7 +31,7 @@ const PER_GROUP: Record<SearchKind, number> = {
   uses: 4,
 };
 
-export function createEngine(file: SearchIndexFile): SearchEngine {
+function createEngine(file: SearchIndexFile): SearchEngine {
   const index = new MiniSearch<SearchDoc>({
     fields: FIELDS,
     idField: 'id',

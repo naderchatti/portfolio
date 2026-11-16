@@ -27,7 +27,7 @@ export function isScreenshot(name: MediaName): boolean {
   return screenshots.has(name);
 }
 
-export type FrameRatio = '4/3' | '3/4' | '1/1' | '16/9' | 'native';
+type FrameRatio = '4/3' | '3/4' | '1/1' | '16/9' | 'native';
 
 type FramedImageProps = {
   name: MediaName;

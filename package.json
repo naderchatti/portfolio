@@ -18,7 +18,8 @@
     "search:index": "tsx scripts/search-index.mjs",
     "media": "node scripts/media.mjs",
     "data:activity": "node scripts/github-activity.mjs",
-    "og": "tsx scripts/og.mjs"
+    "og": "tsx scripts/og.mjs",
+    "knip": "knip"
   },
   "dependencies": {
     "@mdx-js/mdx": "3.1.1",
@@ -51,6 +52,7 @@
     "@types/react-dom": "19.3.0",
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.6",
+    "knip": "6.44.1",
     "mdast-util-mdx-jsx": "3.2.1",
     "postcss": "8.5.33",
     "satori": "0.63.2",

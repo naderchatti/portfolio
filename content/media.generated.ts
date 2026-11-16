@@ -102,34 +102,6 @@ export const generatedImages = {
       ]
     }
   },
-  "cat-on-pc-sleeping": {
-    "name": "cat-on-pc-sleeping",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAACQAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JQBYdgUc374H9vhQAAPxf/UPeQACOjM8KCOsm/9CMf5idMCwPG7EPBRACWBTW1mDdRN75T+MvsRKjNIbbK7yZlIKa3BBMViM7au/K3Vgc4uTIeRpL1kgqzdAAAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/cat-on-pc-sleeping-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/cat-on-pc-sleeping-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/cat-on-pc-sleeping-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/cat-on-pc-sleeping-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
   "chtprk-landing": {
     "name": "chtprk-landing",
     "width": 1840,
@@ -198,42 +170,6 @@ export const generatedImages = {
         {
           "src": "/media/chtprk-landing-light-1840.webp",
           "width": 1840
-        }
-      ]
-    }
-  },
-  "counter-handoff": {
-    "name": "counter-handoff",
-    "width": 1920,
-    "height": 1341,
-    "placeholder": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoQAAsAA4BaJYgC7AEKjhvWoAD+hgrhukHxn3/lebvFi64t0QZrUGHFNacl5reUVx8VVKw2RKOl56KaoAA=",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/counter-handoff-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/counter-handoff-1280.avif",
-          "width": 1280
-        },
-        {
-          "src": "/media/counter-handoff-1920.avif",
-          "width": 1920
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/counter-handoff-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/counter-handoff-1280.webp",
-          "width": 1280
-        },
-        {
-          "src": "/media/counter-handoff-1920.webp",
-          "width": 1920
         }
       ]
     }
@@ -409,34 +345,6 @@ export const generatedImages = {
         },
         {
           "src": "/media/desk-esp32-installed-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
-  "desk-esp32-mounted-glue": {
-    "name": "desk-esp32-mounted-glue",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAADQAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZQAAW+m0J8yTXBw/YMAA/tu14e32eHp+Xp2RjC+iiYFkygvhEvc6hA1RIekCrUkB+/aykonu+2ud7+Qr8svPwLKMQmb3MuV/BzRNj1/g8L/gvppn2e1y4EN/EDlry597FFK4/4mZTxrif3w1xG0QAAA=",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/desk-esp32-mounted-glue-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/desk-esp32-mounted-glue-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/desk-esp32-mounted-glue-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/desk-esp32-mounted-glue-1200.webp",
           "width": 1200
         }
       ]
@@ -630,34 +538,6 @@ export const generatedImages = {
         {
           "src": "/media/egov-desktop-1920.webp",
           "width": 1920
-        }
-      ]
-    }
-  },
-  "esp32-s3-zero": {
-    "name": "esp32-s3-zero",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAwCdASoQABUAPu1kqU2ppaQiMAgBMB2JZQDE2CHfjqZ2S04XcAD+uRe1Q5B2fwAl0BjB/v6LCIdPAsI2t9bJgVAAAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/esp32-s3-zero-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/esp32-s3-zero-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/esp32-s3-zero-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/esp32-s3-zero-1200.webp",
-          "width": 1200
         }
       ]
     }
@@ -986,34 +866,6 @@ export const generatedImages = {
       ]
     }
   },
-  "kvm-esp32": {
-    "name": "kvm-esp32",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAADQAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZQAAW+m0J8yTXBw/YMAA/tu14e32eHp+Xp2RjC+iiYFkygvhEvc6hA1RIekCrUkB+/aykonu+2ud7+Qr8svPwLKMQmb3MuV/BzRNj1/g8L/gvppn2e1y4EN/EDlry597FFK4/4mZTxrif3w1xG0QAAA=",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/kvm-esp32-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/kvm-esp32-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/kvm-esp32-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/kvm-esp32-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
   "kvm-pcb-mod": {
     "name": "kvm-pcb-mod",
     "width": 1200,
@@ -1066,42 +918,6 @@ export const generatedImages = {
         {
           "src": "/media/kvm-under-desk-1200.webp",
           "width": 1200
-        }
-      ]
-    }
-  },
-  "laptop-closed": {
-    "name": "laptop-closed",
-    "width": 1600,
-    "height": 927,
-    "placeholder": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADwAQCdASoQAAkAA4BaJZQAAvav7fP2j7AA/t2+G2G5+glF1BWgtIaH+PredTtys1yaK+fE5DoKd/w3XLwAAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/laptop-closed-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/laptop-closed-1280.avif",
-          "width": 1280
-        },
-        {
-          "src": "/media/laptop-closed-1600.avif",
-          "width": 1600
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/laptop-closed-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/laptop-closed-1280.webp",
-          "width": 1280
-        },
-        {
-          "src": "/media/laptop-closed-1600.webp",
-          "width": 1600
         }
       ]
     }
@@ -1246,62 +1062,6 @@ export const generatedImages = {
         {
           "src": "/media/nextcloud-1840.webp",
           "width": 1840
-        }
-      ]
-    }
-  },
-  "pc-build": {
-    "name": "pc-build",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAACwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZwAAN3dC1yoYieYHAAD+hQbljCyXmVZTJv92MFgDhV/l0vF5LIzUZ6FAac3pznt7SmLRyzL8dpES/3itRMj7U2hZqvsWemlKmr16ibVmZTPzi8wCtwvF2OuePgCFYQAAAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/pc-build-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-build-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/pc-build-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-build-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
-  "pc-case": {
-    "name": "pc-case",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAACwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JYwCdABPW02qJyc5fQAD+GOa98x1JUU0QA6g9j+iIUUqyaOvjDlNMryomennovZI/aXS4OkQ6Nif1dZ8wpaIcYos7tHVjhrkns84YTplLB2mnAQKDHPzG6S68B6tFw+Ie6LY4kzGF+RFYAAA=",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/pc-case-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-case-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/pc-case-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-case-1200.webp",
-          "width": 1200
         }
       ]
     }
@@ -1554,70 +1314,6 @@ export const generatedImages = {
       ]
     }
   },
-  "pc-gpu": {
-    "name": "pc-gpu",
-    "width": 1600,
-    "height": 1200,
-    "placeholder": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoQAAwAA4BaJZwAAueAR3nPXmAA9HfH5qZKQp28CW1B/vvTv2Mho3yEr9l9FNlHsjGkoqSL6OZsypndY7Bk3kZjAAAAAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/pc-gpu-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-gpu-1280.avif",
-          "width": 1280
-        },
-        {
-          "src": "/media/pc-gpu-1600.avif",
-          "width": 1600
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/pc-gpu-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-gpu-1280.webp",
-          "width": 1280
-        },
-        {
-          "src": "/media/pc-gpu-1600.webp",
-          "width": 1600
-        }
-      ]
-    }
-  },
-  "pc-parts": {
-    "name": "pc-parts",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAwAwCdASoQABUAPu1iqU2ppaQiMAgBMB2JYwAAW7dRcCWwAP7r2Nx+fN8MXYxU74jgQjqZ/Ik11P3Cy88Qap0NbkBTOqRZC0qHAAAA",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/pc-parts-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-parts-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/pc-parts-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-parts-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
   "pc-rgb": {
     "name": "pc-rgb",
     "width": 1200,
@@ -1641,34 +1337,6 @@ export const generatedImages = {
         },
         {
           "src": "/media/pc-rgb-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
-  "pc-rgb-side": {
-    "name": "pc-rgb-side",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAADQAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JQAAKL2L5AGCf1I0zaYAA/mFRforUy1BycGiT7PhUdV8VPOwz+OgzYm8oG51xo3cl9YDQsMwXHtW0IJjyjPFk4PdgXD2+R+CI869isueed5Gv+VTrVn9FAUYsQz4AKUVDXofNXkG6wD7YTG055p/yNI/wAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/pc-rgb-side-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-rgb-side-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/pc-rgb-side-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/pc-rgb-side-1200.webp",
           "width": 1200
         }
       ]
@@ -1958,34 +1626,6 @@ export const generatedImages = {
       ]
     }
   },
-  "speakers-cr3-close": {
-    "name": "speakers-cr3-close",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZwAASmtPBKtP1+YrVtQAAP4y+WIOlxW/Pull0Qth4tZjd/1eky496To7XbhLDMUxavmwrhN58D+q6kIClqCa5/t3b1PhaRFhJpLX6FZFG7s4U6Czi0Gi+vcEAA==",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/speakers-cr3-close-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/speakers-cr3-close-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/speakers-cr3-close-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/speakers-cr3-close-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
   "speakers-cr3-front": {
     "name": "speakers-cr3-front",
     "width": 1200,
@@ -2078,42 +1718,6 @@ export const generatedImages = {
       ]
     }
   },
-  "speakers-esp32": {
-    "name": "speakers-esp32",
-    "width": 1600,
-    "height": 1200,
-    "placeholder": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAwAA4BaJZQAAqAernXGgAD+6D7BiVs0FuRBpwWnWPutAAWQCBJU23MoleoVRPMSaXXICYy8nGdAwOKc6rAddZckZLFPSgW/AVmmGWwwQAAA",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/speakers-esp32-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/speakers-esp32-1280.avif",
-          "width": 1280
-        },
-        {
-          "src": "/media/speakers-esp32-1600.avif",
-          "width": 1600
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/speakers-esp32-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/speakers-esp32-1280.webp",
-          "width": 1280
-        },
-        {
-          "src": "/media/speakers-esp32-1600.webp",
-          "width": 1600
-        }
-      ]
-    }
-  },
   "speakers-wiring": {
     "name": "speakers-wiring",
     "width": 1600,
@@ -2173,34 +1777,6 @@ export const generatedImages = {
         },
         {
           "src": "/media/storage-bay-1200.webp",
-          "width": 1200
-        }
-      ]
-    }
-  },
-  "storage-cabinet": {
-    "name": "storage-cabinet",
-    "width": 1200,
-    "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAADwAwCdASoQABUAPu1iqU2ppaQiMAgBMB2JQAAK/99bPVEqMslvAc6AAOJdYfoWI+7R9y+NfrVmJMK2T5zWu1vGbs77rl8h6MgxCVWdvIcjftw4n2A4QWtW90cIaDu6GOJWDMoR78wCJg2yxLX/0GgMMH2lrSuEb1R2xbvJnofoX75xjS4uX7ykAAA=",
-    "sources": {
-      "avif": [
-        {
-          "src": "/media/storage-cabinet-640.avif",
-          "width": 640
-        },
-        {
-          "src": "/media/storage-cabinet-1200.avif",
-          "width": 1200
-        }
-      ],
-      "webp": [
-        {
-          "src": "/media/storage-cabinet-640.webp",
-          "width": 640
-        },
-        {
-          "src": "/media/storage-cabinet-1200.webp",
           "width": 1200
         }
       ]

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["functions/index.ts", "scripts/*.mjs", "content/content.typetest.ts"],
+  "ignore": ["content/log/**/*.mdx"],
+  "ignoreBinaries": ["magick"],
+  "ignoreIssues": {
+    "components/ui/*.tsx": ["exports"]
+  }
+}

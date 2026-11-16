@@ -4,7 +4,7 @@ import type { SearchHit } from '@/lib/search/engine';
 import { highlight, snippet } from '@/lib/search/normalize';
 import type { SearchKind } from '@/lib/search/types';
 
-export const kindIcons: Record<SearchKind, LucideIcon> = {
+const kindIcons: Record<SearchKind, LucideIcon> = {
   page: FileText,
   post: Newspaper,
   section: Hash,

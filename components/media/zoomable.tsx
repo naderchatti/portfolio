@@ -20,7 +20,7 @@ function srcSet(sources: readonly { src: string; width: number }[]): string {
   return sources.map((source) => `${source.src} ${source.width}w`).join(', ');
 }
 
-export function lightboxItem(image: MediaImage, lang: Locale, options: { alt?: string; caption?: string } = {}) {
+function lightboxItem(image: MediaImage, lang: Locale, options: { alt?: string; caption?: string } = {}) {
   const largest = image.sources.webp[image.sources.webp.length - 1];
   const item: LightboxItem = {
     avif: srcSet(image.sources.avif),
