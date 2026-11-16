@@ -9,7 +9,10 @@ import matter from 'gray-matter';
 import rehypePrettyCode, { type Options as PrettyCodeOptions } from 'rehype-pretty-code';
 import remarkGfm from 'remark-gfm';
 import type { Locale } from '@/lib/i18n';
-import { remarkMediaRefs } from '@/lib/mdx/remark-media-refs';
+import { extractRefs, remarkMediaRefs } from '@/lib/mdx/remark-media-refs';
+import { remarkHeadingIds, type TocEntry } from '@/lib/mdx/remark-heading-ids';
+
+export type { TocEntry } from '@/lib/mdx/remark-heading-ids';
 
 export const LOG_DIR = path.join(process.cwd(), 'content/log');
 
@@ -35,7 +38,16 @@ export type PostMeta = {
   readingMinutes: number;
 };
 
-export type Post = PostMeta & { Content: MDXContent };
+export type Post = PostMeta & {
+  Content: MDXContent;
+  /** `##` headings, in order, with their anchor ids. */
+  toc: TocEntry[];
+  /** Media names referenced in the body (`![…](media:name)`). */
+  bodyMedia: string[];
+};
+
+/** Anchor ids used by the post page itself; headings never reuse them. */
+export const RESERVED_IDS = ['top', 'main', 'sources', 'log-list'];
 
 /**
  * Display order for undated posts (newest-looking first). Dated posts sort before these, newest first.
@@ -154,6 +166,17 @@ export function comparePosts(a: PostMeta, b: PostMeta): number {
   return a.slug.localeCompare(b.slug);
 }
 
+/** Previous (newer in display order) and next entries around `slug`. */
+export async function getAdjacentPosts(
+  slug: string,
+  lang: Locale,
+): Promise<{ previous: PostMeta | undefined; next: PostMeta | undefined }> {
+  const posts = await getAllPosts(lang);
+  const index = posts.findIndex((post) => post.slug === slug);
+  if (index === -1) return { previous: undefined, next: undefined };
+  return { previous: posts[index - 1], next: posts[index + 1] };
+}
+
 /** All posts written in `lang`, sorted for display. Drafts only outside production builds. */
 export const getAllPosts = cache(
   async (lang: Locale, options: { includeDrafts?: boolean } = {}): Promise<PostMeta[]> => {
@@ -171,10 +194,12 @@ export const getAllPosts = cache(
 export const getPost = cache(async (slug: string, lang: Locale): Promise<Post | undefined> => {
   const source = await readSource(slug, lang);
   if (!source || (source.meta.draft && !showDrafts)) return undefined;
+  const toc: TocEntry[] = [];
   const { default: Content } = await evaluate(source.body, {
     ...runtime,
-    remarkPlugins: [remarkGfm, remarkMediaRefs],
+    remarkPlugins: [remarkGfm, remarkMediaRefs, [remarkHeadingIds, { toc, reserved: RESERVED_IDS }]],
     rehypePlugins: [[rehypePrettyCode, prettyCode]],
   });
-  return { ...source.meta, Content };
+  const bodyMedia = extractRefs(source.body).flatMap((ref) => (ref.kind === 'media' ? [ref.name] : []));
+  return { ...source.meta, Content, toc, bodyMedia };
 });
