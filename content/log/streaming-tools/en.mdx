@@ -62,7 +62,7 @@ The ad timer subscribes to two Streamer.bot Twitch events, `AdRun` and `AdMidRol
 
 Each overlay is static HTML, CSS and JavaScript with no build step. Each repository has a small Dockerfile on `nginx:alpine` that copies the files in, and a `docker-compose.yml` that publishes one port. All three run as Docker containers inside a dedicated **streaming-tools** LXC on my Proxmox host, following my usual rule of one LXC per service family. Nothing else runs in that container besides Docker.
 
-OBS points each browser source at its overlay's URL on the LAN, and the page connects to Streamer.bot on the streaming PC. The homelab only serves the files; all the live data stays between OBS, Streamer.bot and the platforms. If the LXC is down, the overlays disappear, but the stream keeps going. [TO CONFIRM: whether the overlays are reached directly on the LAN or through the reverse proxy.]
+OBS points each browser source at its overlay's URL on the LAN, and the page connects to Streamer.bot on the streaming PC. The homelab only serves the files; all the live data stays between OBS, Streamer.bot and the platforms. If the LXC is down, the overlays disappear, but the stream keeps going.
 
 ![The overlays in an OBS scene]([PHOTO])
 

@@ -138,7 +138,7 @@ export function SpeakersFrontSvg({ label }: { label: string }) {
           <text x="823" y="334" className="pl b" textAnchor="start" transform="rotate(-90 823 334)">GND</text>
           <circle cx="840" cy="344" r="4.5" className="pu"/>
           <text x="843" y="334" className="pl b" textAnchor="start" transform="rotate(-90 843 334)">VIN</text>
-          <text x="800" y="380" className="bl" textAnchor="middle">GY-PCM5102</text>
+          <text x="820" y="292" className="bl" textAnchor="middle">GY-PCM5102</text>
           <text x="600" y="24" className="wl" textAnchor="start">LINE OUT → Mackie CR3 · RCA in</text>
           <path d="M 82 214 L 82 188 L 620 188 L 620 440 L 840 440 L 840 344" className="halo"/>
           <path d="M 82 214 L 82 188 L 620 188 L 620 440 L 840 440 L 840 344" className="ws"/>

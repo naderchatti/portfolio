@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 import styles from './diagrams.module.css';
 
 type MarkerId = 'ah-w' | 'ah-a' | 'as-w' | 'as-a';
@@ -9,6 +10,11 @@ type DiagramSvgProps = {
   width: number;
   height: number;
   label: string;
+  /** Crop to a sub-rectangle of the drawing (x, y, width, height); defaults to the full canvas. */
+  viewBox?: [number, number, number, number];
+  /** Scale to the container width instead of keeping a legible minimum width (no horizontal scroll). */
+  fit?: boolean;
+  className?: string;
   children: (marker: (id: MarkerId) => string) => ReactNode;
 };
 
@@ -16,19 +22,20 @@ type DiagramSvgProps = {
  * Line-art SVG shell: arrow markers plus theme-aware classes (see diagrams.module.css).
  * Colours come from CSS variables, so the same markup works in light and dark.
  */
-export function DiagramSvg({ prefix, width, height, label, children }: DiagramSvgProps) {
+export function DiagramSvg({ prefix, width, height, label, viewBox, fit, className, children }: DiagramSvgProps) {
+  const [vx, vy, vw, vh] = viewBox ?? [0, 0, width, height];
   const id = (marker: MarkerId) => `${prefix}-${marker}`;
   const marker = (name: MarkerId) => `url(#${id(name)})`;
 
   return (
     <svg
-      viewBox={`0 0 ${width} ${height}`}
-      width={width}
-      height={height}
+      viewBox={`${vx} ${vy} ${vw} ${vh}`}
+      width={vw}
+      height={vh}
       role="img"
       aria-label={label}
-      className={styles.svg}
-      style={{ minWidth: Math.min(width, 720) }}
+      className={cn(styles.svg, className)}
+      style={fit ? undefined : { minWidth: Math.min(vw, 720) }}
     >
       <defs>
         {(['ah-w', 'ah-a'] as const).map((name) => (

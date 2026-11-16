@@ -66,7 +66,7 @@ La carte a aussi quatre cavaliers de configuration au dos, et ce sont eux qui m'
 
 Le firmware est un sketch Arduino basé sur deux bibliothèques de Phil Schatzmann : [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP), qui transforme l'ESP32 en récepteur A2DP, et [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools), dont le `I2SStream` pilote le DAC. Les anciens exemples qu'on trouve en ligne utilisent `i2s_pin_config_t` et `set_pin_config` ; cette API a été supprimée dans les versions récentes de la bibliothèque, et les broches se déclarent maintenant dans la config du stream.
 
-Le sketch d'origine a été perdu, ce qui est une leçon en soi. Je l'ai depuis reconstruit sous forme de projet PlatformIO versionné [TO CONFIRM: link once published]. Le cœur ressemble à ceci (le nom de l'appareil est anonymisé ici) :
+Le sketch d'origine a été perdu, ce qui est une leçon en soi. Je l'ai depuis reconstruit sous forme de projet PlatformIO versionné. Le cœur ressemble à ceci (le nom de l'appareil est anonymisé ici) :
 
 ```cpp
 #include "AudioTools.h"

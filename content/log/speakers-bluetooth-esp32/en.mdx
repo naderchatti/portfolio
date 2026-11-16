@@ -66,7 +66,7 @@ The board also has four configuration jumpers on the back, and those caused most
 
 The firmware is an Arduino sketch built on two libraries by Phil Schatzmann: [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP), which turns the ESP32 into an A2DP sink, and [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools), whose `I2SStream` drives the DAC. Older examples online use `i2s_pin_config_t` and `set_pin_config`; that API was removed in newer library versions, so the pins now go into the stream's config.
 
-The original sketch was lost, which is a lesson in itself. I've since rebuilt it as a versioned PlatformIO project [TO CONFIRM: link once published]. The core of it looks like this (the device name is sanitized here):
+The original sketch was lost, which is a lesson in itself. I've since rebuilt it as a versioned PlatformIO project. The core of it looks like this (the device name is sanitized here):
 
 ```cpp
 #include "AudioTools.h"

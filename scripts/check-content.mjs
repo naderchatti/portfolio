@@ -1,7 +1,7 @@
 #!/usr/bin/env -S pnpm exec tsx
 // Content integrity check (run with `pnpm check:content`, which uses tsx so it can import the TS content).
 // Fails on: wrong post counts, missing translations, unknown media/diagram refs, broken internal links,
-// MDX that does not compile, or manifest entries whose files are missing.
+// MDX that does not compile, editorial placeholders in published posts, or manifest entries whose files are missing.
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -55,6 +55,11 @@ for (const slug of slugs) {
     for (const ref of extractRefs(content)) {
       if (ref.kind === 'media') refImage(ref.name, where);
       else if (!DIAGRAMS.has(ref.name)) errors.push(`${where}: unknown diagram "${ref.name}"`);
+    }
+    if (!data.draft) {
+      // Editorial placeholders must never ship (frontmatter such as `date: null` is not checked here).
+      const placeholder = content.match(/\[(?:TO CONFIRM|DATE\]|PHOTO|N\])/);
+      if (placeholder) errors.push(`${where}: unresolved placeholder "${placeholder[0]}" in a published post`);
     }
     if (/Stirling/i.test(content)) errors.push(`${where}: mentions Stirling-PDF (use BentoPDF)`);
     try {

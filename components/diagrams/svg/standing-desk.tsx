@@ -10,8 +10,8 @@ export function StandingDeskSvg({ label }: { label: string }) {
           <rect x="135" y="84" width="40" height="30" rx="6" className="ft"/>
           <text x="155" y="130" className="ft-t" textAnchor="middle">USB-C</text>
           <rect x="130" y="220" width="50" height="50" rx="3" className="ft" transform="rotate(45 155 245)"/>
-          <rect x="120" y="148" width="14" height="12" rx="3" className="ft"/>
-          <rect x="176" y="148" width="14" height="12" rx="3" className="ft"/>
+          <rect x="100" y="118" width="14" height="12" rx="3" className="ft"/>
+          <rect x="196" y="118" width="14" height="12" rx="3" className="ft"/>
           <rect x="87" y="145" width="10" height="10" rx="2" className="pu"/>
           <text x="102" y="153" className="pl b" textAnchor="start">5V</text>
           <rect x="87" y="165" width="10" height="10" rx="2" className="pu"/>

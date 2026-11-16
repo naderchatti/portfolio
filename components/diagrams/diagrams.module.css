@@ -182,3 +182,16 @@
   margin: 0;
   max-width: none;
 }
+
+/* Speakers back view: full board from 700px, cropped + larger type below (fits the column, no scroll). */
+.svg.narrowOnly :global(.pl) { font-size: 12px; }
+.svg.narrowOnly :global(.pl.f) { font-size: 11px; }
+.svg.narrowOnly :global(.ft-t) { font-size: 11px; }
+
+@media (min-width: 700px) {
+  .svg.narrowOnly { display: none; }
+}
+
+@media (max-width: 699.98px) {
+  .svg.wideOnly { display: none; }
+}

@@ -107,20 +107,20 @@ export function VoiceSatelliteSvg({ label }: { label: string }) {
           <text x="640" y="265" className="bl" textAnchor="middle">INMP441</text>
           <text x="640" y="280" className="vn" textAnchor="middle">layout per vendor pinout</text>
           <circle cx="600" cy="150" r="4.5" className="pu"/>
-          <text x="590" y="153" className="pl b" textAnchor="end">L/R</text>
+          <text x="610" y="153" className="pl b" textAnchor="start">L/R</text>
           <circle cx="600" cy="175" r="4.5" className="pu"/>
-          <text x="590" y="178" className="pl b" textAnchor="end">WS</text>
+          <text x="610" y="178" className="pl b" textAnchor="start">WS</text>
           <circle cx="600" cy="200" r="4.5" className="pu"/>
-          <text x="590" y="203" className="pl b" textAnchor="end">SCK</text>
+          <text x="610" y="203" className="pl b" textAnchor="start">SCK</text>
           <circle cx="680" cy="150" r="4.5" className="pu"/>
-          <text x="690" y="153" className="pl b" textAnchor="start">SD</text>
+          <text x="670" y="153" className="pl b" textAnchor="end">SD</text>
           <circle cx="680" cy="175" r="4.5" className="pu"/>
-          <text x="690" y="178" className="pl b" textAnchor="start">VDD</text>
+          <text x="670" y="178" className="pl b" textAnchor="end">VDD</text>
           <circle cx="680" cy="200" r="4.5" className="pu"/>
-          <text x="690" y="203" className="pl b" textAnchor="start">GND</text>
+          <text x="670" y="203" className="pl b" textAnchor="end">GND</text>
           <rect x="560" y="420" width="240" height="120" rx="8" className="bd"/>
-          <text x="680" y="474" className="ft-t" textAnchor="middle">MAX98357A</text>
-          <text x="680" y="490" className="vn" textAnchor="middle">layout per vendor pinout</text>
+          <text x="680" y="456" className="ft-t" textAnchor="middle">MAX98357A</text>
+          <text x="680" y="471" className="vn" textAnchor="middle">layout per vendor pinout</text>
           <rect x="680" y="404" width="80" height="26" rx="3" className="ft"/>
           <text x="700" y="421" className="pl b" textAnchor="middle">+</text>
           <text x="740" y="421" className="pl b" textAnchor="middle">−</text>
