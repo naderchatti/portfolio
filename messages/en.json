@@ -8,7 +8,8 @@
     "home": "Nader Chatti, home",
     "catLabel": "Cat logo, eyes follow the pointer",
     "primaryNav": "Sections",
-    "socialNav": "Social links"
+    "socialNav": "Social links",
+    "footerNav": "Site"
   },
   "nav": {
     "built": "Built",
@@ -55,7 +56,8 @@
     "copyright": "© {year} Nader Chatti",
     "tagline": "operator@nader ~ exit 0",
     "backToTop": "Back to top",
-    "email": "Email"
+    "email": "Email",
+    "rss": "RSS"
   },
   "notFound": {
     "code": "404",

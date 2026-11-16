@@ -1,21 +1,22 @@
 {
   "meta": {
     "title": "Nader Chatti — Ingénieur fullstack",
-    "description": "Nader Chatti, ingénieur fullstack. Je construis des produits SaaS et j'opère ma propre infrastructure."
+    "description": "Nader Chatti, ingénieur fullstack. Je construis des produits SaaS et j’opère ma propre infrastructure."
   },
   "a11y": {
     "skipToContent": "Aller au contenu",
     "home": "Nader Chatti, accueil",
     "catLabel": "Logo chat, ses yeux suivent le pointeur",
     "primaryNav": "Sections",
-    "socialNav": "Réseaux sociaux"
+    "socialNav": "Réseaux sociaux",
+    "footerNav": "Plan du site"
   },
   "nav": {
     "built": "Projets",
     "experience": "Expérience",
     "lab": "Lab",
     "log": "Journal",
-    "uses": "Outils",
+    "uses": "Setup",
     "menu": "Menu",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu"
@@ -45,7 +46,7 @@
     "fr": "Français"
   },
   "home": {
-    "role": "Ingénieur fullstack — je construis des produits SaaS et j'opère ma propre infrastructure.",
+    "role": "Ingénieur fullstack — je construis des produits SaaS et j’opère ma propre infrastructure.",
     "intro": "Freelance et fondateur SaaS, basé en France. Next.js et TypeScript côté front, Python et Postgres derrière, et un homelab où presque tout est testé en premier.",
     "soon": "Bientôt.",
     "viewWork": "Voir les projets",
@@ -55,13 +56,14 @@
     "copyright": "© {year} Nader Chatti",
     "tagline": "operator@nader ~ exit 0",
     "backToTop": "Retour en haut",
-    "email": "E-mail"
+    "email": "E-mail",
+    "rss": "RSS"
   },
   "notFound": {
     "code": "404",
     "title": "Page introuvable",
-    "description": "Ce chemin n'existe pas — ou il a été déplacé.",
-    "home": "Retour à l'accueil",
+    "description": "Ce chemin n’existe pas — ou il a été déplacé.",
+    "home": "Retour à l’accueil",
     "shell": "cd: aucun fichier ou dossier de ce type"
   },
   "sections": {
@@ -85,11 +87,11 @@
     },
     "lab": {
       "title": "Le lab",
-      "featured": "Montages à la une",
+      "featured": "Réalisations à la une",
       "explore": "Explorer le lab →",
       "allEntries": "Tout le journal →",
       "infrastructure": "Infrastructure",
-      "builds": "Montages",
+      "builds": "Réalisations",
       "services": "Services auto-hébergés",
       "screens": "Écrans",
       "homeAssistant": "Home Assistant"
@@ -101,17 +103,17 @@
       "title": "La stack, tirée du code livré"
     },
     "contact": {
-      "title": "Un projet en tête ?",
-      "emailMe": "M'écrire"
+      "title": "Un projet en tête ?",
+      "emailMe": "M’écrire"
     },
     "uses": {
-      "title": "Outils",
+      "title": "Setup",
       "buildLog": "Journal de montage"
     }
   },
   "project": {
     "status": {
-      "launching-soon": "Lancement imminent",
+      "launching-soon": "Bientôt disponible",
       "live": "En ligne",
       "in-development": "En développement",
       "archived": "Archivé"
@@ -127,7 +129,7 @@
   },
   "log": {
     "title": "Le journal",
-    "lead": "Des notes sur la construction de produits SaaS, la gestion du homelab et quelques ESP32 soudés. Ce que j'ai mis en place, pourquoi, et ce qui a cassé en route.",
+    "lead": "Des notes sur la construction de produits SaaS, la gestion du homelab et quelques ESP32 soudés. Ce que j’ai mis en place, pourquoi, et ce qui a cassé en route.",
     "filterLabel": "Filtrer par tag",
     "filters": {
       "all": "Tout",

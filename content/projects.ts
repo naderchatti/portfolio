@@ -33,7 +33,7 @@ export const projects: readonly Project[] = [
     name: 'UGCKit',
     period: { en: '2025 → now', fr: '2025 → auj.' },
     status: 'launching-soon',
-    affiliation: { en: 'Co-founded at CHTPRK', fr: 'Cofondé chez CHTPRK' },
+    affiliation: { en: 'Co-founded at CHTPRK', fr: 'Cofondateur · CHTPRK' },
     summary: {
       en: 'Turns a creator’s own media into short videos, images, voice-overs and hooks, published to TikTok, Instagram and YouTube.',
       fr: 'Transforme les médias d’un créateur en vidéos courtes, images, voix off et accroches, publiées sur TikTok, Instagram et YouTube.',
@@ -79,7 +79,7 @@ export const projects: readonly Project[] = [
     affiliation: { en: 'Co-founder', fr: 'Cofondateur' },
     summary: {
       en: 'A studio of two independent engineers: a multilingual site and the shared production platform behind our products.',
-      fr: 'Un studio de deux ingénieurs indépendants : un site multilingue et la plateforme de production commune derrière nos produits.',
+      fr: 'Un studio de deux ingénieurs indépendants : un site multilingue et la plateforme de production commune derrière nos produits.',
     },
     bullets: [
       {
@@ -98,7 +98,7 @@ export const projects: readonly Project[] = [
     stack: ['Next.js', 'TypeScript', 'PostgreSQL', 'Temporal', 'ClickHouse', 'Cloudflare Tunnel'],
     detail: {
       en: 'App CI never holds server credentials; deploy is a separate gated step.',
-      fr: 'La CI des applis ne détient jamais d’accès au serveur ; le déploiement est une étape séparée et contrôlée.',
+      fr: 'La CI des applis ne détient jamais d’accès au serveur ; le déploiement est une étape séparée et contrôlée.',
     },
     media: {
       kind: 'landing',
@@ -117,7 +117,7 @@ export const projects: readonly Project[] = [
     affiliation: { en: 'Solo', fr: 'Solo' },
     summary: {
       en: 'Personal workout app: program builder, guided live workouts and progress charts, offline-safe during sessions, with a 199-exercise library in French and English.',
-      fr: 'Application d’entraînement personnelle : création de programmes, séances guidées en direct et graphiques de progression, fiable hors ligne pendant la séance, avec une bibliothèque de 199 exercices en français et en anglais.',
+      fr: 'Application d’entraînement personnelle : création de programmes, séances guidées en direct et graphiques de progression, fiable hors ligne pendant la séance, avec une bibliothèque de 199 exercices en français et en anglais.',
     },
     bullets: [
       {
@@ -127,7 +127,7 @@ export const projects: readonly Project[] = [
       { en: 'NativeWind design tokens, light and dark', fr: 'Design tokens NativeWind, thème clair et sombre' },
       {
         en: 'Custom Kotlin Android “Live Update” notification module',
-        fr: 'Module Kotlin sur mesure pour les notifications Android « Live Update »',
+        fr: 'Module Kotlin sur mesure pour les notifications Android « Live Update »',
       },
     ],
     stack: [
@@ -143,7 +143,7 @@ export const projects: readonly Project[] = [
     ],
     detail: {
       en: 'Every screen is reviewed against its design board in light and dark.',
-      fr: 'Chaque écran est vérifié face à sa maquette, en clair comme en sombre.',
+      fr: 'Chaque écran est vérifié par rapport à sa maquette, en thème clair comme en thème sombre.',
     },
     media: { kind: 'screens', items: ['fourma-home', 'fourma-live-light', 'fourma-editor'] },
   },
@@ -155,7 +155,7 @@ export const projects: readonly Project[] = [
     affiliation: { en: 'Co-founder · top contributor', fr: 'Cofondateur · principal contributeur' },
     summary: {
       en: 'AI assistant for French administrative procedures: streaming chat with tool calls to official sources (legal texts, Service-Public, government news), on web, Android and iOS.',
-      fr: 'Assistant IA pour les démarches administratives françaises : chat en streaming avec appels d’outils vers les sources officielles (textes de loi, Service-Public, actualités du gouvernement), sur le web, Android et iOS.',
+      fr: 'Assistant IA pour les démarches administratives françaises : chat en streaming avec appels d’outils vers les sources officielles (textes de loi, Service-Public, actualités du gouvernement), sur le web, Android et iOS.',
     },
     bullets: [],
     stack: ['FastAPI', 'Mistral', 'SQLAlchemy', 'PostgreSQL', 'Next.js ×2', 'Expo', 'Swift'],

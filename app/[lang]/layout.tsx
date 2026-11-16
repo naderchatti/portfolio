@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
   const { lang } = await params;
   if (!isLocale(lang)) return {};
   const messages = getMessages(lang);
+  const image = { url: `/og/${lang}/home.png`, width: 1200, height: 630, alt: messages.meta.title };
 
   return {
     metadataBase: new URL(site.url),
@@ -44,6 +45,13 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
       title: messages.meta.title,
       description: messages.meta.description,
       url: `/${lang}/`,
+      images: [image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: messages.meta.title,
+      description: messages.meta.description,
+      images: [image.url],
     },
   };
 }
@@ -68,7 +76,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
             <main id="main" tabIndex={-1} className="flex-1 outline-none">
               {children}
             </main>
-            <SiteFooter messages={messages} />
+            <SiteFooter locale={lang} messages={messages} />
           </div>
         </ThemeProvider>
       </body>

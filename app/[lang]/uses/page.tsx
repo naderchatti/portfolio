@@ -22,12 +22,13 @@ export async function generateMetadata({ params }: PageProps<'/[lang]/uses'>): P
   if (!isLocale(lang)) return {};
   const title = t(usesIntro.title, lang);
   const description = t(uiUses.metaDescription, lang);
+  const image = { url: `/og/${lang}/uses.png`, width: 1200, height: 630, alt: title };
   return {
     title,
     description,
     alternates: {
       canonical: `/${lang}/uses/`,
-      languages: { en: '/en/uses/', fr: '/fr/uses/' },
+      languages: { en: '/en/uses/', fr: '/fr/uses/', 'x-default': '/en/uses/' },
     },
     openGraph: {
       type: 'website',
@@ -36,7 +37,9 @@ export async function generateMetadata({ params }: PageProps<'/[lang]/uses'>): P
       title: `${title} — ${site.name}`,
       description,
       url: `/${lang}/uses/`,
+      images: [image],
     },
+    twitter: { card: 'summary_large_image', title: `${title} — ${site.name}`, description, images: [image.url] },
   };
 }
 

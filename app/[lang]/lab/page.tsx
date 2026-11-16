@@ -25,12 +25,13 @@ export async function generateMetadata({ params }: PageProps<'/[lang]/lab'>): Pr
   if (!isLocale(lang)) return {};
   const title = t(labIntro.title, lang);
   const description = t(uiLab.metaDescription, lang);
+  const image = { url: `/og/${lang}/lab.png`, width: 1200, height: 630, alt: title };
   return {
     title,
     description,
     alternates: {
       canonical: `/${lang}/lab/`,
-      languages: { en: '/en/lab/', fr: '/fr/lab/' },
+      languages: { en: '/en/lab/', fr: '/fr/lab/', 'x-default': '/en/lab/' },
     },
     openGraph: {
       type: 'website',
@@ -39,7 +40,9 @@ export async function generateMetadata({ params }: PageProps<'/[lang]/lab'>): Pr
       title: `${title} — ${site.name}`,
       description,
       url: `/${lang}/lab/`,
+      images: [image],
     },
+    twitter: { card: 'summary_large_image', title: `${title} — ${site.name}`, description, images: [image.url] },
   };
 }
 

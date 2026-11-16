@@ -36,12 +36,6 @@ export function Hero({ lang, messages }: HeroProps) {
         <p className="mx-auto mt-5 max-w-[640px] text-base text-pretty text-muted-foreground sm:mx-0">
           {t(profile.intro, lang)}
         </p>
-        <p className="mt-7 inline-block rounded-lg border bg-background px-3 py-2 font-mono text-[13px] text-pretty text-muted-foreground">
-          <span aria-hidden="true" className="mr-2.5 inline-block size-2 rounded-full bg-foreground align-[1px]" />
-          <span>
-            <span className="font-medium text-foreground">{profile.handle}</span> ~ {t(profile.status, lang)}
-          </span>
-        </p>
         <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <Button asChild className="h-11 w-full sm:h-9 sm:w-auto">
             <Link href={`/${lang}/#built`}>{messages.home.viewWork}</Link>

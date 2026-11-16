@@ -17,7 +17,7 @@ export const uiHome = {
     list: { en: 'Work history, most recent first', fr: 'Parcours, du plus récent au plus ancien' },
   },
   lab: {
-    index: { en: 'More builds', fr: 'Autres montages' },
+    index: { en: 'More builds', fr: 'Autres réalisations' },
   },
   contact: {
     breadcrumb: { en: 'contact', fr: 'contact' },

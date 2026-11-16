@@ -6,12 +6,12 @@ export const labIntro = {
   /** Lead on the /lab page. */
   lead: {
     en: 'The infrastructure I run at home, and the hardware builds around it.',
-    fr: 'L’infrastructure que je fais tourner chez moi, et les montages matériels autour.',
+    fr: 'L’infrastructure que je fais tourner chez moi, et les projets matériels qui gravitent autour.',
   },
   /** Lead on the home-page lab section. */
   homeLead: {
     en: 'I run my own infrastructure at home and write about the builds.',
-    fr: 'J’héberge ma propre infrastructure à la maison et je raconte les montages.',
+    fr: 'J’héberge ma propre infrastructure à la maison et je raconte mes réalisations.',
   },
   /** One-line summary under the home-page lab title. */
   summaryLine: {
@@ -44,7 +44,7 @@ export const nodes: readonly LabNode[] = [
     name: { en: 'Edge gateway', fr: 'Passerelle' },
     hardware: {
       en: 'Raspberry Pi 4B 8 GB: Home Assistant, Traefik v3.7, Pi-hole, Tailscale, snapclient',
-      fr: 'Raspberry Pi 4B 8 Go : Home Assistant, Traefik v3.7, Pi-hole, Tailscale, snapclient',
+      fr: 'Raspberry Pi 4B 8 Go : Home Assistant, Traefik v3.7, Pi-hole, Tailscale, snapclient',
     },
     status: 'up',
   },
@@ -53,7 +53,7 @@ export const nodes: readonly LabNode[] = [
     name: { en: 'Hypervisor', fr: 'Hyperviseur' },
     hardware: {
       en: 'Proxmox VE 8.2 on a recycled laptop, an ASUS VivoBook S14 (i7-8550U, 16 GB): 14 LXC, weekly backups to the NAS',
-      fr: 'Proxmox VE 8.2 sur un portable recyclé, un ASUS VivoBook S14 (i7-8550U, 16 Go) : 14 LXC, sauvegardes hebdomadaires vers le NAS',
+      fr: 'Proxmox VE 8.2 sur un portable recyclé, un ASUS VivoBook S14 (i7-8550U, 16 Go) : 14 LXC, sauvegardes hebdomadaires vers le NAS',
     },
     status: 'up',
   },
@@ -62,7 +62,7 @@ export const nodes: readonly LabNode[] = [
     name: { en: 'Storage', fr: 'Stockage' },
     hardware: {
       en: 'TrueNAS SCALE on a Lenovo IdeaCentre H530 (i7-4790) + TerraMaster 4-bay over USB: 4× 4 TB IronWolf, RAIDZ1',
-      fr: 'TrueNAS SCALE sur un Lenovo IdeaCentre H530 (i7-4790) + baie TerraMaster 4 disques en USB : 4× IronWolf 4 To, RAIDZ1',
+      fr: 'TrueNAS SCALE sur un Lenovo IdeaCentre H530 (i7-4790) + baie TerraMaster 4 disques en USB : 4× IronWolf 4 To, RAIDZ1',
     },
     status: 'up',
     image: {
@@ -75,7 +75,7 @@ export const nodes: readonly LabNode[] = [
     name: { en: 'Dev runtime', fr: 'Runtime de dev' },
     hardware: {
       en: 'ASUS laptop (i5, 8 GB): Postgres/pgvector, Temporal, S3 (Garage), BuildKit',
-      fr: 'Portable ASUS (i5, 8 Go) : Postgres/pgvector, Temporal, S3 (Garage), BuildKit',
+      fr: 'Portable ASUS (i5, 8 Go) : Postgres/pgvector, Temporal, S3 (Garage), BuildKit',
     },
     status: 'up',
   },
@@ -124,7 +124,7 @@ export const tiles: readonly LabTile[] = [
     title: { en: 'Standing desk over Wi-Fi', fr: 'Bureau assis-debout en Wi-Fi' },
     summary: {
       en: 'Wired an ESP32-S3 into the desk’s RJ12 control bus, following the community’s guide: height, M1–M4 presets and a slider in Home Assistant.',
-      fr: 'Un ESP32-S3 câblé sur le bus de commande RJ12 du bureau, en suivant le guide de la communauté : hauteur, positions M1–M4 et un curseur dans Home Assistant.',
+      fr: 'Un ESP32-S3 câblé sur le bus de commande RJ12 du bureau, en suivant le guide de la communauté : hauteur, positions M1–M4 et un curseur dans Home Assistant.',
     },
     stack: ['ESPHome', 'UART', 'C++ lambdas'],
     media: {
@@ -149,7 +149,7 @@ export const tiles: readonly LabTile[] = [
     title: { en: 'The rack', fr: 'Le rack' },
     summary: {
       en: 'Spray-painted a cabinet into a quiet home rack: switch, Proxmox laptops, NAS and mini PC.',
-      fr: 'Un meuble repeint à la bombe devenu un rack silencieux : switch, portables Proxmox, NAS et mini PC.',
+      fr: 'Un meuble repeint à la bombe devenu un rack silencieux : switch, portables Proxmox, NAS et mini PC.',
     },
     stack: ['DIY', 'cable management'],
     media: {
@@ -168,7 +168,7 @@ export const tiles: readonly LabTile[] = [
     title: { en: 'Smart USB KVM', fr: 'KVM USB connecté' },
     summary: {
       en: 'Modded a USB switch: soldered an ESP32-S3 to its button and status LEDs; ESPHome pulses the button and reads the LEDs over ADC, so Home Assistant knows and switches the active PC.',
-      fr: 'Un switch USB modifié : un ESP32-S3 soudé sur son bouton et ses LED d’état ; ESPHome actionne le bouton et lit les LED via l’ADC, pour que Home Assistant sache quel PC est actif, et en change.',
+      fr: 'Un switch USB modifié : un ESP32-S3 soudé sur son bouton et ses LED d’état ; ESPHome actionne le bouton et lit les LED via l’ADC, pour que Home Assistant sache quel PC est actif, et en change.',
     },
     stack: ['ESPHome', 'ADC', 'Home Assistant', 'soldering'],
     media: {
@@ -193,12 +193,12 @@ export const tiles: readonly LabTile[] = [
     title: { en: 'Living-room TV, rebuilt', fr: 'La télé du salon, refaite' },
     summary: {
       en: 'Turned a stock TCL Google TV into a custom Ambilight setup: debloated over ADB, replaced the home screen with my own Compose launcher, and patched the open-source grabber and Jellyfin client so every source drives the LEDs.',
-      fr: 'Une TCL Google TV d’origine transformée en installation Ambilight sur mesure : allégée via ADB, écran d’accueil remplacé par mon propre launcher Compose, et le grabber open source et le client Jellyfin patchés pour que chaque source pilote les LED.',
+      fr: 'Une TCL Google TV d’origine transformée en installation Ambilight sur mesure : allégée via ADB, écran d’accueil remplacé par mon propre launcher Compose, et le grabber open source et le client Jellyfin patchés pour que chaque source pilote les LED.',
     },
     bullets: [
       {
         en: 'Custom Jetpack Compose launcher: animated ribbon background capped at 60 fps, pinned apps, HDMI tile, lights panel',
-        fr: 'Launcher Jetpack Compose sur mesure : fond animé en ruban plafonné à 60 fps, applis épinglées, tuile HDMI, panneau des lumières',
+        fr: 'Launcher Jetpack Compose sur mesure : fond animé en ruban plafonné à 60 fps, applis épinglées, tuile HDMI, panneau des lumières',
       },
       {
         en: 'Accessibility service catches TCL’s Settings key to open a custom quick panel',
@@ -220,7 +220,7 @@ export const tiles: readonly LabTile[] = [
     stack: ['Kotlin', 'Jetpack Compose', 'Android TV', 'ADB', 'Hyperion', 'WLED', 'Home Assistant', 'Docker'],
     credit: {
       en: 'launcher & stack: my code · grabber & Jellyfin: patched forks',
-      fr: 'launcher et stack : mon code · grabber et Jellyfin : forks patchés',
+      fr: 'launcher et stack : mon code · grabber et Jellyfin : forks patchés',
     },
     media: {
       main: 'tv-launcher',
@@ -335,7 +335,7 @@ export const tiles: readonly LabTile[] = [
     title: { en: 'Wired speakers, Bluetooth brain', fr: 'Enceintes filaires, cerveau Bluetooth' },
     summary: {
       en: 'ESP32-WROVER + PCM5102 DAC turns my Mackie CR3 speakers into a PIN-protected Bluetooth receiver; the Pi streams Snapcast and MPD to it.',
-      fr: 'Un ESP32-WROVER et un DAC PCM5102 transforment mes enceintes Mackie CR3 en récepteur Bluetooth protégé par PIN ; le Pi leur envoie Snapcast et MPD.',
+      fr: 'Un ESP32-WROVER et un DAC PCM5102 transforment mes enceintes Mackie CR3 en récepteur Bluetooth protégé par PIN ; le Pi leur envoie Snapcast et MPD.',
     },
     stack: ['ESP32', 'PCM5102', 'I2S', 'A2DP', 'Snapcast', 'MPD'],
     media: { main: 'speakers-wiring', thumbs: ['speakers-dac-pads', 'speakers-box', 'speakers-cr3-front'] },
@@ -350,7 +350,7 @@ export const tiles: readonly LabTile[] = [
     title: { en: 'Observability', fr: 'Observabilité' },
     summary: {
       en: 'Prometheus with 9 targets at 15 s and Grafana; a custom TrueNAS exporter in ~180 lines of Python.',
-      fr: 'Prometheus avec 9 cibles toutes les 15 s et Grafana ; un exporter TrueNAS maison d’environ 180 lignes de Python.',
+      fr: 'Prometheus avec 9 cibles toutes les 15 s et Grafana ; un exporter TrueNAS maison d’environ 180 lignes de Python.',
     },
     stack: ['Prometheus', 'Grafana', 'Python'],
     post: 'observability',

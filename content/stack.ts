@@ -16,7 +16,7 @@ export const stack: readonly StackGroup[] = [
   },
   {
     id: 'data',
-    label: { en: 'Data & queues', fr: 'Données et files' },
+    label: { en: 'Data & queues', fr: 'Données et files d’attente' },
     items: ['PostgreSQL', 'pgvector', 'Redis', 'BullMQ', 'Temporal', 'MongoDB'],
   },
   {

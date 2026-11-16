@@ -23,7 +23,7 @@ export function Contact({ lang, messages }: ContactProps) {
           </h2>
           <p className="mt-1.5 text-[15px] text-muted-foreground">
             {t(profile.contact.body, lang)}{' '}
-            <a href={`mailto:${profile.email}`} className="break-all underline-offset-[3px] hover:underline">
+            <a href={`mailto:${profile.email}`} className="whitespace-nowrap underline-offset-[3px] hover:underline">
               {profile.email}
             </a>
           </p>

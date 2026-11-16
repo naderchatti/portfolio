@@ -14,16 +14,11 @@ export const profile = {
     en: 'Freelance & SaaS founder, based in France. Next.js and TypeScript on the front, Python and Postgres behind it, and a homelab where most of it gets tested first.',
     fr: 'Freelance et fondateur SaaS, basé en France. Next.js et TypeScript côté front, Python et Postgres derrière, et un homelab où presque tout est testé en premier.',
   },
-  /** Prompt line under the hero. */
-  status: {
-    en: 'uptime 10w · 9 projects · 14 services',
-    fr: 'uptime 10w · 9 projets · 14 services',
-  },
   contact: {
-    title: { en: 'Have a project in mind?', fr: 'Un projet en tête ?' },
+    title: { en: 'Have a project in mind? Let’s talk.', fr: 'Un projet en tête ? Parlons-en.' },
     body: {
-      en: 'Freelance missions and SaaS collaborations.',
-      fr: 'Missions freelance et collaborations SaaS.',
+      en: 'Tell me what you need and I’ll get back to you. Write to',
+      fr: 'Dites-moi ce dont vous avez besoin, je vous réponds rapidement. Écrivez à',
     },
   },
 } as const satisfies {
@@ -34,7 +29,6 @@ export const profile = {
   location: Localized;
   role: Localized;
   intro: Localized;
-  status: Localized;
   contact: { title: Localized; body: Localized };
 };
 

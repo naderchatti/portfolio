@@ -19,10 +19,10 @@ export type UsesSection = {
 };
 
 export const usesIntro = {
-  title: { en: 'Uses', fr: 'Outils' },
+  title: { en: 'Uses', fr: 'Setup' },
   lead: {
     en: 'The hardware and software I build, game and stream with.',
-    fr: 'Le matériel et les logiciels avec lesquels je développe, je joue et je stream.',
+    fr: 'Le matériel et les logiciels avec lesquels je développe, je joue et je streame.',
   },
   figures: [
     { image: 'desk-cat', caption: { en: 'The real operator.', fr: 'Le vrai opérateur.' } },
@@ -141,7 +141,7 @@ export const usesSections: readonly UsesSection[] = [
         label: { en: 'Overlays', fr: 'Overlays' },
         value: {
           en: 'OBS overlays via Streamer.bot (chat, multichat, ad timer), adapted from nuttylmao’s open-source projects — my own versions are on the to-do list.',
-          fr: 'Overlays OBS via Streamer.bot (chat, multichat, minuteur de pubs), adaptés des projets open source de nuttylmao — mes propres versions sont sur la liste.',
+          fr: 'Overlays OBS via Streamer.bot (chat, multichat, minuteur de pubs), adaptés des projets open source de nuttylmao — mes propres versions sont prévues.',
         },
       },
       {

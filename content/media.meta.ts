@@ -13,7 +13,7 @@ export const mediaMeta = {
   'ugckit-landing': {
     alt: {
       en: 'UGCKit landing page: Make scroll-stopping UGC videos from one project brief, with a product preview',
-      fr: 'Page d’accueil d’UGCKit : des vidéos UGC qui arrêtent le scroll à partir d’un seul brief, avec un aperçu du produit',
+      fr: 'Page d’accueil d’UGCKit : des vidéos UGC qui arrêtent le scroll à partir d’un seul brief, avec un aperçu du produit',
     },
   },
   'ugckit-landing-light': {
@@ -35,7 +35,7 @@ export const mediaMeta = {
   'fourma-live-light': {
     alt: {
       en: 'Fourma live workout: a guided set with weight and reps steppers',
-      fr: 'Séance en direct dans Fourma : une série guidée avec réglage du poids et des répétitions',
+      fr: 'Séance en direct dans Fourma : une série guidée avec réglage du poids et des répétitions',
     },
   },
   'fourma-editor': {
@@ -65,7 +65,7 @@ export const mediaMeta = {
   'counter-handoff': {
     alt: {
       en: 'Counter hand-off screen: the customer’s pickup code is checked before the order is handed over',
-      fr: 'Écran de remise au comptoir : le code de retrait du client est vérifié avant de remettre la commande',
+      fr: 'Écran de remise au comptoir : le code de retrait du client est vérifié avant de remettre la commande',
     },
   },
 
@@ -107,7 +107,7 @@ export const mediaMeta = {
   'music-assistant': {
     alt: {
       en: 'Music Assistant now-playing view with playback controls and the Snapcast output selected',
-      fr: 'Vue « en cours de lecture » de Music Assistant avec les commandes de lecture et la sortie Snapcast sélectionnée',
+      fr: 'Vue « en cours de lecture » de Music Assistant avec les commandes de lecture et la sortie Snapcast sélectionnée',
     },
   },
   'jellyfin-libraries': {
@@ -119,7 +119,7 @@ export const mediaMeta = {
   'tv-launcher': {
     alt: {
       en: 'Custom TV launcher home screen with clock, animated starry ribbon, an Ambilight Live chip and a row of apps including Jellyfin, Twitch and the PC HDMI input',
-      fr: 'Écran d’accueil du launcher TV maison : horloge, ruban étoilé animé, pastille Ambilight Live et une rangée d’applis dont Jellyfin, Twitch et l’entrée HDMI du PC',
+      fr: 'Écran d’accueil du launcher TV maison : horloge, ruban étoilé animé, pastille Ambilight Live et une rangée d’applis dont Jellyfin, Twitch et l’entrée HDMI du PC',
     },
   },
 
@@ -127,9 +127,9 @@ export const mediaMeta = {
   'desk-esp32-installed': {
     alt: {
       en: 'The finished desk controller: a small black box plugged into the Maidesite control box’s RJ12 handset port, next to the motor cables',
-      fr: 'Le contrôleur de bureau terminé : un petit boîtier noir branché sur le port RJ12 de la télécommande du boîtier Maidesite, à côté des câbles moteur',
+      fr: 'Le contrôleur de bureau terminé : un petit boîtier noir branché sur le port RJ12 de la télécommande du boîtier de commande Maidesite, à côté des câbles moteur',
     },
-    focal: '50% 40%',
+    focal: '50% 30%',
   },
   'desk-esp32-sealed': {
     alt: {
@@ -178,8 +178,9 @@ export const mediaMeta = {
   'kvm-under-desk': {
     alt: {
       en: 'Modded USB switch mounted under the desk with the ESP32 attached and cables tied',
-      fr: 'Le switch USB modifié fixé sous le bureau, ESP32 attaché et câbles attachés',
+      fr: 'Le switch USB modifié fixé sous le bureau, avec l’ESP32 et les câbles bien rangés',
     },
+    focal: '50% 55%',
   },
   'kvm-esp32': {
     alt: {
@@ -203,7 +204,7 @@ export const mediaMeta = {
   'rack-front': {
     alt: {
       en: 'The rack from the front: switch, Raspberry Pi, laptops and mini PC on their shelves',
-      fr: 'Le rack de face : switch, Raspberry Pi, portables et mini PC sur leurs étagères',
+      fr: 'Le rack de face : switch, Raspberry Pi, portables et mini PC sur leurs étagères',
     },
   },
   'rack-side': {
@@ -242,7 +243,7 @@ export const mediaMeta = {
   'voice-satellite-build': {
     alt: {
       en: 'Voice satellite build: ESP32-S3 devkit wired to an I2S microphone, an amplifier and two small speakers',
-      fr: 'Le satellite vocal : un devkit ESP32-S3 câblé à un micro I2S, un ampli et deux petits haut-parleurs',
+      fr: 'Le satellite vocal : un devkit ESP32-S3 câblé à un micro I2S, un ampli et deux petits haut-parleurs',
     },
     focal: '50% 60%',
   },
@@ -288,6 +289,7 @@ export const mediaMeta = {
       en: 'Mackie CR3 Limited Edition powered speakers, front',
       fr: 'Enceintes actives Mackie CR3 Limited Edition, de face',
     },
+    focal: '50% 40%',
   },
   'speakers-cr3-close': {
     alt: { en: 'Close-up of a Mackie CR3 speaker', fr: 'Gros plan d’une enceinte Mackie CR3' },
@@ -303,7 +305,7 @@ export const mediaMeta = {
   'desk-setup': {
     alt: {
       en: 'The desk setup: black standing desk with a vertical and a landscape monitor showing cat wallpapers, a gaming PC and a mic arm',
-      fr: 'Le bureau : un bureau assis-debout noir avec un écran vertical et un écran paysage aux fonds d’écran de chat, un PC gaming et un bras de micro',
+      fr: 'Le bureau : un bureau assis-debout noir avec un écran vertical et un écran paysage aux fonds d’écran de chat, un PC gaming et un bras de micro',
     },
     focal: '50% 45%',
   },

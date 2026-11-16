@@ -1,5 +1,5 @@
 ---
-title: 'Enceintes filaires, cerveau Bluetooth : un récepteur ESP32 + PCM5102'
+title: 'Enceintes filaires, cerveau Bluetooth : un récepteur ESP32 + PCM5102'
 slug: speakers-bluetooth-esp32
 summary: >-
   Transformer une paire d'enceintes filaires en récepteur Bluetooth A2DP avec un
@@ -7,7 +7,7 @@ summary: >-
   en faire une zone de mon audio multiroom.
 excerpt: >-
   Un ESP32-WROVER et un DAC PCM5102 transforment mes enceintes Mackie CR3 en
-  récepteur Bluetooth protégé par PIN ; le Pi leur envoie Snapcast et MPD.
+  récepteur Bluetooth protégé par PIN ; le Pi leur envoie Snapcast et MPD.
 category: homelab
 inside:
   - L'idée
@@ -15,7 +15,7 @@ inside:
   - Câblage
   - Firmware
   - Sécurité de l'appairage
-  - Débugger le silence
+  - Déboguer le silence
   - Dans l'installation multiroom
 cover: speakers-wiring
 date: null
@@ -100,7 +100,7 @@ Une remarque de débogage : les erreurs « unable to open ftdi device » d'OpenO
 
 Une enceinte Bluetooth à laquelle n'importe qui à proximité peut se connecter, c'est une gêne modeste mais bien réelle. Avec `activate_pin_code`, un nouvel appareil doit confirmer un code PIN lors du premier appairage. Une fois associé, `set_auto_reconnect` lui permet de se reconnecter sans rien demander, donc l'usage quotidien reste aussi simple qu'avec une enceinte du commerce.
 
-## Débugger le silence
+## Déboguer le silence
 
 Le premier test complet a été frustrant. Le téléphone se connectait, l'appairage avec PIN fonctionnait, la lecture démarrait côté téléphone, et les enceintes restaient muettes. J'ai vérifié couche par couche : SCK relié à GND, VIN à 4,8 V, et le sketch qui utilise bien la config `I2SStream` actuelle plutôt que l'ancienne API de broches. Tout était bon. J'étais convaincu que le DAC était mort, alors j'en ai acheté un deuxième. Exactement le même silence.
 

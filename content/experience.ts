@@ -25,12 +25,12 @@ export const experience: readonly Experience[] = [
     org: 'L’Effiloché',
     summary: {
       en: 'Street food de qualité & coffee shop: designed, built and run the whole digital stack.',
-      fr: 'Street food de qualité & coffee shop : conception, développement et exploitation de toute la stack numérique.',
+      fr: 'Street food de qualité & coffee shop : conception, développement et exploitation de toute la stack numérique.',
     },
     bullets: [
       {
         en: 'In-store display system: playlists on 4 TV players, wide and vertical layouts',
-        fr: 'Affichage en boutique : playlists sur 4 lecteurs TV, formats paysage et portrait',
+        fr: 'Affichage en boutique : playlists sur 4 lecteurs TV, formats paysage et portrait',
       },
       {
         en: 'Online ordering, plus admin, staff, kitchen and driver apps',
@@ -38,13 +38,13 @@ export const experience: readonly Experience[] = [
       },
       {
         en: 'Delivery tours selling from finite truck stock, with atomic checkout',
-        fr: 'Tournées de livraison vendant un stock de camion limité, avec un paiement atomique',
+        fr: 'Tournées de livraison avec vente sur un stock embarqué limité et paiement atomique',
       },
     ],
     stack: ['pnpm monorepo', 'Next.js', 'Expo', 'Prisma', 'PostgreSQL', 'Better Auth', 'web push'],
     detail: {
       en: 'Realtime via a Postgres outbox + relay: every screen gets each change exactly once.',
-      fr: 'Temps réel via un outbox Postgres et un relais : chaque écran reçoit chaque changement exactement une fois.',
+      fr: 'Temps réel via une outbox Postgres et un relais : chaque écran reçoit chaque changement exactement une fois.',
     },
   },
   {
@@ -55,7 +55,7 @@ export const experience: readonly Experience[] = [
     org: 'AI Diag Me',
     summary: {
       en: 'AI health platform interpreting lab reports and questionnaires for humans and animals: multi-brand, 5 languages, multi-currency Stripe, telehealth.',
-      fr: 'Plateforme de santé IA qui interprète bilans biologiques et questionnaires, pour les humains comme pour les animaux : multimarque, 5 langues, Stripe multidevise, téléconsultation.',
+      fr: 'Plateforme de santé IA qui interprète bilans biologiques et questionnaires, pour les humains comme pour les animaux : multimarque, 5 langues, Stripe multidevise, téléconsultation.',
     },
     bullets: [
       { en: 'PDF/OCR pipeline with anonymisation', fr: 'Pipeline PDF/OCR avec anonymisation' },
@@ -109,7 +109,7 @@ export const experience: readonly Experience[] = [
     org: 'Vasta Piscine · Vastappli',
     summary: {
       en: 'Field operations for a pool company: clients, pools, scheduled service visits, anomaly reports, staff and notifications, replacing a paper-based system.',
-      fr: 'Gestion terrain pour une entreprise de piscines : clients, bassins, passages d’entretien planifiés, signalements d’anomalies, équipe et notifications, à la place d’un système papier.',
+      fr: 'Gestion terrain pour une entreprise de piscines : clients, bassins, passages d’entretien planifiés, signalements d’anomalies, équipe et notifications, à la place d’un système papier.',
     },
     bullets: [],
     stack: ['Java (Android)', 'Spring Boot', 'React Native/Expo'],
