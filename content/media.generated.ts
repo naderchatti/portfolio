@@ -1510,7 +1510,7 @@ export const generatedImages = {
     "name": "rack-paint",
     "width": 1200,
     "height": 1600,
-    "placeholder": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZQC/OBuxI1RbWzRxDVBgAP3jmyGGDgqacDyJ9jiS8qQhQOATnCLKD8dLfA0tNZGMga+Sc/5XSVPLD1J+T8dsPOYx2KXTzdMDVA4D6LDMS7IpdSz8AAAA",
+    "placeholder": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAAAwBACdASoQABUAPu1iqU2ppaOiMAgBMB2JZQC/OBuxI1RbWzRzCnrANWAA/eObIYYOCppwPIn2OJLypCE+Zpfcl7AR6syX2P8lvwLH/JOf8rpKnlh6k/J+O2HnMY7FLp5umBqgcB9FhmJdkBhetv4AAAA=",
     "sources": {
       "avif": [
         {
