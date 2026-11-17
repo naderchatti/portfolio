@@ -17,7 +17,7 @@
     "check:content": "tsx scripts/check-content.mjs",
     "search:index": "tsx scripts/search-index.mjs",
     "media": "node scripts/media.mjs",
-    "data:activity": "node scripts/github-activity.mjs",
+    "data:activity": "tsx scripts/github-activity.mjs",
     "og": "tsx scripts/og.mjs",
     "knip": "knip"
   },

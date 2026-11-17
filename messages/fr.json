@@ -75,7 +75,9 @@
       "more": "Plus",
       "languages": "Langages",
       "heatmapLabel": "Carte des contributions, de {from} à {to}",
-      "day": "{count} contributions le {date}"
+      "day": "{count} contributions le {date}",
+      "dayOne": "1 contribution le {date}",
+      "dayNone": "Aucune contribution le {date}"
     },
     "built": {
       "title": "Les produits que je construis et fais tourner",

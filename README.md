@@ -20,7 +20,7 @@ Personal site of Nader Chatti — bilingual (EN/FR), statically exported and hos
 | `pnpm lint`      | ESLint 9 flat config (`eslint.config.mjs`)                     |
 | `pnpm typecheck` | Route type generation + `tsc` for the app and Pages Functions  |
 | `pnpm media`     | Rebuild `public/media` (AVIF/WebP) + `content/media.generated.ts` from `MEDIA_SRC` |
-| `pnpm data:activity` | Refresh `content/activity.generated.json` from GitHub (`GITHUB_TOKEN` or `gh`) |
+| `pnpm data:activity` | Refresh `content/activity.generated.json` from GitHub's public contributions page (no token) |
 | `pnpm check:content` | Post counts, translations, `media:`/`diagram:` refs, MDX compile, manifest files |
 
 Icons (`app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icon-*.png`) are generated from
@@ -44,13 +44,14 @@ Icons (`app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icon-*.p
 
 ## Live GitHub activity
 
-- `functions/api/activity.ts` serves `/api/activity`: the public contribution calendar of `naderchatti` from the
-  GitHub GraphQL API, in the same shape as `content/activity.generated.json`.
-- Secret: `GITHUB_TOKEN` (fine-grained, public read-only, no permissions) in Pages Production and Preview.
-  Missing token → 503; GitHub error or 5 s timeout → 502 `{ error }` with `no-store`.
+- `functions/api/activity.ts` serves `/api/activity`: the contribution calendar of `naderchatti`, parsed from the
+  public `https://github.com/users/naderchatti/contributions` page (shared parser in
+  `lib/activity/parse-contributions.ts`), in the same shape as `content/activity.generated.json`. That page counts
+  private contributions anonymously, like the profile graph; the GraphQL API with a public-only token does not.
+- No secret needed: the former `GITHUB_TOKEN` Pages secret is unused and can be deleted.
+  GitHub error, unparseable page or 5 s timeout → 502 `{ error }` with `no-store`.
 - Cached at the edge with the Workers Cache API:
   `Cache-Control: public, max-age=3600, s-maxage=21600, stale-while-revalidate=86400`.
 - The home heatmap renders the committed snapshot, then swaps in the live data after mount when it validates
-  (skipped in `pnpm dev`); any failure silently keeps the snapshot.
-- Local test: `pnpm build`, then either put `GITHUB_TOKEN=…` in `.dev.vars` (git-ignored) and run `pnpm preview`,
-  or `npx wrangler pages dev out --binding GITHUB_TOKEN=$(gh auth token)`; open `/api/activity`.
+  and its total is at least 80% of the snapshot's (skipped in `pnpm dev`); any failure silently keeps the snapshot.
+- Local test: `pnpm build`, then `pnpm preview` (or `npx wrangler pages dev out`); open `/api/activity`.

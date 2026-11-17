@@ -75,7 +75,9 @@
       "more": "More",
       "languages": "Languages",
       "heatmapLabel": "Contribution heatmap, {from} to {to}",
-      "day": "{count} contributions on {date}"
+      "day": "{count} contributions on {date}",
+      "dayOne": "1 contribution on {date}",
+      "dayNone": "No contributions on {date}"
     },
     "built": {
       "title": "Products I build and run",
