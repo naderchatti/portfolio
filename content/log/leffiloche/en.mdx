@@ -1,0 +1,79 @@
+---
+title: "L'Effiloché: the whole restaurant on one platform"
+slug: leffiloche
+summary: >-
+  The ordering, kitchen, delivery and in-store screens I built for L'Effiloché,
+  a street-food and coffee shop: one platform from the customer's phone to the
+  kitchen tablet and the delivery truck, now in final testing.
+excerpt: >-
+  Ordering, kitchen board, live tracking, delivery tours and in-store screens
+  for one street-food shop.
+category: saas
+inside:
+  - Ordering
+  - Kitchen board
+  - Live tracking
+  - Delivery tours
+  - In-store screens
+  - Under the hood
+cover: kitchen-board
+date: null
+draft: false
+sources: []
+---
+
+L'Effiloché is a street-food and coffee shop where I lead all of the IT. A shop like this usually runs on a patchwork: one tablet per delivery app, a printer in the kitchen, a spreadsheet for the truck, a USB stick in the TV. I wanted one platform where an order placed on a phone shows up in the kitchen, on the customer's tracking page and, for deliveries, in the driver's tour, without anyone retyping it.
+
+It isn't live yet. The platform is in final testing with the team before go-live, so what follows is the system as it runs in those tests.
+
+## Ordering
+
+Customers order from the website, on a laptop or on their phone. The menu shows what is actually available right now: the kitchen can mark a dish as sold out, and the whole service can be opened, paused for 15 or 30 minutes, extended or closed from the kitchen, so the site never takes an order the team can't handle. A small status pill tells the customer whether the shop is open and when the next pickup slot is.
+
+![Customer web menu](media:customer-web-menu)
+
+There are three ways to order: click-and-collect with a pickup slot, dine-in, and delivery. Dishes can be customised, and the price of every option is computed by a single shared rule, so the menu, the basket and the kitchen ticket always agree.
+
+![Customer mobile menu](media:customer-mobile-menu)
+
+## Kitchen board
+
+In the kitchen, orders appear on a board with columns from "to do" to "ready", oldest first. Allergies are always visible on the card. Moving an order to the next column is one tap, and the card moves at once; if the server refuses the change (someone else already moved it, for example), it goes back with a visible message.
+
+![Kitchen board](media:kitchen-board)
+
+The board runs in the browser and in an Android app on the kitchen tablet. The app keeps the screen awake and disables actions when the tablet loses the network, so nobody taps into the void in the middle of service.
+
+A new order sets off an alarm that repeats until someone taps « Vu » (seen). The acknowledgement is shared: the first tap on any kitchen screen silences all of them. Because a busy kitchen tablet isn't always in the foreground, the Android app uses a loud, repeating notification that works with the screen off.
+
+![New-order alert on the kitchen screen](media:kitchen-new-order-alert)
+
+## Live tracking
+
+After ordering, the customer gets a tracking page that updates by itself: received, in preparation, ready, or, for a delivery, queued, en route and arrived. While the truck is on its way, it can show an approximate position and an arrival window. It deliberately shows nothing about the driver, the route or other customers' stops, and it hides the position as soon as the data gets stale.
+
+![Customer order tracking](media:customer-tracking)
+
+At the counter, the order is handed over against a pickup code, so the right bag goes to the right person.
+
+## Delivery tours
+
+Delivery works differently from the shop. A truck leaves with a fixed set of products and a finite stock, and customers in the covered area order from that stock only. Every product in the truck tracks what was loaded, reserved, delivered and returned, and an order can never take more than what is left. If two customers try to buy the last portion at the same moment, one gets it and the other gets a clear "no longer available" message, instead of the truck being oversold.
+
+Each new delivery order is added as a stop to the driver's route. The driver works from their phone with the list of stops and marks each one as delivered; their live position feeds the customers' arrival estimates.
+
+At the end of the tour, an administrator counts what came back and splits it into returned, damaged, wasted or missing. Once confirmed, the tour is locked with its summary.
+
+![Driver tour summary](media:driver-tour-summary)
+
+## In-store screens
+
+The menu boards in the shop are TVs, and a separate, smaller app drives them. The team uploads images and videos, arranges them into playlists with a duration per item, and assigns a playlist to each screen. Three of the TVs sit side by side and can act as one wide video wall: a single image or a synchronised video spans all three, or each TV shows its own slot. Changing the menu boards no longer means walking around with a USB stick.
+
+## Under the hood
+
+The hard part is keeping every one of those screens current, once, without leaking data to the wrong one. I didn't want a message broker for one restaurant, so everything goes through Postgres. Any change other screens care about writes an event to an outbox table in the same transaction as the change itself: if the order commits, the event commits with it; if it rolls back, nothing was announced. Events only say "this order changed", never what's in it, and each one is addressed to an audience (the kitchen, admins, one driver, one order). A small relay process numbers published events in a strict order and wakes the app servers with `pg_notify`, so each screen updates exactly once per change.
+
+Browsers receive those wakeups over server-sent events and then re-read only what they're allowed to see. Every message carries its sequence number, so a reconnecting browser resumes exactly where it left off, and a cursor that has fallen out of history triggers one clean refresh. As a safety net, every visible page also polls on a slow timer and refreshes when it comes back into view.
+
+None of this needs more than Postgres, one small relay and plain HTTP streams, which suits a business of this size.

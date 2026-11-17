@@ -1,0 +1,156 @@
+---
+title: Standing desk over Wi-Fi
+slug: standing-desk-over-wifi
+summary: >-
+  Putting a Maidesite T2 Pro Plus into Home Assistant with an ESP32-S3 and
+  ESPHome, following the community's guide.
+excerpt: >-
+  A Maidesite T2 Pro Plus driven from Home Assistant through a soldered
+  ESP32-S3.
+category: homelab
+inside:
+  - Why
+  - What you need
+  - Wiring
+  - The protocol
+  - Flashing & config
+  - Home Assistant
+  - Limits & what's next
+  - Credits & sources
+cover: desk-esp32-installed
+date: null
+draft: false
+sources:
+  - >-
+    https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293
+  - >-
+    https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293/22
+  - 'https://github.com/shades66/Maidesite-standing-desk'
+---
+
+## Why
+
+The desk's own handset works, but it lives in its own world: no presets from my phone, no way to tie the desk into the rest of the house. The controller already talks to the handset over a serial line, and the Home Assistant community had already worked out its protocol. So the plan was simple: follow their guide, put an ESP32-S3 running ESPHome on that line, and let Home Assistant speak the same language.
+
+![The finished controller: ESP32 sealed in hot glue inside a small black box, plugged into the desk's RJ12 port](media:desk-esp32-installed)
+
+## What you need
+
+| Item | Details |
+| --- | --- |
+| Desk | Maidesite T2 Pro Plus |
+| Cable | RJ12 cable (6P6C, 6 wires), straight, male |
+| Board | ESP32-S3-Zero |
+| Wiring | Jumper wires |
+| Tools | Soldering iron, solder, heat-shrink tubing for the wire joints |
+| Enclosure | Hot glue and a small black project box |
+| Cost / time | Under €15 · about 45–60 min (≈15 min flashing, ≈30 min wiring) |
+
+## Wiring
+
+The ESP32 sits on the desk's handset line: the RJ12 port that normally takes the keypad. These are the community guide's steps, as I did them:
+
+1. Cut the jumper wires and the RJ12 cable.
+2. Separate and strip the six conductors.
+3. Slide a small piece of heat-shrink over each wire, and a big one over the whole harness.
+4. Twist and solder the six pairs.
+5. If your cables use different colours, write down the mapping.
+6. Shrink the tubing. A hairdryer is gentle enough for thin insulation.
+7. Wire to the ESP32 and plug it into the desk's handset port.
+8. Seal the board with hot glue and put it in a small black box.
+
+| From | To · signal |
+| --- | --- |
+| RJ12 pin 2 · GND | ESP GND |
+| RJ12 pin 3 · handset TX | ESP RX (GPIO44) · UART, desk → ESP |
+| ESP TX (GPIO43) | RJ12 pin 5 · handset RX · UART, ESP → desk |
+| RJ12 pin 4 · 5V | ESP 5V · powered from the desk |
+| RJ12 pins 1, 6 | unused |
+
+UART at 9600 baud. The ESP is powered from the desk's pin 4, so a single cable runs from the RJ12 port to the board. Shades66 recommends a 1.5k/3k voltage divider on the ESP's RX line, which is the safer option. On the S3-Zero it worked without one, as in post #22, but that is a reported success, not a guarantee.
+
+![Wiring diagram](diagram:standing-desk)
+
+![Top view of the ESP32-S3-Zero with coloured wires soldered to a cut RJ12 cable](media:desk-esp32-board)
+
+![Back side of the board showing the flat RJ12 cable and connector](media:desk-esp32-rj45)
+
+![The board sealed with hot glue on its RJ12 cable](media:desk-esp32-sealed)
+
+**Mind the metal.** Keep the ESP clear of the desk's metal frame and guard, or the Wi-Fi signal suffers. Plan the cable length with that in mind.
+
+## The protocol
+
+The handset and the controller talk over a UART at 9600 baud. Frames sent to the desk start with `F1 F1`, replies from the desk start with `F2 F2`. Every frame carries a checksum and ends with a `0x7E` terminator, which makes the stream easy to cut into frames.
+
+| Part | To desk / from desk |
+| --- | --- |
+| Header | `F1 F1` / `F2 F2` |
+| Command + payload | Button, preset or target height; replies carry height and memory slots |
+| Checksum | Validates the frame |
+| Terminator | `7E` |
+
+## Flashing & config
+
+Again following the guide:
+
+1. Flash the ESP32 with ESPHome Builder in Home Assistant.
+2. Apply the YAML.
+3. Add `desk.h` to `esphome/include/`: the custom UART component from Shades66's repo.
+
+The firmware and its protocol handling come from the community work. Parsing happens in the UART debug callback, so frames are handled as they arrive instead of being polled, and the ESP asks the desk for its initial values at boot.
+
+A simplified `desk.yaml`:
+
+```yaml
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+uart:
+  id: desk_bus
+  baud_rate: 9600
+  tx_pin: GPIO43
+  rx_pin: GPIO44
+
+number:
+  - platform: template
+    id: deskSlider
+    name: "Desk height"
+    min_value: 620
+    max_value: 1263
+    step: 1
+    unit_of_measurement: mm
+```
+
+The community thread also suggests a current-height sensor in centimetres, plus an mdi icon per control. I kept both:
+
+```yaml
+- platform: template
+  name: "Desk Current Height"
+  id: desk_current_height
+  icon: "mdi:format-vertical-align-center"
+  lambda: |-
+    return id(deskSlider).state / 10.0;
+```
+
+## Home Assistant
+
+In Home Assistant the desk shows up as a normal device: current height, the four memory-slot heights, Up and Down, M1 to M4 preset buttons, and a height slider from 620 to 1263 mm that sends a go-to-height command.
+
+![Home Assistant device page with desk up and down buttons, height slider, M1 to M4 presets and memory height sensors](media:desk-ha-controls)
+
+## Limits & what's next
+
+The handset's physical lock button isn't on the UART bus: the desk doesn't report its state and the ESP can't toggle it, so the lock stays a manual press.
+
+Next idea: press it mechanically, for example with a SwitchBot-style button pusher triggered from Home Assistant. I'm still deciding.
+
+## Credits & sources
+
+- [Maidesite standing desk with ESPHome](https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293), Home Assistant Community thread: parts list, wiring steps, base YAML, "Desk Current Height" sensor.
+- [lukas-berger, post #22](https://community.home-assistant.io/t/maidesite-standing-desk-with-esphome/602293/22): the ESP32-S3-Zero + T2 Pro Plus wiring I followed.
+- [shades66/Maidesite-standing-desk](https://github.com/shades66/Maidesite-standing-desk): Shades66's repo, `desk.h` and the protocol work.
+
+My part: I followed the community's wiring and protocol work, then customised `desk.h` and my ESPHome config with my own memory presets and buttons, and built and sealed it for my T2 Pro Plus.

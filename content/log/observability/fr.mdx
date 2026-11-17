@@ -1,0 +1,130 @@
+---
+title: 'Observabilité : Prometheus, Grafana et un petit exporter TrueNAS'
+slug: observability
+summary: >-
+  Un LXC de monitoring interroge neuf cibles toutes les 15 secondes, un tableau
+  de bord Grafana provisionné montre tout le lab sur une page, et un exporter
+  Python de 180 lignes comble le manque côté TrueNAS.
+excerpt: 'Métriques et tableaux de bord pour tout le lab, plus un petit exporter maison.'
+category: homelab
+inside:
+  - Prometheus
+  - Grafana
+  - Un exporter TrueNAS
+cover: grafana
+date: null
+draft: false
+sources:
+  - 'https://prometheus.io/'
+  - 'https://grafana.com/oss/grafana/'
+  - 'https://github.com/prometheus/node_exporter'
+  - 'https://github.com/google/cadvisor'
+  - 'https://github.com/prometheus-pve/prometheus-pve-exporter'
+  - 'https://www.home-assistant.io/integrations/prometheus/'
+  - 'https://www.truenas.com/docs/api/'
+  - 'https://github.com/websocket-client/websocket-client'
+---
+
+Pendant longtemps, mon « monitoring » consistait à ouvrir cinq interfaces web en plissant les yeux. Désormais, il y a un seul endroit qui répond d'un coup d'œil à la question « est-ce que tout va bien ? », et il est volontairement petit : un unique LXC sur Proxmox avec Prometheus, Grafana et quelques exporters, le tout dans un seul fichier Docker Compose.
+
+## Prometheus
+
+**Prometheus** interroge chaque cible toutes les **15 secondes** (l'intervalle d'évaluation est le même). Le stockage local est plafonné à **30 jours ou 8 Go**, selon ce qui arrive en premier, ce qui est largement suffisant pour un homelab et garde le disque du conteneur prévisible.
+
+Il y a **neuf jobs de scrape**, chacun avec une seule cible :
+
+| Job | Ce qu'il mesure |
+| --- | --- |
+| `prometheus` | Prometheus lui-même |
+| `monitoring-lxc` | node-exporter dans le conteneur de monitoring |
+| `proxmox` | l'hyperviseur et chaque invité, via l'exporter PVE |
+| `truenas` | le NAS, via mon propre exporter (voir plus bas) |
+| `pi-node` / `pi-cadvisor` | l'hôte Raspberry Pi et ses conteneurs Docker |
+| `dev-node` / `dev-cadvisor` | mon serveur de développement et ses conteneurs |
+| `home-assistant` | l'endpoint `/api/prometheus` intégré à Home Assistant |
+
+L'**exporter Proxmox VE** est le plus intéressant. Plutôt que d'installer un agent sur l'hyperviseur, il interroge l'API Proxmox avec un token d'API en lecture seule (le rôle `PVEAuditor`) et traduit le résultat en métriques : CPU, mémoire et stockage du nœud, plus l'état, le CPU et la mémoire de chaque LXC. Prometheus utilise l'astuce de relabeling habituelle pour l'interroger comme un proxy :
+
+```yaml
+# Sanitized excerpt from prometheus.yml
+- job_name: proxmox
+  metrics_path: /pve
+  params:
+    module: [default]
+    cluster: ["1"]
+    node: ["1"]
+  static_configs:
+    - targets: ["<proxmox-host>"]
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - target_label: __address__
+      replacement: pve-exporter:9221
+```
+
+Sur le Pi et le serveur de dev, **node-exporter** couvre l'hôte et **cAdvisor** le CPU et la mémoire par conteneur. Home Assistant n'a eu besoin d'aucun logiciel supplémentaire : son intégration Prometheus expose directement les états des entités.
+
+## Grafana
+
+**Grafana 11** lit depuis Prometheus, et la source de données comme le tableau de bord sont **provisionnés à partir de fichiers**. Le JSON du tableau de bord « Homelab Overview » n'est pas édité à la main non plus : un petit script Node le génère, et Grafana relit le dossier de provisioning toutes les 30 secondes. Si j'efface le volume Grafana, le tableau de bord revient au démarrage suivant.
+
+![Grafana Homelab Overview](media:grafana)
+
+Le tableau de bord est une longue page de 41 panneaux regroupés en six rangées, rafraîchie toutes les 30 secondes :
+
+- **Vue d'ensemble** : état des cibles de scrape, un gros compteur « cibles actives » (9 quand tout va bien) et le CPU des hôtes de toutes les machines ;
+- **Proxmox** : état du nœud, CPU, mémoire, occupation de chaque cible de stockage, et état, CPU et mémoire par conteneur ;
+- **TrueNAS** : état de l'exporter, santé du pool, occupation, espace libre et utilisé, mémoire, taille de l'ARC ZFS, quelques « datasets importants » et l'occupation du pool dans le temps ;
+- **Pi / Home Assistant** : CPU, mémoire et disque racine de l'hôte, plus CPU et mémoire par conteneur ;
+- **Dev** : la même vue pour le serveur de développement ;
+- **Monitoring** : le LXC de monitoring qui se surveille lui-même, l'ingestion d'échantillons de Prometheus et la durée des scrapes.
+
+La rangée du haut est celle que je regarde vraiment. Si le compteur affiche 9 et que le pool indique *Up*, je ferme l'onglet.
+
+## Un exporter TrueNAS
+
+TrueNAS SCALE était le trou dans la raquette. Je voulais une poignée de chiffres — le pool est-il sain, à quel point est-il plein, combien de mémoire l'ARC utilise-t-il, les services dont je dépends tournent-ils — sans rien installer sur le NAS lui-même. TrueNAS expose une **API JSON-RPC sur WebSocket**, j'ai donc écrit un petit exporter : environ **180 lignes de Python**, avec `websocket-client` comme seule dépendance et le `http.server` de la bibliothèque standard pour servir `/metrics`.
+
+À chaque scrape, il :
+
+1. ouvre un WebSocket vers l'API TrueNAS et s'authentifie avec une clé d'API lue dans l'environnement ;
+2. appelle `system.info`, `reporting.netdata_get_data` (mémoire et taille de l'ARC), `pool.query`, `pool.dataset.query` et `service.query` ;
+3. produit du texte au format Prometheus et ferme la connexion.
+
+Les métriques produites :
+
+- **Pool** : `truenas_pool_healthy`, `truenas_pool_size_bytes`, `truenas_pool_used_bytes`, `truenas_pool_free_bytes`, étiquetées par pool ;
+- **Datasets** : `truenas_dataset_used_bytes` et `truenas_dataset_available_bytes`, étiquetées par dataset ;
+- **Mémoire et ARC** : `truenas_memory_total_bytes`, `truenas_memory_available_bytes`, `truenas_memory_used_bytes`, `truenas_arc_size_bytes` ;
+- **Services** : `truenas_service_running`, une série par service TrueNAS ;
+- **Auto-surveillance** : `truenas_exporter_up`, plus une métrique d'erreur portant un message tronqué quand un appel échoue, et l'horodatage du dernier scrape.
+
+Le cœur est un appel JSON-RPC minimal sur le socket :
+
+```python
+def ws_call(ws, request_ids, method, params=None):
+    request_id = next(request_ids)
+    ws.send(json.dumps({
+        "jsonrpc": "2.0",
+        "method": method,
+        "params": params or [],
+        "id": request_id,
+    }))
+    while True:
+        message = json.loads(ws.recv())
+        if message.get("id") != request_id:
+            continue  # skip events and other replies
+        if "error" in message:
+            raise RuntimeError(f"{method}: {message['error']}")
+        return message.get("result")
+```
+
+Un scrape raté ne fait jamais planter l'exporter : il remonte `truenas_exporter_up 0` et continue de servir, donc Grafana affiche une tuile « TrueNAS Exporter » rouge au lieu d'une cible qui disparaît en silence.
+
+Il y a quelques raccourcis assumés. L'exporter accepte le certificat auto-signé du NAS sans vérification, ce qui va très bien sur mon LAN mais que je ne livrerais pas ailleurs. Il interroge aussi l'API de façon synchrone à chaque scrape ; avec un intervalle de 15 secondes, ça ne coûte pas grand-chose, mais un poller en arrière-plan avec cache ménagerait davantage le NAS si j'ajoutais d'autres appels.
+
+## Ce qui manque
+
+Jusqu'ici, l'approche a été « tableaux de bord d'abord, règles d'alerte ensuite ». Grafana et Prometheus n'ont pas encore de règles d'alerte. Les alertes que j'ai viennent des systèmes eux-mêmes : Proxmox m'envoie un e-mail quand une sauvegarde échoue ou que SMART signale un problème, et TrueNAS envoie ses propres alertes par e-mail. La prochaine étape : ajouter quelques règles Prometheus (pool en mauvaise santé, exporter hors service, disque au-delà de 85 %) envoyées sur mon téléphone.
+
+Pour la navigation au quotidien plutôt que les métriques, un tableau de bord Homepage sur le Pi liste environ 24 services répartis en 11 groupes, pour que les liens aussi soient réunis au même endroit.

@@ -1,0 +1,130 @@
+---
+title: 'Observability: Prometheus, Grafana and a tiny TrueNAS exporter'
+slug: observability
+summary: >-
+  One monitoring LXC scrapes nine targets every 15 seconds, a provisioned
+  Grafana dashboard shows the whole lab on one page, and a 180-line Python
+  exporter fills the TrueNAS gap.
+excerpt: 'Metrics and dashboards for the whole lab, plus a small exporter of my own.'
+category: homelab
+inside:
+  - Prometheus
+  - Grafana
+  - A TrueNAS exporter
+cover: grafana
+date: null
+draft: false
+sources:
+  - 'https://prometheus.io/'
+  - 'https://grafana.com/oss/grafana/'
+  - 'https://github.com/prometheus/node_exporter'
+  - 'https://github.com/google/cadvisor'
+  - 'https://github.com/prometheus-pve/prometheus-pve-exporter'
+  - 'https://www.home-assistant.io/integrations/prometheus/'
+  - 'https://www.truenas.com/docs/api/'
+  - 'https://github.com/websocket-client/websocket-client'
+---
+
+For a long time my "monitoring" was opening five web UIs and squinting. Now there is one place that answers "is everything OK?" at a glance, and it is deliberately small: a single LXC on Proxmox running Prometheus, Grafana and a few exporters, all in one Docker Compose file.
+
+## Prometheus
+
+**Prometheus** scrapes every target every **15 seconds** (the evaluation interval is the same). Local storage is capped at **30 days or 8 GB**, whichever comes first, which is plenty for a homelab and keeps the container's disk predictable.
+
+There are **nine scrape jobs**, each with a single target:
+
+| Job | What it measures |
+| --- | --- |
+| `prometheus` | Prometheus itself |
+| `monitoring-lxc` | node-exporter inside the monitoring container |
+| `proxmox` | the hypervisor and every guest, via the PVE exporter |
+| `truenas` | the NAS, via my own exporter (below) |
+| `pi-node` / `pi-cadvisor` | the Raspberry Pi host and its Docker containers |
+| `dev-node` / `dev-cadvisor` | my development server and its containers |
+| `home-assistant` | Home Assistant's built-in `/api/prometheus` endpoint |
+
+The **Proxmox VE exporter** is the interesting one. Instead of installing an agent on the hypervisor, it queries the Proxmox API with a read-only API token (the `PVEAuditor` role) and translates the result into metrics: node CPU, memory and storage, plus status, CPU and memory for each LXC. Prometheus uses the usual relabeling trick to scrape it as a proxy:
+
+```yaml
+# Sanitized excerpt from prometheus.yml
+- job_name: proxmox
+  metrics_path: /pve
+  params:
+    module: [default]
+    cluster: ["1"]
+    node: ["1"]
+  static_configs:
+    - targets: ["<proxmox-host>"]
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - target_label: __address__
+      replacement: pve-exporter:9221
+```
+
+On the Pi and the dev server, **node-exporter** covers the host and **cAdvisor** covers per-container CPU and memory. Home Assistant needed no extra software at all: its Prometheus integration exposes entity states directly.
+
+## Grafana
+
+**Grafana 11** reads from Prometheus, and both the data source and the dashboard are **provisioned from files**. The "Homelab Overview" dashboard JSON isn't hand-edited either: a small Node script generates it, and Grafana re-reads the provisioning folder every 30 seconds. If I wipe the Grafana volume, the dashboard comes back on the next start.
+
+![Grafana Homelab Overview](media:grafana)
+
+The dashboard is one long page with 41 panels grouped in six rows, refreshing every 30 seconds:
+
+- **Overall**: scrape target status, a big "targets up" counter (9 when all is well) and host CPU across machines;
+- **Proxmox**: node status, CPU, memory, storage usage per storage target, and per-container status, CPU and memory;
+- **TrueNAS**: exporter status, pool health, usage, free and used space, memory, ZFS ARC size, a few "important datasets", and pool usage over time;
+- **Pi / Home Assistant**: host CPU, memory and root disk, plus per-container CPU and memory;
+- **Dev**: the same view for the development server;
+- **Monitoring**: the monitoring LXC watching itself, Prometheus sample ingestion and scrape duration.
+
+The top row is the one I actually look at. If the counter says 9 and the pool says *Up*, I close the tab.
+
+## A TrueNAS exporter
+
+TrueNAS SCALE was the gap. I wanted a handful of numbers — is the pool healthy, how full is it, how much memory is ARC using, are the services I rely on running — without installing anything on the NAS itself. TrueNAS exposes a **JSON-RPC API over a WebSocket**, so I wrote a small exporter: about **180 lines of Python**, with `websocket-client` as its only dependency and the standard library's `http.server` serving `/metrics`.
+
+On every scrape it:
+
+1. opens a WebSocket to the TrueNAS API and authenticates with an API key read from the environment;
+2. calls `system.info`, `reporting.netdata_get_data` (memory and ARC size), `pool.query`, `pool.dataset.query` and `service.query`;
+3. renders plain Prometheus text format and closes the connection.
+
+The metrics it produces:
+
+- **Pool**: `truenas_pool_healthy`, `truenas_pool_size_bytes`, `truenas_pool_used_bytes`, `truenas_pool_free_bytes`, labelled by pool;
+- **Datasets**: `truenas_dataset_used_bytes` and `truenas_dataset_available_bytes`, labelled by dataset;
+- **Memory and ARC**: `truenas_memory_total_bytes`, `truenas_memory_available_bytes`, `truenas_memory_used_bytes`, `truenas_arc_size_bytes`;
+- **Services**: `truenas_service_running`, one series per TrueNAS service;
+- **Self-health**: `truenas_exporter_up`, plus an error metric carrying a truncated error message when a call fails, and the timestamp of the last scrape.
+
+The core is a minimal JSON-RPC call over the socket:
+
+```python
+def ws_call(ws, request_ids, method, params=None):
+    request_id = next(request_ids)
+    ws.send(json.dumps({
+        "jsonrpc": "2.0",
+        "method": method,
+        "params": params or [],
+        "id": request_id,
+    }))
+    while True:
+        message = json.loads(ws.recv())
+        if message.get("id") != request_id:
+            continue  # skip events and other replies
+        if "error" in message:
+            raise RuntimeError(f"{method}: {message['error']}")
+        return message.get("result")
+```
+
+A failed scrape never crashes the exporter: it reports `truenas_exporter_up 0` and keeps serving, so Grafana shows a red "TrueNAS Exporter" tile instead of a silently missing target.
+
+There are honest shortcuts here. The exporter accepts the NAS's self-signed certificate without verification, which is fine on my LAN but not something I'd ship elsewhere. It also queries the API synchronously on every scrape; at a 15-second interval that is cheap, but a cached background poller would be kinder to the NAS if I added more calls.
+
+## What's missing
+
+The approach so far has been dashboards first, alert rules next. Grafana and Prometheus don't have alert rules yet. The alerts I do have come from the systems themselves: Proxmox emails me when a backup job fails or SMART reports a problem, and TrueNAS sends its own email alerts. Adding a few Prometheus rules (pool unhealthy, exporter down, disk above 85%) routed to my phone is the next step.
+
+For day-to-day navigation rather than metrics, a Homepage dashboard on the Pi lists about 24 services in 11 groups, so the links live in one place too.

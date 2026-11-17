@@ -1,0 +1,197 @@
+/*
+ * Wiring diagrams — line-art tokens from portfolio-media/_build/canvas/Diagrams.dc.html.
+ * Everything is driven by CSS variables so light/dark follow the `.dark` class.
+ */
+.root {
+  --dg-bg: var(--background);
+  --dg-card: var(--card);
+  --dg-bd: var(--border);
+  --dg-mu: var(--muted-foreground);
+  --dg-fg: var(--foreground);
+  --dg-sec: var(--secondary);
+  --dg-wire: #71717a;
+  --dg-gnd: #a1a1aa;
+  --dg-acc: #09090b;
+  --dg-line: #a1a1aa;
+  --dg-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+:global(.dark) .root {
+  --dg-wire: #a1a1aa;
+  --dg-gnd: #71717a;
+  --dg-acc: #fafafa;
+  --dg-line: #52525b;
+}
+
+/* Horizontal scroll box: the drawing keeps a legible minimum width on phones. */
+.scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  max-width: 100%;
+  border: 1px solid var(--dg-bd);
+  border-radius: 0.75rem;
+  background: var(--dg-card);
+}
+
+.scroll:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.root .legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  font-family: var(--dg-mono);
+  font-size: 12px;
+  color: var(--dg-mu);
+}
+
+.legend i {
+  display: inline-block;
+  width: 28px;
+  height: 0;
+  margin-right: 8px;
+  vertical-align: middle;
+  border-top: 1.5px solid var(--dg-wire);
+}
+
+.legend i.legendGround {
+  border-top: 1.5px dashed var(--dg-gnd);
+}
+
+.legend i.legendAccent {
+  border-top: 2px solid var(--dg-acc);
+}
+
+.table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-family: var(--dg-mono);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--dg-bd);
+}
+
+.table thead th {
+  color: var(--dg-mu);
+  font-weight: 500;
+  background: var(--dg-sec);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table .accent {
+  color: var(--dg-acc);
+  font-weight: 600;
+}
+
+.root .step {
+  display: inline-block;
+  font-family: var(--dg-mono);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--dg-acc);
+  border: 1.5px solid var(--dg-acc);
+  border-radius: 0.5rem;
+  padding: 8px 14px;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.root .callout {
+  border: 1.5px solid var(--dg-acc);
+  border-radius: 0.75rem;
+  padding: 14px 18px;
+  font-size: 14px;
+  line-height: 22px;
+  background: var(--dg-card);
+}
+
+.callout b {
+  font-weight: 600;
+}
+
+.callout .accent {
+  color: var(--dg-acc);
+}
+
+.root .note {
+  border: 1px solid var(--dg-bd);
+  border-radius: 0.75rem;
+  background: var(--dg-card);
+  padding: 12px 16px;
+  font-family: var(--dg-mono);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dg-mu);
+}
+
+.note b {
+  color: var(--dg-fg);
+  font-weight: 600;
+}
+
+/* --- SVG line art ------------------------------------------------------ */
+.svg :global(.bd) { fill: var(--dg-card); stroke: var(--dg-line); stroke-width: 1.5; }
+.svg :global(.ft) { fill: none; stroke: var(--dg-mu); stroke-width: 1; }
+.svg :global(.ft-d) { stroke: var(--dg-mu); stroke-width: 1; stroke-dasharray: 3 3; }
+.svg :global(.ft-t) { font-family: var(--dg-mono); font-size: 10px; fill: var(--dg-mu); }
+.svg :global(.pl) { font-family: var(--dg-mono); font-size: 10px; fill: var(--dg-fg); }
+.svg :global(.pl.b) { font-weight: 600; }
+.svg :global(.pl.f) { fill: var(--dg-mu); opacity: 0.55; font-size: 9px; }
+.svg :global(.bl) { font-family: var(--dg-mono); font-size: 12px; font-weight: 600; fill: var(--dg-fg); }
+.svg :global(.vn) { font-family: var(--dg-mono); font-size: 9px; fill: var(--dg-mu); font-style: italic; }
+.svg :global(.wl) { font-family: var(--dg-mono); font-size: 11px; fill: var(--dg-mu); }
+.svg :global(.pu) { fill: var(--dg-bg); stroke: var(--dg-fg); stroke-width: 1.5; }
+.svg :global(.pn) { fill: none; stroke: var(--dg-mu); stroke-width: 1; opacity: 0.45; }
+.svg :global(line.ct) { stroke: var(--dg-fg); stroke-width: 3; stroke-linecap: round; }
+.svg :global(line.ct.f) { stroke: var(--dg-mu); opacity: 0.45; }
+.svg :global(.halo) { fill: none; stroke: var(--dg-card); stroke-width: 5; stroke-linejoin: round; }
+.svg :global(.ws) { fill: none; stroke: var(--dg-wire); stroke-width: 1.5; stroke-linejoin: round; }
+.svg :global(.wa) { fill: none; stroke: var(--dg-acc); stroke-width: 2; stroke-linejoin: round; }
+.svg :global(.wg) { fill: none; stroke: var(--dg-gnd); stroke-width: 1.5; stroke-dasharray: 4 4; stroke-linejoin: round; }
+.svg :global(.mkw) { fill: var(--dg-wire); }
+.svg :global(.mka) { fill: var(--dg-acc); }
+.svg :global(.jb) { fill: none; stroke: var(--dg-mu); stroke-width: 1; }
+.svg :global(.ja) { fill: none; stroke: var(--dg-acc); stroke-width: 2; }
+.svg :global(.pad) { fill: var(--dg-sec); stroke: var(--dg-mu); stroke-width: 1; }
+.svg :global(.blob) { fill: var(--dg-wire); opacity: 0.85; }
+.svg :global(.blob.a) { fill: var(--dg-acc); opacity: 1; }
+.svg :global(text.acc) { fill: var(--dg-acc); font-weight: 600; }
+
+.root .callout,
+.root .note {
+  margin: 0;
+  max-width: none;
+}
+
+/* Speakers back view: full board from 700px, cropped + larger type below (fits the column, no scroll). */
+.svg.narrowOnly :global(.pl) { font-size: 12px; }
+.svg.narrowOnly :global(.pl.f) { font-size: 11px; }
+.svg.narrowOnly :global(.ft-t) { font-size: 11px; }
+
+@media (min-width: 700px) {
+  .svg.narrowOnly { display: none; }
+}
+
+@media (max-width: 699.98px) {
+  .svg.wideOnly { display: none; }
+}

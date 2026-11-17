@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "title": "Nader Chatti — Ingénieur fullstack",
+    "description": "Nader Chatti, ingénieur fullstack. Je construis des produits SaaS et je gère ma propre infrastructure."
+  },
+  "a11y": {
+    "skipToContent": "Aller au contenu",
+    "home": "Nader Chatti, accueil",
+    "catLabel": "Logo chat, ses yeux suivent le pointeur",
+    "primaryNav": "Sections",
+    "socialNav": "Réseaux sociaux",
+    "footerNav": "Plan du site"
+  },
+  "nav": {
+    "built": "Projets",
+    "experience": "Expérience",
+    "lab": "Lab",
+    "log": "Journal",
+    "uses": "Setup",
+    "menu": "Menu",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "command": {
+    "trigger": "Aller à…",
+    "open": "Ouvrir le menu de commandes",
+    "title": "Menu de commandes",
+    "description": "Aller à une section ou modifier un réglage.",
+    "placeholder": "Tapez une commande ou cherchez…",
+    "empty": "Aucun résultat.",
+    "navigation": "Navigation",
+    "preferences": "Préférences",
+    "links": "Liens"
+  },
+  "theme": {
+    "toggle": "Changer de thème",
+    "label": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "locale": {
+    "label": "Langue",
+    "switchTo": "Read in English",
+    "en": "English",
+    "fr": "Français"
+  },
+  "home": {
+    "role": "Ingénieur fullstack — je construis des produits SaaS et je gère ma propre infrastructure.",
+    "intro": "Freelance et fondateur SaaS, basé en France. Next.js et TypeScript côté front, Python et Postgres derrière, et un homelab où presque tout est testé en premier.",
+    "soon": "Bientôt.",
+    "viewWork": "Voir les projets",
+    "readLog": "Lire le journal"
+  },
+  "footer": {
+    "copyright": "© {year} Nader Chatti",
+    "tagline": "operator@nader ~ exit 0",
+    "backToTop": "Retour en haut",
+    "email": "E-mail",
+    "rss": "RSS"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page introuvable",
+    "description": "Ce chemin n’existe pas — ou il a été déplacé.",
+    "home": "Retour à l’accueil",
+    "shell": "cd: aucun fichier ou dossier de ce type"
+  },
+  "sections": {
+    "activity": {
+      "title": "Activité",
+      "total": "{count} contributions sur les 12 derniers mois",
+      "note": "surtout des dépôts privés",
+      "less": "Moins",
+      "more": "Plus",
+      "languages": "Langages",
+      "heatmapLabel": "Carte des contributions, de {from} à {to}",
+      "day": "{count} contributions le {date}",
+      "dayOne": "1 contribution le {date}",
+      "dayNone": "Aucune contribution le {date}"
+    },
+    "built": {
+      "title": "Les produits que je construis et fais tourner",
+      "tag": "perso"
+    },
+    "experience": {
+      "title": "Expérience",
+      "tag": "pro"
+    },
+    "lab": {
+      "title": "Le lab",
+      "featured": "Réalisations à la une",
+      "explore": "Explorer le lab →",
+      "allEntries": "Tout le journal →",
+      "infrastructure": "Infrastructure",
+      "builds": "Réalisations",
+      "services": "Services auto-hébergés",
+      "screens": "Écrans",
+      "homeAssistant": "Home Assistant"
+    },
+    "education": {
+      "title": "Formation"
+    },
+    "stack": {
+      "title": "La stack, tirée du code livré"
+    },
+    "contact": {
+      "title": "Un projet en tête ?",
+      "emailMe": "M’écrire"
+    },
+    "uses": {
+      "title": "Setup",
+      "buildLog": "Journal de montage"
+    }
+  },
+  "project": {
+    "status": {
+      "launching-soon": "Bientôt disponible",
+      "live": "En ligne",
+      "in-development": "En développement",
+      "archived": "Archivé"
+    },
+    "private": "Privé",
+    "visit": "Visiter {label}",
+    "screens": "Écrans",
+    "detail": "Détail technique"
+  },
+  "experience": {
+    "now": "auj.",
+    "current": "En cours"
+  },
+  "log": {
+    "title": "Le journal",
+    "lead": "Des notes sur la construction de produits SaaS, la gestion du homelab et quelques ESP32 soudés. Ce que j’ai mis en place, pourquoi, et ce qui a cassé en route.",
+    "filterLabel": "Filtrer par tag",
+    "filters": {
+      "all": "Tout",
+      "homelab": "Homelab",
+      "saas": "SaaS"
+    },
+    "searchLabel": "Chercher dans le journal",
+    "searchPlaceholder": "Chercher un article",
+    "count": {
+      "one": "{count} article",
+      "other": "{count} articles"
+    },
+    "empty": "Aucun article ne correspond à ce filtre.",
+    "inside": "Au sommaire",
+    "read": "Lire",
+    "readInLog": "Lire dans le journal →",
+    "readMore": "Lire →",
+    "minutes": "{count} min de lecture",
+    "undated": "Non daté",
+    "draft": "Brouillon",
+    "sources": "Sources",
+    "onThisPage": "Sur cette page",
+    "backToLog": "← Tous les articles",
+    "diagramPending": "Schéma de câblage"
+  },
+  "media": {
+    "playVideo": "Lire la vidéo",
+    "pauseVideo": "Mettre la vidéo en pause"
+  }
+}

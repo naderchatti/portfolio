@@ -1,0 +1,138 @@
+---
+title: 'Enceintes filaires, cerveau Bluetooth : un récepteur ESP32 + PCM5102'
+slug: speakers-bluetooth-esp32
+summary: >-
+  Transformer une paire d'enceintes filaires en récepteur Bluetooth A2DP avec un
+  ESP32-WROVER DevKitC, un DAC I2S PCM5102 et la bibliothèque ESP32-A2DP, puis
+  en faire une zone de mon audio multiroom.
+excerpt: >-
+  Un ESP32-WROVER et un DAC PCM5102 transforment mes enceintes Mackie CR3 en
+  récepteur Bluetooth protégé par PIN ; le Pi leur envoie Snapcast et MPD.
+category: homelab
+inside:
+  - L'idée
+  - Matériel
+  - Câblage
+  - Firmware
+  - Sécurité de l'appairage
+  - Déboguer le silence
+  - Dans l'installation multiroom
+cover: speakers-wiring
+date: null
+draft: false
+sources:
+  - 'https://github.com/pschatzmann/ESP32-A2DP'
+  - 'https://github.com/pschatzmann/arduino-audio-tools'
+---
+
+## L'idée
+
+J'ai une paire de moniteurs Mackie CR3 Limited Edition : une enceinte gauche active qui alimente une enceinte droite passive, avec uniquement des entrées filaires. Plutôt que d'acheter un adaptateur Bluetooth, je voulais en construire un : un ESP32 qui apparaît comme une enceinte Bluetooth, décode le flux et transmet un signal audio numérique propre à un petit DAC, dont la sortie ligne 3,5 mm alimente les entrées RCA des CR3. Ça marche aujourd'hui, mais pas du premier coup, donc cet article raconte aussi le débogage.
+
+![Les entrées RCA à l'arrière de la CR3 active](media:speakers-cr3-back)
+
+**Premier essai.** J'ai d'abord tenté ESPHome sur un ESP32-S3, avec `i2s_audio` pour piloter le PCM5102 comme `media_player` stéréo dans Home Assistant. Ça fonctionnait bien comme enceinte HA, mais ça ne pouvait jamais devenir un récepteur Bluetooth A2DP : l'ESP32-S3 n'a pas de Bluetooth Classic, seulement du BLE, et A2DP a besoin du Classic. Je suis donc passé à un ESP32 classique (un WROVER) avec un sketch Arduino et la bibliothèque ESP32-A2DP, ce que décrit la suite de cet article.
+
+## Matériel
+
+- un **ESP32-WROVER DevKitC**, parce que l'ESP32 classique a le Bluetooth Classic dont A2DP a besoin (les S3 et C3 ne font que du BLE) ;
+- un module DAC I2S **PCM5102** (une carte GY-PCM5102), avec une sortie ligne 3,5 mm ;
+- un câble jack 3,5 mm vers RCA pour la CR3 ;
+- deux petits boîtiers noirs ventilés, un pour l'ESP32 et un pour le DAC ;
+- des fils Dupont et une alimentation USB.
+
+## Câblage
+
+Le DAC a besoin de six connexions :
+
+| ESP32 | PCM5102 |
+| --- | --- |
+| 5V | VIN |
+| GND | GND |
+| GND | SCK |
+| GPIO26 | BCK |
+| GPIO25 | LCK |
+| GPIO22 | DIN |
+
+![Câblage ESP32 vers PCM5102](media:speakers-wiring)
+
+![Schéma de câblage](diagram:speakers)
+
+La broche **SCK** doit être reliée à GND pour que le DAC génère sa propre horloge système à partir de BCK, en mode I2S standard. Laissée flottante, elle ne donne aucun son. Sur ma carte, j'ai mesuré 4,8 V sur VIN.
+
+La carte a aussi quatre cavaliers de configuration au dos, et ce sont eux qui m'ont causé l'essentiel des soucis. Ils ont droit à leur propre section plus bas.
+
+## Firmware
+
+Le firmware est un sketch Arduino basé sur deux bibliothèques de Phil Schatzmann : [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP), qui transforme l'ESP32 en récepteur A2DP, et [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools), dont le `I2SStream` pilote le DAC. Les anciens exemples qu'on trouve en ligne utilisent `i2s_pin_config_t` et `set_pin_config` ; cette API a été supprimée dans les versions récentes de la bibliothèque, et les broches se déclarent maintenant dans la config du stream.
+
+Le sketch d'origine a été perdu, ce qui est une leçon en soi. Je l'ai depuis reconstruit sous forme de projet PlatformIO versionné. Le cœur ressemble à ceci (le nom de l'appareil est anonymisé ici) :
+
+```cpp
+#include "AudioTools.h"
+#include "BluetoothA2DPSink.h"
+
+I2SStream i2s;
+BluetoothA2DPSink a2dp_sink(i2s);
+
+void setup() {
+  Serial.begin(115200);
+
+  auto cfg = i2s.defaultConfig();
+  cfg.pin_bck = 26;
+  cfg.pin_ws = 25;
+  cfg.pin_data = 22;
+  i2s.begin(cfg);
+
+  a2dp_sink.activate_pin_code(true);   // new devices confirm a PIN
+  a2dp_sink.set_auto_reconnect(true);  // bonded devices come back on their own
+  a2dp_sink.start("desk-speakers");
+}
+
+void loop() {}
+```
+
+La première compilation a échoué sur la taille : le sketch occupait 126 % de la partition applicative par défaut. Passer le Partition Scheme sur **"Huge APP (3MB No OTA/1MB SPIFFS)"** a réglé le problème, au prix des mises à jour OTA, dont je n'ai pas besoin ici.
+
+Une remarque de débogage : les erreurs « unable to open ftdi device » d'OpenOCD viennent de la console du débogueur, pas du sketch. Les logs du sketch lui-même s'affichent dans le Serial Monitor à 115200 bauds.
+
+## Sécurité de l'appairage
+
+Une enceinte Bluetooth à laquelle n'importe qui à proximité peut se connecter, c'est une gêne modeste mais bien réelle. Avec `activate_pin_code`, un nouvel appareil doit confirmer un code PIN lors du premier appairage. Une fois associé, `set_auto_reconnect` lui permet de se reconnecter sans rien demander, donc l'usage quotidien reste aussi simple qu'avec une enceinte du commerce.
+
+## Déboguer le silence
+
+Le premier test complet a été frustrant. Le téléphone se connectait, l'appairage avec PIN fonctionnait, la lecture démarrait côté téléphone, et les enceintes restaient muettes. J'ai vérifié couche par couche : SCK relié à GND, VIN à 4,8 V, et le sketch qui utilise bien la config `I2SStream` actuelle plutôt que l'ancienne API de broches. Tout était bon. J'étais convaincu que le DAC était mort, alors j'en ai acheté un deuxième. Exactement le même silence.
+
+Le vrai coupable se trouvait au dos de la carte. La GY-PCM5102 a quatre cavaliers à souder à 3 pads, notés H1L à H4L. Chacun fixe une broche de contrôle du PCM5102A en reliant le pad central soit au côté **L** (bas), soit au côté **H** (haut) :
+
+| Cavalier | Fonction | Réglage | Pourquoi |
+| --- | --- | --- | --- |
+| H1L | FLT | bas | filtre à latence normale |
+| H2L | DEMP | bas | désaccentuation désactivée |
+| H3L | XSMT | haut | soft-mute désactivé, sinon le DAC reste muet |
+| H4L | FMT | bas | format I2S |
+
+![Les quatre cavaliers de config : FLT, DEMP et FMT en bas, XSMT en haut.](media:speakers-dac-pads)
+
+Les instructions que j'avais suivies disaient « centre + gauche » pour H1, H2 et H4, et « centre + droite » pour H3. Sur ma carte, tenue comme je la tenais, c'était exactement l'inverse : XSMT se retrouvait à l'état bas, ce qui gardait le DAC muet, et les trois autres étaient dans le mauvais mode. Les deux DAC fonctionnaient parfaitement. Je les avais simplement configurés de la même mauvaise façon.
+
+Inverser les ponts a tout réglé immédiatement. Avec le connecteur de la carte à droite, ça donne centre + droite pour H1, H2 et H4, et centre + gauche pour H3. En les refaisant, ne jamais relier les trois pads d'un même groupe, sinon H se retrouve directement connecté à L.
+
+![L'avant de la carte PCM5102](media:speakers-dac-front)
+
+> **Leçon :** configurer par fonction (L/H), pas par « gauche/droite ». Le côté gauche dépend de la façon dont on tient la carte. Vérifier la sérigraphie et la datasheet du PCM5102A.
+
+## Dans l'installation multiroom
+
+Le récepteur joue maintenant un vrai rôle dans mon audio multiroom. La chaîne est la suivante : Raspberry Pi → Bluetooth → ESP32 → PCM5102 → moniteurs CR3.
+
+Sur le Pi, le récepteur (il s'annonce sous le nom `CR3_AUDIO`) est connecté comme sink A2DP via PulseAudio, en stéréo 16 bits 44,1 kHz. Un petit service systemd de reconnexion Bluetooth automatique maintient le lien, pour que les enceintes reviennent après une coupure ou un redémarrage sans que j'aie à les réappairer. Le **snapclient** du Pi joue dans ce sink, ce qui fait des enceintes une zone Snapcast que Music Assistant peut cibler comme n'importe quel autre lecteur. MPD sur le Pi a aussi une sortie PulseAudio nommée « Bluetooth Speaker », pour jouer directement dessus.
+
+L'ESP32 et le DAC vivent désormais dans deux petits boîtiers noirs ventilés à côté des enceintes, et l'ensemble ressemble moins à une expérience sur un coin d'établi.
+
+![L'ESP32 et le DAC dans leurs boîtiers ventilés](media:speakers-box)
+
+## Crédits
+
+- Phil Schatzmann, [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP) et [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools), les bibliothèques sur lesquelles repose le firmware.

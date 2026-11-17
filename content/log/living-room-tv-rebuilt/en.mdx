@@ -1,0 +1,96 @@
+---
+title: 'The living-room TV, rebuilt'
+slug: living-room-tv-rebuilt
+summary: >-
+  Debloating a TCL Google TV, building a 211-LED Ambilight with Hyperion and
+  WLED, patching an Android screen grabber and Jellyfin so playback can be
+  captured, and writing a self-healing daemon that keeps it all in sync.
+excerpt: >-
+  A stock TCL Google TV turned into a custom Ambilight setup with my own
+  launcher.
+category: homelab
+inside:
+  - Debloat
+  - Ambilight
+  - Jellyfin patch
+  - Self-healing daemon
+cover: ambilight-abstract
+date: null
+draft: false
+sources:
+  - 'https://github.com/hyperion-project/hyperion.ng'
+  - 'https://github.com/wled/WLED'
+  - 'https://github.com/evanwhitt/hyperion-android-reborn'
+  - 'https://github.com/jellyfin/jellyfin-androidtv'
+---
+
+The living-room TV is a TCL Google TV. Out of the box it came with a cluttered home screen and a lot of preinstalled software. I turned it into a cleaner, quieter device with a proper Ambilight behind it. Most of the pieces are open-source projects I didn't write. My part was making them work together on this particular TV and fixing the gaps.
+
+![Ambilight running behind a game](media:ambilight-game)
+
+## Debloat
+
+The first step was taking things away. Over ADB, I disabled 25 packages with `pm disable-user --user 0`. These were TCL's own extras (media center, gallery, game bar, browser, message box, user center, logging and analytics services, an Alexa bridge, and so on), plus a few Google and Android apps I never use on a TV, like the stock screensaver, feedback and messaging.
+
+`disable-user` is reversible: it keeps the APK and its data and hides it from the system. Before touching anything I saved the full list of enabled and disabled packages, and the repo includes a one-line `restore.sh` that re-enables every package on the list.
+
+That safety net was useful. Some disables turned out to break things I wanted, so I re-enabled them and took them off the list: TCL's channel input service, an IPTV app, Miracast (needed for screen mirroring from a phone), and TCL's Quick Panel, which is what the remote's Source button opens. A firmware update can also re-enable packages, so the list doubles as a re-run script.
+
+## Ambilight
+
+Behind the TV is an addressable LED strip driven by a WLED controller. The layout is 211 LEDs: 67 along the top, 70 along the bottom, and 37 on each side. HyperionNG runs in Docker in a Proxmox container. It receives the screen image, maps it to that layout, and sends the colours to WLED over the network (DDP).
+
+The hard part on an Android TV is capturing the screen at all. I use **hyperion-android-reborn** (upstream: `evanwhitt/hyperion-android-reborn`), an Android grabber that uses MediaProjection and streams frames to Hyperion. Upstream had already done the heavy lifting, including a codec-based capture method that fixes the black frames TCL and similar TVs return on the standard path.
+
+I maintain a small fork on top of it. My main change fixes persistent reconnects. In the upstream version, the grabber retried the connection once after a network error. If Hyperion was still restarting at that moment, the capture service stayed alive but silently discarded every frame from then on. The fork keeps retrying until the socket comes back, without touching MediaProjection or the encoder. It also adds a heartbeat: Hyperion drops a FlatBuffers client after a few seconds without image data, and a static screen produces no new frames, so the grabber now periodically resends the last frame to keep its source registered. The rest of the fork is a personal release build with my default settings.
+
+I also tuned Hyperion's black-border detector (letterbox mode, 2% threshold, a longer frame count) so dark 16:9 content doesn't get imaginary bars, and I keep LED layout backups with a restore script. Hyperion's "Generate" button overwrites custom layout depths.
+
+## Jellyfin patch
+
+One problem remained: video in Jellyfin came through black. Jellyfin's Android TV client renders video into a `SurfaceView`. A SurfaceView is composited as its own layer outside the normal view hierarchy, and on this TV the grabber captured black wherever it was.
+
+The fix in my build of **jellyfin-androidtv** is small: render into a `TextureView` instead, which is drawn as part of the normal view hierarchy and is therefore capturable.
+
+```kotlin
+// playback/core/.../PlayerSurfaceView.kt
+val surface = TextureView(context, attrs).apply {
+    addView(this, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+}
+
+// playback/media3/exoplayer/.../ExoPlayerBackend.kt
+override fun setSurfaceView(surfaceView: PlayerSurfaceView?) {
+    exoPlayer.setVideoTextureView(surfaceView?.surface)
+}
+```
+
+The legacy player layout gets the equivalent `surface_type="texture_view"` attribute. The build also uses its own application ID, so it installs alongside the official app. I haven't noticed any playback downsides with the TextureView build in daily use.
+
+## Self-healing daemon
+
+With all these parts, something is always in a weird state: the TV is off but the LEDs are still on, a DRM-protected app sends black frames, or the grabber died after a reboot. So next to Hyperion there's a small Python daemon of mine, in its own container, that polls Home Assistant (TV state and foreground app) and Hyperion's JSON-RPC API every half second and corrects things:
+
+- **TV off**: Hyperion's LED output off, WLED off.
+- **Black picture for 15 s with the grabber connected** (typical of DRM apps), **or no grabber for 3 s**: Hyperion's LED output off, and WLED switches to a static preset so the room still has light.
+- **Picture back for 1.5 s**: back to Ambilight.
+- **Manual mode**: if I picked a WLED preset or "off" from the launcher, the daemon leaves the lights alone.
+- **Black-border drift**: the detector is turned off for a couple of apps whose dark UI looks like letterbox bars, and if anything else flips it, the daemon puts it back after two mismatched polls.
+- **HDMI sources**: my gaming PC forwards its own capture to Hyperion. The daemon selects that stream only when the TV is on the PC's HDMI port (checked over ADB) and never shows it on any other source.
+
+"Black" is measured, not guessed: the daemon grabs a Hyperion snapshot, downsizes it to 64×36 greyscale, and counts the pixels at or below a darkness level.
+
+```python
+image = Image.open(io.BytesIO(png)).convert("L")
+image.thumbnail((64, 36))
+hist = image.histogram()
+black_ratio = sum(hist[: BLACK_PIXEL_LEVEL + 1]) / (image.width * image.height)
+# >= 99.5 % of pixels at level <= 4 counts as a black frame
+```
+
+Between the daemon and the launcher's watchdog, the Ambilight reliably comes back on its own after a reboot.
+
+Timings, thresholds and URLs are all environment variables, and tokens live in a root-only `.env` that's never committed.
+
+![The custom launcher on the TV](media:tv-launcher)
+
+The last piece is the custom launcher, which shows the Ambilight status and controls the lights. It has its own post.

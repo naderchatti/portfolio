@@ -1,0 +1,138 @@
+---
+title: 'Wired speakers, Bluetooth brain: an ESP32 + PCM5102 receiver'
+slug: speakers-bluetooth-esp32
+summary: >-
+  Turning a pair of wired speakers into a Bluetooth A2DP receiver with an
+  ESP32-WROVER DevKitC, a PCM5102 I2S DAC and the ESP32-A2DP library, then
+  making them a zone in my multiroom audio.
+excerpt: >-
+  ESP32-WROVER + PCM5102 DAC turns my Mackie CR3 speakers into a PIN-protected
+  Bluetooth receiver; the Pi streams Snapcast and MPD to it.
+category: homelab
+inside:
+  - The idea
+  - Parts
+  - Wiring
+  - Firmware
+  - Pairing security
+  - Debugging the silence
+  - In the multiroom setup
+cover: speakers-wiring
+date: null
+draft: false
+sources:
+  - 'https://github.com/pschatzmann/ESP32-A2DP'
+  - 'https://github.com/pschatzmann/arduino-audio-tools'
+---
+
+## The idea
+
+I have a pair of Mackie CR3 Limited Edition monitors: a powered left speaker that drives a passive right one, with only wired inputs. Rather than buying a Bluetooth adapter, I wanted to build one: an ESP32 that shows up as a Bluetooth speaker, decodes the stream, and hands clean digital audio to a small DAC whose 3.5 mm line out feeds the CR3's RCA inputs. It works now, but not on the first try, so this post includes the debugging.
+
+![The RCA inputs on the back of the powered CR3](media:speakers-cr3-back)
+
+**First attempt.** I first tried ESPHome on an ESP32-S3, using `i2s_audio` to drive the PCM5102 as a stereo Home Assistant `media_player`. It worked well as an HA speaker, but it could never be a Bluetooth A2DP receiver: the ESP32-S3 has no Bluetooth Classic, only BLE, and A2DP needs Classic. So I moved to a classic ESP32 (a WROVER) running an Arduino sketch with the ESP32-A2DP library, which is what the rest of this post describes.
+
+## Parts
+
+- an **ESP32-WROVER DevKitC**, because the classic ESP32 has Bluetooth Classic, which A2DP needs (the S3 and C3 only do BLE);
+- a **PCM5102** I2S DAC breakout (a GY-PCM5102 board), with a 3.5 mm line out;
+- a 3.5 mm to RCA cable into the CR3;
+- two small black vented project boxes, one for the ESP32 and one for the DAC;
+- jumper wires and a USB supply.
+
+## Wiring
+
+The DAC needs six connections:
+
+| ESP32 | PCM5102 |
+| --- | --- |
+| 5V | VIN |
+| GND | GND |
+| GND | SCK |
+| GPIO26 | BCK |
+| GPIO25 | LCK |
+| GPIO22 | DIN |
+
+![ESP32 to PCM5102 wiring](media:speakers-wiring)
+
+![Wiring diagram](diagram:speakers)
+
+The **SCK** pin has to be tied to GND so the DAC generates its own system clock from BCK in plain I2S mode. Left floating, it gives no sound at all. On my board, VIN measured 4.8 V.
+
+The board also has four configuration jumpers on the back, and those caused most of my trouble. They get their own section below.
+
+## Firmware
+
+The firmware is an Arduino sketch built on two libraries by Phil Schatzmann: [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP), which turns the ESP32 into an A2DP sink, and [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools), whose `I2SStream` drives the DAC. Older examples online use `i2s_pin_config_t` and `set_pin_config`; that API was removed in newer library versions, so the pins now go into the stream's config.
+
+The original sketch was lost, which is a lesson in itself. I've since rebuilt it as a versioned PlatformIO project. The core of it looks like this (the device name is sanitized here):
+
+```cpp
+#include "AudioTools.h"
+#include "BluetoothA2DPSink.h"
+
+I2SStream i2s;
+BluetoothA2DPSink a2dp_sink(i2s);
+
+void setup() {
+  Serial.begin(115200);
+
+  auto cfg = i2s.defaultConfig();
+  cfg.pin_bck = 26;
+  cfg.pin_ws = 25;
+  cfg.pin_data = 22;
+  i2s.begin(cfg);
+
+  a2dp_sink.activate_pin_code(true);   // new devices confirm a PIN
+  a2dp_sink.set_auto_reconnect(true);  // bonded devices come back on their own
+  a2dp_sink.start("desk-speakers");
+}
+
+void loop() {}
+```
+
+The first compile failed on size: the sketch was 126% of the default app partition. Switching the Partition Scheme to **"Huge APP (3MB No OTA/1MB SPIFFS)"** fixed it, at the cost of over-the-air updates, which I don't need here.
+
+One debugging note: "unable to open ftdi device" errors from OpenOCD come from the debugger console, not from the sketch. The sketch's own logs are in the Serial Monitor at 115200 baud.
+
+## Pairing security
+
+A Bluetooth speaker that anyone nearby can connect to is a small but real annoyance. With `activate_pin_code`, a new device has to confirm a PIN the first time it pairs. Once it's bonded, `set_auto_reconnect` lets it reconnect without any prompt, so daily use stays as simple as an off-the-shelf speaker.
+
+## Debugging the silence
+
+The first full test was frustrating. The phone connected, pairing with the PIN worked, playback started on the phone's side, and the speakers stayed silent. I checked one layer at a time: SCK tied to GND, VIN at 4.8 V, and the sketch using the current `I2SStream` config rather than the removed pin API. All of it was fine. I was sure the DAC was dead, so I bought a second one. It gave exactly the same silence.
+
+The real culprit was on the back of the board. The GY-PCM5102 has four 3-pad solder jumpers, labelled H1L to H4L. Each one sets a PCM5102A control pin by bridging the centre pad to either the **L** (low) or **H** (high) side:
+
+| Jumper | Function | Setting | Why |
+| --- | --- | --- | --- |
+| H1L | FLT | low | normal-latency filter |
+| H2L | DEMP | low | de-emphasis off |
+| H3L | XSMT | high | soft-mute off, otherwise the DAC stays muted |
+| H4L | FMT | low | I2S format |
+
+![The four config jumpers: FLT, DEMP and FMT low, XSMT high.](media:speakers-dac-pads)
+
+The instructions I followed said "centre + left" for H1, H2 and H4, and "centre + right" for H3. On my board, held the way I was holding it, that was exactly the inverse: XSMT went low, which kept the DAC muted, and the other three were in the wrong mode. Both DACs were fine. I had configured both of them the same wrong way.
+
+Reversing the bridges fixed it immediately. With the board's header on the right, that means centre + right for H1, H2 and H4, and centre + left for H3. While redoing them, never bridge all three pads of a group together, which would connect H straight to L.
+
+![The front of the PCM5102 board](media:speakers-dac-front)
+
+> **Lesson:** configure by function (L/H), not by "left/right". Which side is left depends on how you hold the board. Check the silkscreen and the PCM5102A datasheet.
+
+## In the multiroom setup
+
+The receiver now plays a real role in my multiroom audio. The chain is: Raspberry Pi → Bluetooth → ESP32 → PCM5102 → CR3 monitors.
+
+On the Pi, the receiver (it advertises itself as `CR3_AUDIO`) is connected as an A2DP sink through PulseAudio, playing 16-bit 44.1 kHz stereo. A small "Bluetooth auto-reconnect" systemd service keeps the link up, so the speakers come back after a drop or a reboot without me pairing again. The Pi's **snapclient** plays into that sink, which makes the speakers a Snapcast zone that Music Assistant can target like any other player. MPD on the Pi also has a PulseAudio output named "Bluetooth Speaker", for playing to them directly.
+
+The ESP32 and the DAC now live in two small black vented project boxes next to the speakers, so the whole thing looks less like a bench experiment.
+
+![The ESP32 and DAC in their vented project boxes](media:speakers-box)
+
+## Credits
+
+- Phil Schatzmann, [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP) and [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools), the libraries the firmware is built on.

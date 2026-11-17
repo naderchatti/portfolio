@@ -1,0 +1,97 @@
+---
+title: 'La télé du salon, refaite'
+slug: living-room-tv-rebuilt
+summary: >-
+  Alléger une Google TV TCL, construire un Ambilight de 211 LED avec Hyperion et
+  WLED, patcher un grabber d'écran Android et Jellyfin pour que la lecture
+  puisse être capturée, et écrire un démon auto-réparateur qui garde le tout
+  synchronisé.
+excerpt: >-
+  Une TCL Google TV d'origine transformée en installation Ambilight, avec mon
+  propre launcher.
+category: homelab
+inside:
+  - Allègement
+  - Ambilight
+  - Patch Jellyfin
+  - Démon auto-réparateur
+cover: ambilight-abstract
+date: null
+draft: false
+sources:
+  - 'https://github.com/hyperion-project/hyperion.ng'
+  - 'https://github.com/wled/WLED'
+  - 'https://github.com/evanwhitt/hyperion-android-reborn'
+  - 'https://github.com/jellyfin/jellyfin-androidtv'
+---
+
+La télé du salon est une Google TV TCL. À la sortie du carton, elle avait un écran d'accueil encombré et beaucoup de logiciels préinstallés. Je l'ai transformée en un appareil plus propre et plus discret, avec un vrai Ambilight derrière. La plupart des briques sont des projets open source que je n'ai pas écrits. Mon travail a été de les faire fonctionner ensemble sur cette télé précise et de combler les trous.
+
+![L'Ambilight derrière un jeu](media:ambilight-game)
+
+## Allègement
+
+La première étape a consisté à retirer des choses. Via ADB, j'ai désactivé 25 paquets avec `pm disable-user --user 0`. Il s'agissait des extras de TCL (media center, galerie, barre de jeu, navigateur, messagerie, espace utilisateur, services de journalisation et d'analytique, une passerelle Alexa, etc.), plus quelques applis Google et Android que je n'utilise jamais sur une télé, comme l'économiseur d'écran d'origine, le feedback et la messagerie.
+
+`disable-user` est réversible : il conserve l'APK et ses données et le masque simplement au système. Avant de toucher à quoi que ce soit, j'ai sauvegardé la liste complète des paquets activés et désactivés, et le dépôt contient un `restore.sh` d'une ligne qui réactive tous les paquets de la liste.
+
+Ce filet de sécurité m'a servi. Certaines désactivations cassaient des choses que je voulais garder, je les ai donc réactivées et retirées de la liste : le service d'entrée des chaînes de TCL, une appli IPTV, Miracast (nécessaire pour la duplication d'écran depuis un téléphone) et le Quick Panel de TCL, qui est ce qu'ouvre le bouton Source de la télécommande. Une mise à jour du firmware peut aussi réactiver des paquets, donc la liste sert également de script à relancer.
+
+## Ambilight
+
+Derrière la télé, il y a un ruban LED adressable piloté par un contrôleur WLED. La disposition compte 211 LED : 67 en haut, 70 en bas et 37 de chaque côté. HyperionNG tourne dans Docker, dans un conteneur Proxmox. Il reçoit l'image de l'écran, la projette sur cette disposition et envoie les couleurs à WLED par le réseau (DDP).
+
+Le plus difficile sur une Android TV, c'est tout simplement de capturer l'écran. J'utilise **hyperion-android-reborn** (upstream : `evanwhitt/hyperion-android-reborn`), un grabber Android qui s'appuie sur MediaProjection et envoie les images à Hyperion. L'upstream avait déjà fait le gros du travail, y compris une méthode de capture basée sur le codec qui corrige les images noires que renvoient les TCL et télés similaires sur le chemin standard.
+
+Je maintiens un petit fork par-dessus. Mon changement principal corrige les reconnexions persistantes. Dans la version upstream, le grabber ne retentait la connexion qu'une fois après une erreur réseau. Si Hyperion était encore en train de redémarrer à ce moment-là, le service de capture restait vivant mais jetait silencieusement toutes les images à partir de là. Le fork continue de réessayer jusqu'au retour du socket, sans toucher à MediaProjection ni à l'encodeur. Il ajoute aussi un heartbeat : Hyperion abandonne un client FlatBuffers après quelques secondes sans données d'image, et un écran statique ne produit pas de nouvelles images, donc le grabber renvoie désormais périodiquement la dernière image pour que sa source reste enregistrée. Le reste du fork est un build de release personnel avec mes réglages par défaut.
+
+J'ai aussi ajusté le détecteur de bandes noires de Hyperion (mode letterbox, seuil de 2 %, un nombre d'images plus long) pour que les contenus 16:9 sombres n'aient pas de bandes imaginaires, et je garde des sauvegardes de la disposition des LED avec un script de restauration. Le bouton « Generate » de Hyperion écrase les profondeurs de disposition personnalisées.
+
+## Patch Jellyfin
+
+Un problème restait : la vidéo dans Jellyfin arrivait noire. Le client Android TV de Jellyfin affiche la vidéo dans une `SurfaceView`. Une SurfaceView est composée comme une couche à part, hors de la hiérarchie de vues normale, et sur cette télé le grabber capturait du noir partout où elle se trouvait.
+
+La correction dans mon build de **jellyfin-androidtv** est minime : afficher dans une `TextureView` à la place, qui est dessinée dans la hiérarchie de vues normale et donc capturable.
+
+```kotlin
+// playback/core/.../PlayerSurfaceView.kt
+val surface = TextureView(context, attrs).apply {
+    addView(this, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+}
+
+// playback/media3/exoplayer/.../ExoPlayerBackend.kt
+override fun setSurfaceView(surfaceView: PlayerSurfaceView?) {
+    exoPlayer.setVideoTextureView(surfaceView?.surface)
+}
+```
+
+La disposition de l'ancien lecteur reçoit l'attribut équivalent `surface_type="texture_view"`. Le build utilise aussi son propre application ID, pour s'installer à côté de l'appli officielle. Je n'ai remarqué aucun inconvénient de lecture avec le build TextureView au quotidien.
+
+## Démon auto-réparateur
+
+Avec toutes ces briques, il y a toujours quelque chose dans un état bizarre : la télé est éteinte mais les LED sont encore allumées, une appli protégée par DRM envoie des images noires, ou le grabber est mort après un redémarrage. Donc à côté de Hyperion tourne un petit démon Python de ma main, dans son propre conteneur, qui interroge Home Assistant (état de la télé et appli au premier plan) et l'API JSON-RPC de Hyperion toutes les demi-secondes, et qui corrige :
+
+- **Télé éteinte** : sortie LED de Hyperion coupée, WLED éteint.
+- **Image noire pendant 15 s avec le grabber connecté** (typique des applis avec DRM), **ou pas de grabber pendant 3 s** : sortie LED de Hyperion coupée, et WLED passe sur un preset statique pour que la pièce garde de la lumière.
+- **Image revenue depuis 1,5 s** : retour à l'Ambilight.
+- **Mode manuel** : si j'ai choisi un preset WLED ou « éteint » depuis le launcher, le démon laisse les lumières tranquilles.
+- **Dérive des bandes noires** : le détecteur est désactivé pour quelques applis dont l'interface sombre ressemble à des bandes letterbox, et si quoi que ce soit d'autre le modifie, le démon le remet en place après deux relevés discordants.
+- **Sources HDMI** : mon PC de jeu transmet sa propre capture à Hyperion. Le démon ne sélectionne ce flux que quand la télé est sur le port HDMI du PC (vérifié via ADB) et ne l'affiche jamais sur une autre source.
+
+Le « noir » est mesuré, pas deviné : le démon récupère un instantané de Hyperion, le réduit en 64×36 niveaux de gris et compte les pixels au niveau d'obscurité défini ou en dessous.
+
+```python
+image = Image.open(io.BytesIO(png)).convert("L")
+image.thumbnail((64, 36))
+hist = image.histogram()
+black_ratio = sum(hist[: BLACK_PIXEL_LEVEL + 1]) / (image.width * image.height)
+# >= 99.5 % of pixels at level <= 4 counts as a black frame
+```
+
+Entre le démon et le watchdog du launcher, l'Ambilight revient de lui-même, de façon fiable, après un redémarrage.
+
+Délais, seuils et URL sont tous des variables d'environnement, et les tokens vivent dans un `.env` lisible uniquement par root, jamais commité.
+
+![Le launcher sur mesure sur la télé](media:tv-launcher)
+
+La dernière pièce est le launcher sur mesure, qui affiche l'état de l'Ambilight et pilote les lumières. Il a son propre article.

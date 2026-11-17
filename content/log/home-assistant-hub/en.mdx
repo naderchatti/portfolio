@@ -1,0 +1,101 @@
+---
+title: 'Home Assistant: the hub that ties it together'
+slug: home-assistant-hub
+summary: >-
+  How a single Home Assistant instance on a Raspberry Pi 4 coordinates 14 Zigbee
+  devices, Frigate cameras, media players and the automations that make the
+  flat feel a little less manual.
+excerpt: '14 Zigbee devices, 27 automations, 20 scripts and the dashboards that run the flat.'
+category: homelab
+inside:
+  - Zigbee (ZHA)
+  - Automations
+  - Dashboards
+  - Cameras (Frigate)
+cover: ha
+date: null
+draft: false
+sources:
+  - 'https://www.home-assistant.io/'
+  - 'https://www.home-assistant.io/integrations/zha/'
+  - 'https://phoscon.de/en/conbee2'
+  - 'https://frigate.video/'
+  - 'https://kno.wled.ge/'
+  - 'https://esphome.io/'
+  - 'https://hacs.xyz/'
+---
+
+Every other part of my homelab exists to serve something, and most of the time that something is Home Assistant. It runs as a Docker container on a Raspberry Pi 4, next to the reverse proxy and the primary DNS resolver, and it is the place where lights, cameras, media players, the TV, the desk and my phone all meet.
+
+At the time of writing, the instance runs **14 Zigbee devices**, **27 automations**, **20 scripts** and **12 scenes**. Home Assistant's registry counts 104 devices, but that includes virtual ones like containers and phones, so the Zigbee mesh is the more honest picture of the hardware in the flat.
+
+![Home Assistant overview dashboard](media:ha)
+
+## Zigbee (ZHA)
+
+Zigbee is the backbone for anything that has to be reliable and local. The mesh is modest: 14 Zigbee devices, including two SONOFF ZBMINIL2 in-wall modules that make the ordinary wall switches in the living room and office smart, four ceiling bulbs in the living room plus one in the office, a mmWave presence sensor that also reports illuminance, temperature/humidity sensors in each room, a smart plug and a wireless button on my desk. I use the built-in **ZHA** integration with a **ConBee II** USB stick plugged into the Pi. No separate Zigbee bridge, no extra container: ZHA talks to the stick directly, and devices show up as normal Home Assistant entities.
+
+I like this choice for a small flat. The mesh is small enough that I don't need the extra knobs of a standalone bridge, and keeping the radio inside Home Assistant means one less service to update and monitor.
+
+Wi-Fi devices fill the gaps: **WLED** for the LED strip behind the TV, **ESPHome** for custom boards (including an ESP32-S3 that switches my KVM between machines), and a handful of local integrations for the TV, Cast devices and DLNA renderers.
+
+## Automations
+
+I try to keep automations boring and explainable. A few themes cover most of them.
+
+**Presence lighting.** When I come home after sunset and the living room is dark, the lights come on at 75%. The trigger is my phone entering the home zone, but the automation also waits briefly for the phone to actually join the home Wi-Fi, which filters out GPS jitter near the building.
+
+**Target-lux lighting.** A presence sensor in the living room reports illuminance, and one automation tries to hold the room around 1,000 lx while the lights are on: below 900 lx it raises brightness by 10%, above 1,100 lx it lowers it by 10%. It is a crude controller, but in practice it smooths out the transition from daylight to evening without me touching anything.
+
+```yaml
+# Simplified excerpt: keep the living room near 1000 lx
+triggers:
+  - trigger: numeric_state
+    entity_id: sensor.presence_lr_illuminance
+    below: 900
+  - trigger: numeric_state
+    entity_id: sensor.presence_lr_illuminance
+    above: 1100
+conditions:
+  - condition: state
+    entity_id: switch.light_switch_lr
+    state: "on"
+actions:
+  - action: light.turn_on
+    target:
+      entity_id: light.lr_light
+    data:
+      brightness_pct: >
+        {% set lx = states('sensor.presence_lr_illuminance') | float(0) %}
+        {% set pct = (state_attr('light.lr_light', 'brightness') or 0) / 255 * 100 %}
+        {{ [pct + 10, 100] | min if lx < 900 else [pct - 10, 0] | max }}
+```
+
+**WLED follows the TV.** When the TV leaves the `off` state, the WLED strip turns on; when the TV turns off, the strip follows.
+
+**KVM profiles.** The ESP32-based KVM exposes its active profile to Home Assistant. Small automations mirror that into a helper so dashboards and other automations know which machine currently owns the keyboard and screen.
+
+**Sleep wind-down.** This is the most "product-like" flow. At 22:00, if I'm home and my phone's sleep-confidence sensor says I'm still awake, Home Assistant sends an actionable notification: *Start*, *Snooze 1h* or *Ignore*. Accepting it kicks off staged scripts that dim the lights and the TV strip to 50%, then 25%, with slow transitions, and finally turn everything off at midnight. A separate automation shuts lights and the TV down if the phone reports high sleep confidence for five minutes while my watch is off its charger. "Ignore tonight" is a simple boolean that resets the next day.
+
+Twenty scripts carry the reusable parts: brightness presets, relative brightness steps, desk up/down, and the wind-down stages. Scenes cover moods such as *Work*, *Meeting*, *Gaming* and *Film Living Room*.
+
+## Dashboards
+
+There are **9 dashboards**, including an overview, a map, a full-screen panel and a dedicated **tablet** layout. There's no wall tablet yet: day to day I use Home Assistant from my phone and my smartwatch. The tablet view is groundwork for a future wall panel, either a Pi with a touchscreen or an Android tablet running Fully Kiosk. Some dashboards are honestly scratch space (`test`, `backup`, `new`), which is where I prototype layouts before promoting them.
+
+Custom cards and a few community integrations come from **HACS**. I keep that list short on purpose, because every custom component is something that can break on a Home Assistant upgrade.
+
+## Cameras (Frigate)
+
+Cameras are handled by **Frigate**, which runs in its own LXC on the Proxmox host together with a Mosquitto MQTT broker. Frigate currently manages two IP cameras (ONVIF), and recordings land on the TrueNAS pool through an SMB share. Home Assistant talks to it through the Frigate integration from HACS.
+
+Nobody in the household wants to be recorded at home, so Home Assistant itself starts and stops Frigate recording based on household presence. Each of us has the Home Assistant Companion app on our phone, which feeds a person entity in Home Assistant:
+
+- when nobody is home, Home Assistant switches recording on for both cameras;
+- as soon as anyone in the household is home, it switches recording off again, after a 30-second grace period on arrival.
+
+That gives useful footage when the flat is empty and nothing at all while any of us is in it, which is the trade-off I wanted.
+
+## What I'd change next
+
+The registries are a bit cluttered after years of experiments, and a few dashboards should be deleted rather than kept "just in case". The next step is pruning: fewer entities, fewer dashboards, and automations that each fit on one screen.

@@ -1,0 +1,72 @@
+---
+title: Stream overlays on the homelab
+slug: streaming-tools
+summary: >-
+  Three Streamer.bot browser-source overlays for OBS, a horizontal chat ticker,
+  a multi-platform chat box and a Twitch ad-break timer, adapted from community
+  projects, hardened with a chat filter, and served from a Docker LXC on my
+  Proxmox host.
+excerpt: 'Streamer.bot overlays for OBS, hardened and served from the homelab.'
+category: homelab
+inside:
+  - Why
+  - Where the code comes from
+  - Horizontal chat
+  - Multichat overlay
+  - Ad timer
+  - Hosting on the homelab
+  - Credits
+cover: null
+date: null
+draft: true
+sources:
+  - 'https://streamer.bot'
+  - 'https://wiki.streamer.bot/en/Servers-Clients/WebSocket-Server/Events'
+  - 'https://github.com/nuttylmao/multichat-overlay'
+  - 'https://github.com/nuttylmao/horizontal-chat'
+  - 'https://github.com/nuttylmao/twitch-ad-timer'
+---
+
+## Why
+
+I stream on [twitch.tv/naderolli](https://twitch.tv/naderolli), and like most small streamers I wanted a few things on screen that OBS does not do on its own: chat visible to viewers watching the VOD, a heads-up when an ad break is coming, and one feed for messages wherever they come from. I already run [Streamer.bot](https://streamer.bot) on the streaming PC, which exposes Twitch and YouTube events over a local WebSocket. Every overlay in this post is a plain web page that connects to that WebSocket and is added to OBS as a **browser source**.
+
+## Where the code comes from
+
+I did not write these overlays from scratch, and I want to be clear about that. All three started as open-source overlays from the Streamer.bot community, released under the GPL-3.0 licence, which I kept in each repository. The original author is nutty ([nuttylmao](https://github.com/nuttylmao) on GitHub): [multichat-overlay](https://github.com/nuttylmao/multichat-overlay), [horizontal-chat](https://github.com/nuttylmao/horizontal-chat) and [twitch-ad-timer](https://github.com/nuttylmao/twitch-ad-timer). The folder names still carry the `-main` suffix of a GitHub ZIP download.
+
+What I added is the part that made me comfortable putting viewer text on my screen: a moderation layer, fixes for newer Streamer.bot payloads, tests, and the packaging that lets the overlays run as containers on my homelab instead of as local files.
+
+## Horizontal chat
+
+The horizontal chat is a single-line ticker: messages flow sideways in a strip instead of stacking in a box, which fits along the bottom of a gameplay scene without covering anything important. Each message can show the platform icon, avatar, timestamp, badges, pronouns and username, all toggled through URL parameters. The project ships a small settings page that builds the browser-source URL for you, including the Streamer.bot address and port.
+
+My changes, shared with the multichat overlay:
+
+- **A moderation filter.** `moderation.js` loads before the overlay script, and every chat event goes through it before anything is rendered. It checks a blocklist of English and French terms, and normalises text first so the usual tricks do not get through: Cyrillic and Greek look-alike letters, leetspeak substitutions, combining accents and invisible formatting characters. If the filter fails to load, the overlay refuses to start instead of falling back to showing everything.
+- **Safer rendering.** Message content is no longer built as raw HTML.
+- **Payload compatibility.** Current Streamer.bot versions changed the shape of Twitch chat events (older versions used a nested message object), so I normalised both formats.
+- **Tests.** Plain Node scripts, `moderation.test.js` and `integration.test.js`, with no framework or package manager.
+
+## Multichat overlay
+
+The multichat overlay is the classic vertical chat box, but merged across platforms: Twitch chat, announcements, subs and raids; YouTube chat, Super Chats, Super Stickers and memberships; and Streamlabs and StreamElements tips, all in one list with a platform icon on each line. It can hide messages after a delay, skip bot commands, ignore listed chatters, reverse the scroll direction, collapse repeated user headers, and restrict image embeds to a chosen role, from broadcaster only to everyone.
+
+It got the same moderation layer, payload fixes and tests as the horizontal chat. The two projects deliberately share `moderation.js` and its tests, so a fix in one goes to the other. The other difference is the hosting: its settings page loads the configuration through an iframe, which needs HTTPS, so its nginx image generates a self-signed certificate and serves the settings JSON with the right CORS headers.
+
+## Ad timer
+
+The ad timer subscribes to two Streamer.bot Twitch events, `AdRun` and `AdMidRoll`. When an ad break starts, a thin bar runs along one edge of the screen for the length of the break, with a countdown in a corner. The bar position (top, bottom, left, right or hidden) and the timer corner are URL parameters. That way I know when viewers are back without checking the Twitch dashboard. The ad timer is essentially upstream code; I only host and configure it.
+
+## Hosting on the homelab
+
+Each overlay is static HTML, CSS and JavaScript with no build step. Each repository has a small Dockerfile on `nginx:alpine` that copies the files in, and a `docker-compose.yml` that publishes one port. All three run as Docker containers inside a dedicated **streaming-tools** LXC on my Proxmox host, following my usual rule of one LXC per service family. Nothing else runs in that container besides Docker.
+
+OBS points each browser source at its overlay's URL on the LAN, and the page connects to Streamer.bot on the streaming PC. The homelab only serves the files; all the live data stays between OBS, Streamer.bot and the platforms. If the LXC is down, the overlays disappear, but the stream keeps going.
+
+![The overlays in an OBS scene]([PHOTO])
+
+## Credits
+
+- nutty ([nuttylmao](https://github.com/nuttylmao)), author of the original [multichat-overlay](https://github.com/nuttylmao/multichat-overlay), [horizontal-chat](https://github.com/nuttylmao/horizontal-chat) and [twitch-ad-timer](https://github.com/nuttylmao/twitch-ad-timer), released under GPL-3.0.
+- [Streamer.bot](https://streamer.bot), whose WebSocket server feeds all three overlays.
