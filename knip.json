@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["functions/index.ts", "scripts/*.mjs", "content/content.typetest.ts"],
+  "entry": ["functions/index.ts", "functions/api/activity.ts", "scripts/*.mjs", "content/content.typetest.ts"],
   "ignore": ["content/log/**/*.mdx"],
   "ignoreBinaries": ["magick"],
   "ignoreIssues": {

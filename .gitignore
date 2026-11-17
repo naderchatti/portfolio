@@ -37,6 +37,7 @@ next-env.d.ts
 
 # cloudflare
 .wrangler
+.dev.vars
 
 # agent worktrees
 .claude/

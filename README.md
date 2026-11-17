@@ -41,3 +41,16 @@ Icons (`app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icon-*.p
 - `functions/index.ts` handles `/` only: 302 to `/fr/` when `Accept-Language` starts with `fr`, otherwise `/en/`
   (`Vary: Accept-Language`). Every other path is a static file; `public/_headers` sets security headers and
   immutable caching for `/_next/static/*`.
+
+## Live GitHub activity
+
+- `functions/api/activity.ts` serves `/api/activity`: the public contribution calendar of `naderchatti` from the
+  GitHub GraphQL API, in the same shape as `content/activity.generated.json`.
+- Secret: `GITHUB_TOKEN` (fine-grained, public read-only, no permissions) in Pages Production and Preview.
+  Missing token → 503; GitHub error or 5 s timeout → 502 `{ error }` with `no-store`.
+- Cached at the edge with the Workers Cache API:
+  `Cache-Control: public, max-age=3600, s-maxage=21600, stale-while-revalidate=86400`.
+- The home heatmap renders the committed snapshot, then swaps in the live data after mount when it validates
+  (skipped in `pnpm dev`); any failure silently keeps the snapshot.
+- Local test: `pnpm build`, then either put `GITHUB_TOKEN=…` in `.dev.vars` (git-ignored) and run `pnpm preview`,
+  or `npx wrangler pages dev out --binding GITHUB_TOKEN=$(gh auth token)`; open `/api/activity`.
